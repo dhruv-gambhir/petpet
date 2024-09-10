@@ -1,10 +1,9 @@
 
-
 export default function EventCard({ event }) {
   return (
     <div className="relative bg-white rounded w-4/5 h-80 ml-8 flex flex-row p-3 gap-8 shadow-sm shadow-black">
-      <div className="flex-none relative">
-        <img className="object-scale-down max-h-full aspect-auto" src="https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg" alt="A dog photo." />
+      <div className="flex-none w-60 relative">
+        <img className="object-scale-down mx-auto h-full aspect-auto" src={event.dogPhoto} alt="A dog photo." />
         <div className="absolute w-4/5 text-center bg-gray-300 px-2 py-1 rounded z-50 text-nowrap shadow-sm shadow-black bottom-[-1rem] left-[50%] translate-x-[-50%]">
           <p>{event.coordinator}</p>
         </div>

@@ -9,6 +9,7 @@ const staticEvents = [
     location: 'Location 1',
     description: 'This is the first event.',
     coordinator: 'Coordinator 1',
+    dogPhoto: 'https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg',
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ const staticEvents = [
     location: 'Location 2',
     description: `abcd.`,
     coordinator: 'Coordinator 1',
+    dogPhoto: 'https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg',
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ const staticEvents = [
     location: 'Location 3',
     description: 'This is the first event.',
     coordinator: 'Coordinator 1',
+    dogPhoto: 'https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg',
   },
 ];
 
