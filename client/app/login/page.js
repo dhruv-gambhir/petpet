@@ -16,7 +16,7 @@ export default function Login() {
 
         try {
             const user = await login(email, password);
-            addUserToState(email);
+            router.push("/");
         } catch (error) {
             alert("Login error:", error.message);
         }
