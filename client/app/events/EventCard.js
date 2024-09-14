@@ -1,5 +1,7 @@
 
-export default function EventCard({ event }) {
+export default function EventCard({ event, organizerView }) {
+  const isOrganizer = organizerView ?? false;
+
   return (
     <div className="relative bg-white rounded w-4/5 h-80 ml-8 flex flex-row p-3 gap-8 shadow-sm shadow-black">
       <div className="flex-none w-60 relative">
@@ -19,10 +21,18 @@ export default function EventCard({ event }) {
           <p className="bg-gray-300 px-2 py-1 rounded text-nowrap">{event.location}</p>
         </div>
       </div>
-      <div className="flex-initial flex flex-row items-start flex-nowrap">
-        <button className="p-2 font-bold hover:underline">Interested</button>
-        <button className="p-2 hover:drop-shadow hover:shadow-gray-300">❤️</button>
-      </div>
+      {
+        isOrganizer ? (
+          <div className="absolute top-2 right-2 bg-white">
+            <button className="p-2 font-bold hover:underline">Remove</button>
+          </div>
+        ) : (
+          <div className="absolute top-2 right-2 bg-white">
+            <button className="p-2 font-bold hover:underline">Interested</button>
+            <button className="p-2 hover:drop-shadow hover:shadow-gray-300">❤️</button>
+          </div>
+        )
+      }
     </div>
   )
 }

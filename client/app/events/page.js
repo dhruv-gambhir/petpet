@@ -1,4 +1,6 @@
+import { redirect, RedirectType } from 'next/navigation';
 import EventCard from './EventCard';
+import EventForm from './EventSearchForm';
 
 const staticEvents = [
   {
@@ -35,28 +37,39 @@ const staticEvents = [
 
 
 
-export default async function EventsPage() {
+export default async function EventsPage( { searchParams } ) {
   // This is to mimic db call.
-  const events = await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(staticEvents);
-    }, 1000);
-  });
+  // const events = await new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(staticEvents);
+  //   }, 1000);
+  // });
 
-  // const events = staticEvents;
+  const events = staticEvents;
+
+  async function updateSearchParams(formData) {
+    "use server";
+
+    const params = new URLSearchParams();
+
+    for (const key of ['title', 'location', 'animalType', 'startDate', 'endDate']) {
+      const value = formData.get(key);
+      if (value)
+        params.set(key, value);
+    }
+
+    redirect(`events?${params.toString()}`, RedirectType.replace);
+  }
 
   return (
     <div>
-      <form className="flex m-4 h-8">
-        <input className="flex-1 mr-2 w-[40rem] px-2" type="text" placeholder="Pet Events" />
-        <div className="flex gap-2">
-          <input className="px-2" type="text" placeholder="Location" />
-          <input className="px-2" type="text" placeholder="Animal Type" />
-          <input className="px-2" type="date" />
+      <EventForm updateSearchParams={updateSearchParams} searchParams={searchParams} />
+      <div className="relative flex flex-col items-start gap-4 m-2 mt-8">
+        <div className='absolute top-2 right-10 z-50'>
+          <a className='bg-mypurple rounded text-white border border-black hover:underline p-2 px-20' href='/events/me'>
+            View My Events
+          </a>
         </div>
-        
-      </form>
-      <div className="flex flex-col items-start gap-4 m-2 mt-8">
         {events.map((event) => (
           <EventCard event={event} key={event.id} />
         ))}
