@@ -37,16 +37,16 @@ const staticEvents = [
 
 export default async function EventsPage() {
   // This is to mimic db call.
-  const events = await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(staticEvents);
-    }, 1000);
-  });
+  // const events = await new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(staticEvents);
+  //   }, 1000);
+  // });
 
-  // const events = staticEvents;
+  const events = staticEvents;
 
   return (
-    <div>
+    <div className='flex-initial'>
       <form className="flex m-4 h-8">
         <input className="flex-1 mr-2 w-[40rem] px-2" type="text" placeholder="Pet Events" />
         <div className="flex gap-2">

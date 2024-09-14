@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 
-import NavBar from "../Components/NavBar.js";
-import { signup } from "../Authentication/auth.js";
+import { signup } from "../../Authentication/auth.js";
 import { useRouter } from "next/navigation";
 
 /*
@@ -91,45 +90,41 @@ function SignUp() {
     */
 
     return (
-        <main className="flex h-screen flex-col items-center">
-            <NavBar />
+        <div className="flex flex-row m-8 justify-center items-center bg-white w-1/2 h-4/6">
+            <form className="m-8 flex flex-col justify-center items-center w-2/6 h-4/6 ">
+                <h1 className="color-mypurple text-2xl font-bold">Sign up!</h1>
+                <div className="flex flex-col relative justify-center w-5/6">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="border-2 border-mypurple rounded bg-mybg h-8 m-4"
+                    />
+                </div>{" "}
+                <div className="flex flex-col relative justify-center w-5/6 ">
+                    <input
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="border-2 border-mypurple rounded bg-mybg h-8 m-4"
+                    />
+                </div>{" "}
+                <div className="flex flex-col justify-center items-center">
+                    <button
+                        type="submit"
+                        className="bg-mypurple w-32 m-4 rounded p-2 text-white"
+                        onClick={handleSignUp}
+                    >
+                        SignUp
+                    </button>
 
-            <div className="flex flex-row m-8 justify-center items-center bg-white w-1/2 h-4/6">
-                <form className="m-8 flex flex-col justify-center items-center w-2/6 h-4/6 ">
-                    <h1 className="color-mypurple text-2xl font-bold">Sinup</h1>
-                    <div className="flex flex-col relative justify-center w-5/6">
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-8 m-4"
-                        />
-                    </div>{" "}
-                    <div className="flex flex-col relative justify-center w-5/6 ">
-                        <input
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-8 m-4"
-                        />
-                    </div>{" "}
-                    <div className="flex flex-col justify-center items-center">
-                        <button
-                            type="submit"
-                            className="bg-mypurple w-32 m-4 rounded p-2 text-white"
-                            onClick={handleSignUp}
-                        >
-                            SignUp
-                        </button>
-
-                        <a href="/login" className="text-lg underline">
-                            Already have an account? Login.
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </main>
+                    <a href="/login" className="text-lg underline">
+                        Already have an account? Login.
+                    </a>
+                </div>
+            </form>
+        </div>
     );
 }
 

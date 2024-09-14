@@ -1,3 +1,5 @@
+"use client";
+
 import Title from "./Title";
 import { useRouter } from "next/navigation";
 
@@ -5,7 +7,7 @@ export default function NavBar() {
     const router = useRouter();
 
     return (
-        <main className="bg-white w-full h-1/6 flex flex-row items-center justify-center">
+        <nav className="bg-white w-full h-40 flex-none flex flex-row items-center justify-center">
             <div className="flex flex-row justify-between w-full">
                 <Title className="w-1/2 left-2" />
                 <div className="w-1/2 h-full right-2 flex flex-row">
@@ -43,6 +45,6 @@ export default function NavBar() {
                     </button>
                 </div>
             </div>
-        </main>
+        </nav>
     );
 }

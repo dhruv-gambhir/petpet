@@ -6,3 +6,10 @@ body {
     color: black;
     background: #f3edf7;
 }
+
+@supports (overflow-y: overlay) {
+    html {
+        overflow-y: overlay;
+        scrollbar-gutter: auto;
+    }
+}
