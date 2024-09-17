@@ -14,7 +14,7 @@ export default function NavBar() {
                     <button
                         className="h-16 w-1/6 bg-gray-300 border-1 border-black rounded mx-8 justify-end"
                         onClick={() => {
-                            router.push("./sitters");
+                            router.push("/sitters/owner");
                         }}
                     >
                         Sitters
@@ -22,7 +22,7 @@ export default function NavBar() {
                     <button
                         className="w-1/6 bg-gray-300 border-1 border-black rounded mx-8"
                         onClick={() => {
-                            router.push("./events");
+                            router.push("/events");
                         }}
                     >
                         Events
@@ -30,7 +30,7 @@ export default function NavBar() {
                     <button
                         className="w-1/6 bg-gray-300 border-1 border-black rounded mx-8"
                         onClick={() => {
-                            router.push("./adoption");
+                            router.push("/adoption");
                         }}
                     >
                         Adoption
@@ -38,7 +38,7 @@ export default function NavBar() {
                     <button
                         className="w-1/6 bg-gray-300 border-1 border-black rounded mx-8"
                         onClick={() => {
-                            router.push("./profile");
+                            router.push("/profile");
                         }}
                     >
                         Profile
