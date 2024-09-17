@@ -1,5 +1,5 @@
 "use client"
-import catBg from '../../public/cat_bg.png'; 
+import catBg from '../../../../public/cat_bg.png'; 
 import { useRouter } from "next/navigation";
 import PopupForm from './NewSittingRequest';
 
