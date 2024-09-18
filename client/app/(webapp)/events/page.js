@@ -45,6 +45,7 @@ export default async function EventsPage() {
 
     return (
         <div className="flex-initial">
+            
             <form className="flex m-4 h-8">
                 <input
                     className="flex-1 mr-2 w-[40rem] px-2"
@@ -65,7 +66,12 @@ export default async function EventsPage() {
                     <input className="px-2" type="date" />
                 </div>
             </form>
-            <div className="flex flex-col items-start gap-4 m-2 mt-8">
+            <div className="relative flex flex-col items-start gap-4 m-2 mt-8">
+                <div className="absolute top-0 right-0">
+                    <a className="mx-2 p-2 bg-mypurple hover:underline text-white rounded-md block" href="/events/me">
+                        My Events
+                    </a>
+                </div>
                 {events.map((event) => (
                     <EventCard event={event} key={event.id} />
                 ))}

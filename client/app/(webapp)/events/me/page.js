@@ -19,7 +19,7 @@ export default async function MyEventsPage() {
   const events = staticEvents;
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col self-stretch'>
       <h1 className='text-2xl font-bold text-center py-4'>My Events</h1>
 
       <form className='flex flex-col p-4 gap-4 border border-mypurple m-4 rounded'>
