@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "cd .. && husky client/.husky",
+    "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
