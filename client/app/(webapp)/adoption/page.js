@@ -36,17 +36,6 @@ export default function AdoptionPage() {
               </button>
             );
           })}
-          {/* <input
-                        className="px-2"
-                        type="text"
-                        placeholder="Location"
-                    />
-                    <input
-                        className="px-2"
-                        type="text"
-                        placeholder="Animal Type"
-                    />
-                    <input className="px-2" type="date" /> */}
         </div>
       </form>
 
