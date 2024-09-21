@@ -1,7 +1,3 @@
 export default function AgencyAdoptionPage() {
-    return (
-        <main>
-            hi
-        </main> 
-    )
+  return <main>hi</main>;
 }

@@ -1,3 +1,3 @@
 export default function AdoptionPage() {
-    return(<p>Adoption Page</p>);
+  return <p>Adoption Page</p>;
 }
