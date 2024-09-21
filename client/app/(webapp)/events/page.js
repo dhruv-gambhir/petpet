@@ -44,7 +44,7 @@ export default async function EventsPage() {
     const events = staticEvents;
 
     return (
-        <div className="flex-initial">
+        <div className="flex-initial self-stretch w-[83.3%] mx-auto">
             
             <form className="flex m-4 h-8">
                 <input
