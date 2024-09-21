@@ -1,19 +1,17 @@
-
-import EventCard from '../EventCard';
+import EventCard from "../EventCard";
 
 const staticEvents = [
   {
     id: 3,
-    name: 'Event 3',
-    date: '2021-03-03',
-    time: '3:00 PM',
-    location: 'Location 3',
-    description: 'This is the first event.',
-    coordinator: 'Coordinator 1',
-    dogPhoto: 'https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg',
+    name: "Event 3",
+    date: "2021-03-03",
+    time: "3:00 PM",
+    location: "Location 3",
+    description: "This is the first event.",
+    coordinator: "Coordinator 1",
+    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
   },
 ];
-
 
 export default async function MyEventsPage() {
   const events = staticEvents;
@@ -22,13 +20,29 @@ export default async function MyEventsPage() {
     <div className='flex flex-col self-stretch w-[83.3%] mx-auto'>
       <h1 className='text-2xl font-bold text-center py-4'>My Events</h1>
 
-      <form className='flex flex-col p-4 gap-4 border border-mypurple m-4 rounded'>
-        <label className='text-lg font-semibold'>Create an event</label>
-        <div className='flex flex-row gap-8'>
-          <input type='text' placeholder='Event Name' className='border border-gray-300 rounded-md p-2 flex-1' />
-          <input type='date' placeholder='Date' className='border border-gray-300 rounded-md p-2 flex-1' />
-          <input type='time' placeholder='Time' className='border border-gray-300 rounded-md p-2 flex-1' />
-          <input type='text' placeholder='Location' className='border border-gray-300 rounded-md p-2 flex-1' />
+      <form className="flex flex-col p-4 gap-4 border border-mypurple m-4 rounded">
+        <label className="text-lg font-semibold">Create an event</label>
+        <div className="flex flex-row gap-8">
+          <input
+            type="text"
+            placeholder="Event Name"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
+          <input
+            type="date"
+            placeholder="Date"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
+          <input
+            type="time"
+            placeholder="Time"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
+          <input
+            type="text"
+            placeholder="Location"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
         </div>
         <textarea type='text' placeholder='Description' className='border border-gray-300 rounded-md p-2 resize-none basis-32' />
         <button className='bg-mypurple text-white rounded-md p-2 self-center w-80 hover:underline'>Create</button>
@@ -40,5 +54,5 @@ export default async function MyEventsPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }

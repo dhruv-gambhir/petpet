@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const petOptions = [
-  { value: 'dog', label: 'Dog' },
-  { value: 'cat', label: 'Cat' },
-  { value: 'bird', label: 'Bird' },
-  { value: 'fish', label: 'Fish' },
+  { value: "dog", label: "Dog" },
+  { value: "cat", label: "Cat" },
+  { value: "bird", label: "Bird" },
+  { value: "fish", label: "Fish" },
 ];
 
 const PopupForm = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formData, setFormData] = useState({
-    ownerName: '',
-    petName: '',
-    petType: '',
-    startDate: '',
-    endDate: '',
-    description: ''
+    ownerName: "",
+    petName: "",
+    petType: "",
+    startDate: "",
+    endDate: "",
+    description: "",
   });
 
   const handleClose = () => {
@@ -27,28 +27,28 @@ const PopupForm = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
-  //mock API call 
+  //mock API call
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/submit', {
-        method: 'POST',
+      const response = await fetch("/api/submit", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       const result = await response.json();
-      console.log('Success:', result);
+      console.log("Success:", result);
       setShowModal(false);
-      setShowSuccessModal(true); 
+      setShowSuccessModal(true);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -77,7 +77,9 @@ const PopupForm = () => {
 
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="flex items-center space-x-4">
-                <label className="block text-gray-700 font-bold mb-2">Owner Name</label>
+                <label className="block text-gray-700 font-bold mb-2">
+                  Owner Name
+                </label>
                 <input
                   type="text"
                   name="ownerName"
@@ -89,7 +91,9 @@ const PopupForm = () => {
                 />
               </div>
               <div className="flex items-center space-x-4">
-                <label className="block text-gray-700 font-bold mb-2">Pet Name</label>
+                <label className="block text-gray-700 font-bold mb-2">
+                  Pet Name
+                </label>
                 <input
                   type="text"
                   name="petName"
@@ -101,7 +105,9 @@ const PopupForm = () => {
                 />
               </div>
               <div className="flex items-center space-x-4">
-                <label className="block text-gray-700 font-bold mb-2">Pet Type</label>
+                <label className="block text-gray-700 font-bold mb-2">
+                  Pet Type
+                </label>
                 <select
                   name="petType"
                   value={formData.petType}
@@ -109,7 +115,9 @@ const PopupForm = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded"
                   required
                 >
-                  <option value="" disabled>Select your pet's type</option>
+                  <option value="" disabled>
+                    Select your pet's type
+                  </option>
                   {petOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -118,7 +126,9 @@ const PopupForm = () => {
                 </select>
               </div>
               <div className="flex items-center space-x-4">
-                <label className="block text-gray-700 font-bold mb-2">Start Date</label>
+                <label className="block text-gray-700 font-bold mb-2">
+                  Start Date
+                </label>
                 <input
                   type="datetime-local"
                   name="startDate"
@@ -129,7 +139,9 @@ const PopupForm = () => {
                 />
               </div>
               <div className="flex items-center space-x-4">
-                <label className="block text-gray-700 font-bold mb-2">End Date</label>
+                <label className="block text-gray-700 font-bold mb-2">
+                  End Date
+                </label>
                 <input
                   type="datetime-local"
                   name="endDate"
@@ -140,7 +152,9 @@ const PopupForm = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-bold mb-2">Description</label>
+                <label className="block text-gray-700 font-bold mb-2">
+                  Description
+                </label>
                 <textarea
                   name="description"
                   value={formData.description}
@@ -167,7 +181,9 @@ const PopupForm = () => {
       {showSuccessModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-10 rounded-lg shadow-lg w-1/3 text-center">
-            <h2 className="text-2xl font-bold text-green-600 mb-4">Successfully Submitted!</h2>
+            <h2 className="text-2xl font-bold text-green-600 mb-4">
+              Successfully Submitted!
+            </h2>
             <button
               className="bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-300"
               onClick={closeSuccessModal}

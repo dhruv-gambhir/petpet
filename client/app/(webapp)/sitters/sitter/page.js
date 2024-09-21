@@ -1,3 +1,3 @@
 export default function SitterPage() {
-    return(<p>Sitter Page</p>);
+  return <p>Sitter Page</p>;
 }
