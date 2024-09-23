@@ -1,50 +1,50 @@
 import EventCard from "./EventCard";
 
 const staticEvents = [
-    {
-        id: 1,
-        name: "Event 1",
-        date: "2021-01-01",
-        time: "3:00 PM",
-        location: "Location 1",
-        description: "This is the first event.",
-        coordinator: "Coordinator 1",
-        dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
-    },
-    {
-        id: 2,
-        name: "Event 2",
-        date: "2021-02-02",
-        time: "3:00 PM",
-        location: "Location 2",
-        description: `abcd.`,
-        coordinator: "Coordinator 1",
-        dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
-    },
-    {
-        id: 3,
-        name: "Event 3",
-        date: "2021-03-03",
-        time: "3:00 PM",
-        location: "Location 3",
-        description: "This is the first event.",
-        coordinator: "Coordinator 1",
-        dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
-    },
+  {
+    id: 1,
+    name: "Event 1",
+    date: "2021-01-01",
+    time: "3:00 PM",
+    location: "Location 1",
+    description: "This is the first event.",
+    coordinator: "Coordinator 1",
+    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
+  },
+  {
+    id: 2,
+    name: "Event 2",
+    date: "2021-02-02",
+    time: "3:00 PM",
+    location: "Location 2",
+    description: `abcd.`,
+    coordinator: "Coordinator 1",
+    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
+  },
+  {
+    id: 3,
+    name: "Event 3",
+    date: "2021-03-03",
+    time: "3:00 PM",
+    location: "Location 3",
+    description: "This is the first event.",
+    coordinator: "Coordinator 1",
+    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
+  },
 ];
 
 export default async function EventsPage() {
-    // This is to mimic db call.
-    // const events = await new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     resolve(staticEvents);
-    //   }, 1000);
-    // });
+  // This is to mimic db call.
+  // const events = await new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(staticEvents);
+  //   }, 1000);
+  // });
 
-    const events = staticEvents;
+  const events = staticEvents;
 
     return (
-        <div className="flex-initial">
+        <div className="flex-initial self-stretch w-[83.3%] mx-auto">
             
             <form className="flex m-4 h-8">
                 <input

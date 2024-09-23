@@ -1,5 +1,4 @@
-
-import NavBar from '../Components/NavBar';
+import NavBar from "../Components/NavBar";
 
 export default function WebappLayout({ children }) {
   return (

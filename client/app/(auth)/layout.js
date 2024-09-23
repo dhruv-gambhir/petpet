@@ -1,5 +1,4 @@
-
-import TitleBar from '../Components/TitleBar';
+import TitleBar from "../Components/TitleBar";
 
 export default function AuthLayout({ children }) {
   return (
