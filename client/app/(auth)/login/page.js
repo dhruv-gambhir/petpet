@@ -16,7 +16,7 @@ export default function Login() {
 
     try {
       const user = await login(email, password);
-      router.push("/");
+      router.push("/profile");
     } catch (error) {
       alert("Login error:", error.message);
     }
