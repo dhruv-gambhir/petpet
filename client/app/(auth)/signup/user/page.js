@@ -10,7 +10,7 @@ function UserSignUp() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState(""); // For displaying errors
+    const [error, setError] = useState("");
 
     const router = useRouter();
 

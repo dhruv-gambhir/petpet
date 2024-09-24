@@ -52,7 +52,7 @@ function AgencySignUp() {
                     <div className="mb-4">
                         <input
                             type="email"
-                            placeholder="Ex: abc@example.com"
+                            placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
@@ -61,7 +61,7 @@ function AgencySignUp() {
                     <div className="mb-4">
                         <input
                             type="text"
-                            placeholder="Ex. Saul Ramirez"
+                            placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"

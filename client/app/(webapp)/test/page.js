@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { uploadFile } from '../../lib/uploadFile';
 
 export default function Home() {
   const [file, setFile] = useState(null);
@@ -11,23 +12,12 @@ export default function Home() {
   };
 
   const handleUpload = async () => {
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
+    try {
+      const url = await uploadFile(file);
+      setImageUrl(url);
       alert('File uploaded successfully!');
-      setImageUrl(result.url); // Set the image URL
-    } else {
-      alert(`Upload failed: ${result.error}`);
+    } catch (error) {
+      alert(`Upload failed: ${error.message}`);
     }
   };
 
@@ -47,4 +37,3 @@ export default function Home() {
     </div>
   );
 }
-
