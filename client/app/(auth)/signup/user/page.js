@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { signup } from "../../../Authentication/auth.js";
 import { useRouter } from "next/navigation";
+import { uploadFile } from "../../../lib/uploadFile.js";
 
 function UserSignUp() {
     const [email, setEmail] = useState("");
@@ -11,11 +12,14 @@ function UserSignUp() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState("");
 
     const router = useRouter();
+    const fileInputRef = useRef(null);
 
-    async function addUser() {
-        console.log("User added: ", email, name, phone);
+    async function addUser(imageUrl) {
+        console.log("User added: ", email, name, phone, imageUrl);
     }
 
     const handleSignUp = async (event) => {
@@ -26,13 +30,49 @@ function UserSignUp() {
         }
 
         try {
+            let imageUrl = "";
+            if (selectedFile) {
+                imageUrl = await uploadFile(selectedFile); 
+            }
+
             const user = await signup(email, password);
-            addUser();
+            addUser(imageUrl);
             router.push("/login");
         } catch (error) {
             setError(error.message);
         }
     };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        if (file) {
+            setSelectedFile(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+    useEffect(() => {
+        return () => {
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+            }
+        };
+    }, [previewUrl]);
 
     return (
         <div className="flex flex-col justify-center items-center h-full w-full">
@@ -45,8 +85,7 @@ function UserSignUp() {
                     <h1 className="text-mypurple text-3xl font-bold mb-4">
                         Register
                     </h1>
-                    {error && <p className="text-red-500 mb-4">{error}</p>}{" "}
-                    {/* Display error message */}
+                    {error && <p className="text-red-500 mb-4">{error}</p>}
                     <div className="mb-4">
                         <input
                             type="email"
@@ -93,18 +132,37 @@ function UserSignUp() {
                         />
                     </div>
                 </form>
-
                 {/* Right side - Profile Picture Upload */}
                 <div className="w-1/2 p-8 flex flex-col justify-center items-center">
-                    <div className="border-2 border-dashed border-mypurple w-full h-64 flex justify-center items-center rounded-lg mb-4">
-                        <label className="text-mypurple text-center">
-                            <p>
-                                Drag & Drop your image here or{" "}
-                                <span className="text-blue-600 underline cursor-pointer">
-                                    choose a file
-                                </span>
-                            </p>
-                        </label>
+                    <div
+                        className="border-2 border-dashed border-mypurple w-full h-64 flex justify-center items-center rounded-lg mb-4 cursor-pointer"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onClick={() => fileInputRef.current.click()}
+                    >
+                        {previewUrl ? (
+                            <img
+                                src={previewUrl}
+                                alt="Preview"
+                                className="object-cover h-full w-full rounded-lg"
+                            />
+                        ) : (
+                            <label className="text-mypurple text-center">
+                                <p>
+                                    Drag & Drop your image here or{" "}
+                                    <span className="text-blue-600 underline cursor-pointer">
+                                        choose a file
+                                    </span>
+                                </p>
+                            </label>
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                            ref={fileInputRef}
+                        />
                     </div>
                     <button
                         type="submit"
