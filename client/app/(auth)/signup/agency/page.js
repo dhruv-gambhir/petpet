@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { signup } from "../../../Authentication/auth.js";
 import { useRouter } from "next/navigation";
+import { uploadFile } from "../../../lib/uploadFile.js"; // Import the uploadFile function
 
 function AgencySignUp() {
     const [email, setEmail] = useState("");
@@ -10,14 +11,18 @@ function AgencySignUp() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [address, setAddress] = useState("");
-    const [license, setLiscense] = useState("");
+    const [license, setLicense] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState(""); // For displaying errors
+    const [error, setError] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState("");
 
     const router = useRouter();
+    const fileInputRef = useRef(null);
 
-    async function addUser() {
-        console.log("User added: ", email, name, phone, address, license);
+    async function addUser(imageUrl) {
+        console.log("User added: ", email, name, phone, address, license, imageUrl);
+        // Save the user data, including imageUrl
     }
 
     const handleSignUp = async (event) => {
@@ -28,13 +33,49 @@ function AgencySignUp() {
         }
 
         try {
+            let imageUrl = "";
+            if (selectedFile) {
+                imageUrl = await uploadFile(selectedFile); // Upload the file
+            }
+
             const user = await signup(email, password);
-            addUser();
+            await addUser(imageUrl); // Include imageUrl in user data
             router.push("/login");
         } catch (error) {
             setError(error.message);
         }
     };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        if (file) {
+            setSelectedFile(file);
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+    useEffect(() => {
+        return () => {
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+            }
+        };
+    }, [previewUrl]);
 
     return (
         <div className="flex flex-col justify-center items-center h-full w-full">
@@ -78,7 +119,7 @@ function AgencySignUp() {
                     </div>
                     <div className="mb-4">
                         <input
-                            type="adress"
+                            type="text"
                             placeholder="Address"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
@@ -87,10 +128,10 @@ function AgencySignUp() {
                     </div>
                     <div className="mb-4">
                         <input
-                            type="license"
+                            type="text"
                             placeholder="License Number"
                             value={license}
-                            onChange={(e) => setLiscense(e.target.value)}
+                            onChange={(e) => setLicense(e.target.value)}
                             className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
                         />
                     </div>
@@ -116,16 +157,35 @@ function AgencySignUp() {
 
                 {/* Right side - Profile Picture Upload */}
                 <div className="w-1/2 p-8 flex flex-col justify-center items-center">
-
-                    <div className="border-2 border-dashed border-mypurple w-full h-64 flex justify-center items-center rounded-lg mb-4">
-                        <label className="text-mypurple text-center">
-                            <p>
-                                Drag & Drop your image here or{" "}
-                                <span className="text-blue-600 underline cursor-pointer">
-                                    choose a file
-                                </span>
-                            </p>
-                        </label>
+                    <div
+                        className="border-2 border-dashed border-mypurple w-full h-64 flex justify-center items-center rounded-lg mb-4 cursor-pointer"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onClick={() => fileInputRef.current.click()}
+                    >
+                        {previewUrl ? (
+                            <img
+                                src={previewUrl}
+                                alt="Preview"
+                                className="object-cover h-full w-full rounded-lg"
+                            />
+                        ) : (
+                            <label className="text-mypurple text-center">
+                                <p>
+                                    Drag & Drop your image here or{" "}
+                                    <span className="text-blue-600 underline cursor-pointer">
+                                        choose a file
+                                    </span>
+                                </p>
+                            </label>
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                            ref={fileInputRef}
+                        />
                     </div>
                     <button
                         type="submit"
@@ -149,4 +209,3 @@ function AgencySignUp() {
 }
 
 export default AgencySignUp;
-
