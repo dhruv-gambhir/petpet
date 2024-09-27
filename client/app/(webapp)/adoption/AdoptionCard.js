@@ -5,8 +5,8 @@ const AdoptionTile = ({ label, content, units }) => {
   </div>)
 }
 
-export default function AdoptionCard({ detail }) {
-const isOrganizer = false;
+export default function AdoptionCard({ detail, isOrganizer }) {
+isOrganizer = isOrganizer ?? false;
 
 return (
   <div className="relative bg-white rounded w-4/5 h-80 ml-8 flex flex-row p-3 gap-8 shadow-sm shadow-black">
