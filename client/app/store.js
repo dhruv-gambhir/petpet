@@ -5,9 +5,9 @@ const useStore = create(
   persist(
     (set) => ({
       zIsLoggedIn: false,
-      zUserId: '',
-      zLogin: (userid) => set({ zIsLoggedIn: true, zUserId: userid }),
-      zLogout: () => set({ zIsLoggedIn: false, zUserId: '' }),
+      zEmail: '',
+      zLogin: (email) => set({ zIsLoggedIn: true, zEmail: email }),
+      zLogout: () => set({ zIsLoggedIn: false, zEmail: '' }),
     }),
     {
       name: 'petpal-auth-storage',
