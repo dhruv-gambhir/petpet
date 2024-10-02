@@ -1,7 +1,5 @@
 "use client";
 
-import NavBar from "../../Components/NavBar";
-
 import { login } from "../../Authentication/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
