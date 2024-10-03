@@ -7,10 +7,12 @@ import os
 
 
 '''
-CHANGES: 
+RUN THIS SCRIPT TO GENERATE FAKE DATA FOR THE DATABASE.
+python .\PETPAL_DB\data\create_data.py
 
-map_id : anything labelled as such or user_map_id is a name place for the UUID FK.
-will need to insert and retrieve relevant UUID? is it generated in script or postgres?  
+TODO: 
+map_id : anything labelled as such or user_map_id is a placeholder for the UUID FK.
+will need to insert and retrieve relevant UUID? 
 
 '''
 
