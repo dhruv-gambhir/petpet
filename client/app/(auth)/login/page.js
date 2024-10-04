@@ -3,17 +3,20 @@
 import { login } from "../../Authentication/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import useStore from "../../store";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { zLogin } = useStore();
 
   const handleLogIn = async (event) => {
     event.preventDefault();
 
     try {
       const user = await login(email, password);
+      zLogin(email);
       router.push("/profile");
     } catch (error) {
       alert("Login error:", error.message);
@@ -35,6 +38,7 @@ export default function Login() {
         </div>{" "}
         <div className="flex flex-col relative justify-center w-5/6 ">
           <input
+            type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
