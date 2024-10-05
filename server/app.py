@@ -23,6 +23,7 @@ class Event(db.Model):
     startdate = db.Column(db.Date)
     cost = db.Column(db.Integer)
     status = db.Column(db.Enum('pending', 'decided', 'accepted', 'rejected', name='status_enum'), default='pending')
+    imageurl = db.Column(db.Text)  
     createdat = db.Column(db.TIMESTAMP, default=db.func.current_timestamp())
 
     #add relationship to user table
@@ -117,11 +118,12 @@ class SittingRequests(db.Model):
     description= db.Column(db.Text)  # Description of the sitting request
     status= db.Column(db.Enum('pending', 'decided', name='status_enum'), default='pending')  # Status of the sitting request
     createdat= db.Column(db.TIMESTAMP, default=db.func.current_timestamp())
+    location = db.Column(db.String(255))
     tasktype= db.Column(db.Enum('day_boarding', 'doggy_day_care', 'dog_walking', 'home_visits', 'house_sitting', name='task_enum'))  # Type of the task
 
     #add relationship to user table and sitter interest table and pet sitting request table
     sitter_interest= db.relationship('SitterInterests', backref='sitting_requests_made')
-    pet_sitting_requests= db.relationship('PetSittingRequests', backref='sitting_requests_of_pets')
+    pet_sitting_requests = db.relationship('PetSittingRequests', backref='sitting_requests_of_pets', cascade="all, delete", lazy=True)
 
 class SitterInterests(db.Model):
     __tablename__ = 'sitter_interests'
@@ -160,6 +162,7 @@ def get_events():
         'startdate': event.startdate.strftime('%Y-%m-%d') if event.startdate else None,
         'cost': event.cost,
         'status': event.status,
+        'imageurl': event.imageurl,
         'createdat': event.createdat
     } for event in events]
     return jsonify(event_list), 200
@@ -180,6 +183,7 @@ def get_event(event_id):
         'startdate': event.startdate.strftime('%Y-%m-%d') if event.startdate else None,
         'cost': event.cost,
         'status': event.status,
+        'imageurl': event.imageurl,
         'createdat': event.createdat
     }
     return jsonify(event_data), 200
@@ -203,6 +207,7 @@ def create_event():
         location=data.get('location'),
         startdate=startdate,
         cost=data.get('cost', 0),
+        imageurl=data.get('imageurl'),
         status=data.get('status', 'pending')
     )
     db.session.add(new_event)
@@ -229,6 +234,7 @@ def update_event(event_id):
     event.description = data.get('description', event.description)
     event.location = data.get('location', event.location)
     event.cost = data.get('cost', event.cost)
+    event.imageurl = data.get('imageurl', event.imageurl)
     event.status = data.get('status', event.status)
 
     db.session.commit()
@@ -551,6 +557,7 @@ def get_sitting_requests():
         'description': sitting_request.description,
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
+        'location': sitting_request.location,
         'tasktype': sitting_request.tasktype
     } for sitting_request in sitting_requests]
     return jsonify(sitting_request_list), 200
@@ -583,6 +590,7 @@ def get_sitting_request_with_pet(sitting_request_id):
         'description': sitting_request.description,
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
+        'location': sitting_request.location,
         'tasktype': sitting_request.tasktype
     }
     return jsonify(
@@ -610,6 +618,7 @@ def create_sitting_request():
         enddate=datetime.strptime(data['enddate'], '%Y-%m-%d').date(),
         description=data['description'],
         status=data.get('status', 'pending'),
+        location=data.get('location'),
         tasktype=data.get('tasktype')
     )
 
@@ -650,7 +659,6 @@ def create_sitting_request():
                     'pet_sitting_request_ids': new_pet_sitting_request_ids
                     }), 201
 
-#TODO: update the create sitting request to update and handle the pet data as well
 # Route to update a sitting request (PUT)
 @app.route('/sitting_requests/<string:sitting_request_id>', methods=['PUT'])
 def update_sitting_request(sitting_request_id):
@@ -659,6 +667,8 @@ def update_sitting_request(sitting_request_id):
         abort(404, description="Sitting request not found")
 
     data = request.get_json()
+
+    # Update sitting request fields
     sitting_request.userid = data.get('userid', sitting_request.userid)
     sitting_request.pay = data.get('pay', sitting_request.pay)
     sitting_request.startdate = datetime.strptime(data['startdate'], '%Y-%m-%d').date()
@@ -666,12 +676,46 @@ def update_sitting_request(sitting_request_id):
     sitting_request.description = data.get('description', sitting_request.description)
     sitting_request.status = data.get('status', sitting_request.status)
     sitting_request.tasktype = data.get('tasktype', sitting_request.tasktype)
+    sitting_request.location = data.get('location', sitting_request.location)  # Add location field
+
+    # Check for pet data in the request
+    pet_data = data.get('pets')
+    if pet_data:
+        for pet in pet_data:
+            # If the pet already exists (check by pet_id), update it
+            if 'id' in pet:
+                existing_pet = Pets.query.get(pet['id'])
+                if existing_pet:
+                    existing_pet.name = pet.get('name', existing_pet.name)
+                    existing_pet.species = pet.get('species', existing_pet.species)
+                    existing_pet.breed = pet.get('breed', existing_pet.breed)
+                    existing_pet.age = pet.get('age', existing_pet.age)
+                    existing_pet.imageurl = pet.get('image_url', existing_pet.imageurl)
+            else:
+                # If pet data is new, create a new pet and add to the sitting request
+                new_pet = Pets(
+                    ownerid=sitting_request.userid,
+                    name=pet['name'],
+                    species=pet['species'],
+                    breed=pet.get('breed'),
+                    age=pet.get('age', 0),
+                    imageurl=pet.get('image_url')
+                )
+                db.session.add(new_pet)
+                db.session.flush()  # Flush to get the new pet ID
+
+                # Create a new PetSittingRequests entry
+                new_pet_sitting_request = PetSittingRequests(
+                    sittingrequestid=sitting_request.id,
+                    petid=new_pet.id
+                )
+                db.session.add(new_pet_sitting_request)
 
     db.session.commit()
     return jsonify({'message': 'Sitting request updated successfully'}), 200
 
+
 # Route to delete a sitting request (DELETE)
-#TODO: When deleting a sitting request, also delete the associated pet_sitting_requests
 @app.route('/sitting_requests/<string:sitting_request_id>', methods=['DELETE'])
 def delete_sitting_request(sitting_request_id):
     sitting_request = SittingRequests.query.get(sitting_request_id)
