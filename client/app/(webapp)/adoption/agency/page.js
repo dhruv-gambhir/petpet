@@ -1,4 +1,5 @@
 import AdoptionCard from "../AdoptionCard";
+import PreviewForm from "./PreviewForm";
 
 // const commonAnimals = ["🐱 Cat", "🐶 Dog", "🐢 Turtle", "🐹 Hams", "🐰 Rabbit"];
 
@@ -53,7 +54,10 @@ export default function AgencyAdoptionPage() {
             className="border border-gray-300 rounded-md p-2 flex-1"
           />
         </div>
-        <textarea type='text' placeholder='Description' className='border border-gray-300 rounded-md p-2 resize-none basis-32' />
+        <div className="basis-32 flex flex-row gap-8">
+          <textarea type='text' placeholder='Description' className='border border-gray-300 rounded-md p-2 resize-none flex-auto' />
+          <PreviewForm className="basis-1/3" />
+        </div>
         <button className='bg-mypurple text-white rounded-md p-2 self-center w-80 hover:underline'>Submit</button>
       </form>
 
