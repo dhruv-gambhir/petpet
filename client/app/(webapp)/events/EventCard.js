@@ -1,3 +1,12 @@
+
+/**
+ * 
+ * @param {{
+ *    event: import("./events").Event,
+ *    organizerView?: boolean
+ * }} param0
+ * @returns 
+ */
 export default function EventCard({ event, organizerView }) {
   const isOrganizer = organizerView ?? false;
 

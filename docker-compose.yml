@@ -16,12 +16,12 @@ services:
 
   web:
     build: ./server
-    volumes:
-      - ./server:/app
     ports:
       - "5000:5000"
     environment:
       DATABASE_URL: postgresql://myuser:mypassword@db/mydb
+      SSL_ENABLED: true
+      SSL_DISABLE: False
     depends_on:
       - db
     restart: unless-stopped
