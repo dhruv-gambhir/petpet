@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request, abort
 from flask_sqlalchemy import SQLAlchemy
 import uuid
@@ -6,7 +7,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # PostgreSQL database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://myuser:mypassword@localhost/mydb'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'postgresql://myuser:mypassword@localhost/mydb')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database
