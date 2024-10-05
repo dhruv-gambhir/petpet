@@ -1,5 +1,3 @@
-import fetch from "node-fetch"
-
 const fetcher = async (url, options) => await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`, options)
 
 /**

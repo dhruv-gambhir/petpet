@@ -1,39 +1,6 @@
 import EventCard from "./EventCard";
 import { getEvents, unpacker } from "./events";
 
-const staticEvents = [
-  {
-    id: 1,
-    name: "Event 1",
-    date: "2021-01-01",
-    time: "3:00 PM",
-    location: "Location 1",
-    description: "This is the first event.",
-    coordinator: "Coordinator 1",
-    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
-  },
-  {
-    id: 2,
-    name: "Event 2",
-    date: "2021-02-02",
-    time: "3:00 PM",
-    location: "Location 2",
-    description: `abcd.`,
-    coordinator: "Coordinator 1",
-    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
-  },
-  {
-    id: 3,
-    name: "Event 3",
-    date: "2021-03-03",
-    time: "3:00 PM",
-    location: "Location 3",
-    description: "This is the first event.",
-    coordinator: "Coordinator 1",
-    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
-  },
-];
-
 export default async function EventsPage() {
   const events = await unpacker(() => getEvents());
 
