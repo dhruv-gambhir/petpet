@@ -63,6 +63,7 @@ CREATE TABLE Sitting_Requests (
     StartDate DATE,
     EndDate DATE,
     Description TEXT,
+    Location VARCHAR(255),
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -85,6 +86,7 @@ CREATE TABLE Events (
     Location VARCHAR(255),
     StartDate DATE,
     Cost INT,
+    ImageUrl TEXT, 
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
