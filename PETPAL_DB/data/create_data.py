@@ -11,8 +11,8 @@ RUN THIS SCRIPT TO GENERATE FAKE DATA FOR THE DATABASE.
 python .\PETPAL_DB\data\create_data.py
 
 TODO: 
-map_id : anything labelled as such or user_map_id is a placeholder for the UUID FK.
-will need to insert and retrieve relevant UUID? 
+ADDRESS (events) change just to pincode  
+LOCATION in sitting 
 
 '''
 
@@ -35,9 +35,10 @@ if __name__=="__main__":
     fake = Faker()
     print(DIR)
 
-    userdf = pd.DataFrame(columns=["map_id" , "Name", "Email", "Phonenumber", "Role", "CreatedAt", "updatedAt", 'Bio' , "IsAgency"])
-    agencydf = pd.DataFrame(columns=["map_id" , "AgentId", "UserId", "Address", "LicenseNumber"])
+    userdf = pd.DataFrame(columns=["userid" , "Name", "Email", "Phonenumber", "Role", "CreatedAt", "updatedAt", 'Bio' , "IsAgency", "Address", "LicenseNumber"])
+    agencydf = pd.DataFrame(columns=["userid" , "Address", "LicenseNumber"])
     number = COUNT//2 
+
     BIO = [
     "I am a proud pet enthusiast who loves every moment with my furry friends.",
     "As a cat mom, my life revolves around my playful kittens.",
@@ -55,7 +56,8 @@ if __name__=="__main__":
     for i in range(number):
         phone_number = str(random.randint(11111111, 99999999))
         bio = random.choice(BIO)
-        userdf.loc[len(userdf)] = {"map_id" :len(userdf), "Name": fake.name(), "Email": fake.email(), "Phonenumber": "65"+phone_number, "Role": "user", "Bio" : bio, "IsAgency": False}
+        userdf.loc[len(userdf)] = {"userid" :str(uuid4()), "Name": fake.name(), "Email": fake.email(), "Phonenumber": "65"+phone_number, "Role": "user", "Bio" : bio, "IsAgency": False}
+        # userdf.loc[len(userdf)] = {"map_id" :len(userdf), "Name": fake.name(), "Email": fake.email(), "Phonenumber": "65"+phone_number, "Role": "user", "Bio" : bio, "IsAgency": False}
     
     # TODO add user get UUID? 
 
@@ -110,11 +112,12 @@ if __name__=="__main__":
         address = random.choice(ADDRESS)
         bio = random.choice(AGENCY_BIO)
         license_number = str(random.randint(111111111, 999999999))
-        userdf.loc[len(userdf)] = {"map_id" :len(userdf), "Name": agency_name, "Email": fake.email(), "Phonenumber": "65"+phone_number, "Role": "agency",  "Bio":bio, "isAgency": True}
-        agencydf.loc[len(agencydf)] = {"map_id" :len(userdf), "Address": address, "LicenseNumber": license_number}
+        id = str(uuid4())
+        userdf.loc[len(userdf)] = {"userid" : id, "Name": agency_name, "Email": fake.email(), "Phonenumber": "65"+phone_number, "Role": "agency",  "Bio":bio, "isAgency": True , "Address": address, "LicenseNumber": license_number}
+        agencydf.loc[len(agencydf)] = {"userid" : id , "Address": address, "LicenseNumber": license_number}
 
     # add pets 
-    petdf = pd.DataFrame(columns=["map_id" , "Name", "Age", "Sex", "Species" , "Breed" , "CreatedAt"])
+    petdf = pd.DataFrame(columns=["id" , "ownerid" , "name", "age", "sex", "species" , "breed" , "createdat"])
     id_range = len(userdf)
     SPECIES = {
         "Dog": "German Shepherd",
@@ -141,17 +144,19 @@ if __name__=="__main__":
     "Molly",
     "Sadie"
     ]
+    user_onlydf = userdf[userdf["Role"]=="user"]
+
     for i in range(PET_COUNT):
-        user_id = random.randint(0, id_range)
+        user_id = random.choice(user_onlydf["userid"].tolist())
         pet_name = random.choice(PET_NAMES)
         age = random.randint(1, 20)
         species = random.choice(list(SPECIES.keys()))
         breed = SPECIES[species]
         sex = random.choice(SEX)
-        petdf.loc[len(petdf)] = {"map_id" :user_id, "Name": pet_name, "Age": age, "Species": species, "Breed": breed,  "Sex": sex}
+        petdf.loc[len(petdf)] = {"id": str(uuid4()), "ownerid" :user_id, "name": pet_name, "age": age, "species": species, "breed": breed,  "sex": sex}
 
     
-    user_onlydf = userdf[userdf["Role"]=="user"]
+    
     STATUS = ["pending", "decided"]
     DESCRIPTIONS = [
     "Looking for a sitter for a weekend trip.",
@@ -161,31 +166,38 @@ if __name__=="__main__":
     "Pet sitter needed while we move houses.",
     ]   
     
+    TASK_TYPES = ['day_boarding', 'doggy_day_care', 'dog_walking', 'home_visits', 'house_sitting']
 
     # add sitting 
-    sittingdf = pd.DataFrame(columns=["sitting_id", "map_id" , "Pay" ,  "StartDate", "EndDate", "Status", "CreatedAt" , "Description"])
+    sittingdf = pd.DataFrame(columns=["id", "userid" , "pay" ,  "startdate", "enddate", "status", "createdat" , "description", "tasktype"])
+    pet_sitting_df = pd.DataFrame(columns=["id", "sittingrequestid", "petid"])
     for i in range(REQUEST_COUNT):
-        random_map_id = random.choice(user_onlydf["map_id"].tolist())
+        random_map_id = random.choice(petdf["ownerid"].tolist())
+        pets_for_sitting_df = petdf[petdf["ownerid"]==random_map_id]
+        petid = random.choice(pets_for_sitting_df["id"].tolist())
         pay = random.randint(5, 100)
         start_date = datetime.datetime.now() + datetime.timedelta(days=random.randint(1, 30))
         end_date = start_date + datetime.timedelta(days=random.randint(1, 30))
         status = random.choice(STATUS)
         description = random.choice(DESCRIPTIONS)
-        sittingdf.loc[len(sittingdf)] = {"sitting_id": len(sittingdf), "map_id" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description}
+        tasktype = random.choice(TASK_TYPES)
+        sittingid = str(uuid4())
+        sittingdf.loc[len(sittingdf)] = {"id":sittingid , "userid" :random_map_id, "pay": pay, "startdate": start_date, "enddate": end_date, "status": status,  "description": description, "tasktype": tasktype}
+        pet_sitting_df.loc[len(pet_sitting_df)] = {"id": str(uuid4()), "sittingrequestid": sittingid, "petid": petid}
 
 
     # add interest
-    sitting_interestdf = pd.DataFrame(columns=["interest_id", "user_map_id", "sitting_id", "CreatedAt" , "status"])
+    sitting_interestdf = pd.DataFrame(columns=["id", "userid", "sittingrequestid", "createdat" , "status"])
     
     for i in range(len(sittingdf)):
-        poster_id = sittingdf.iloc[i]["map_id"]
+        poster_id = sittingdf.iloc[i]["userid"]
         for j in range(INTEREST_COUNT):
-            sitting_id = i  
-            user_map_id = random.choice([map_id for map_id in user_onlydf["map_id"].tolist() if map_id != poster_id])
-            sitting_interestdf.loc[len(sitting_interestdf)] = {"interest_id": len(sitting_interestdf), "map_id": user_map_id, "sitting_id": sitting_id}
+            sitting_id = sittingdf.iloc[i]["id"]
+            user_map_id = random.choice([map_id for map_id in user_onlydf["userid"].tolist() if map_id != poster_id])
+            sitting_interestdf.loc[len(sitting_interestdf)] = {"id": str(uuid4()), "userid": user_map_id, "sittingrequestid": sitting_id}
 
     # add events 
-    eventdf = pd.DataFrame(columns=["event_id", "map_id", "event_name", "description" , "location", "startdate", "enddate",  "createdat"])
+    eventdf = pd.DataFrame(columns=["id", "createdby", "event_name", "description" , "location", "startdate", "enddate",  "createdat", "cost"])
 
     EVENTS = {
     "Pet Adoption Drive" : "Come and meet our pets at our adoption drive.",
@@ -199,26 +211,28 @@ if __name__=="__main__":
 
 
     for i in range(REQUEST_COUNT):
-        random_map_id = random.choice(userdf["map_id"].tolist())
+        random_map_id = random.choice(userdf["userid"].tolist())
         name = random.choice(list(EVENTS.keys()))
         description = EVENTS[name]
         location = random.choice(ADDRESS)
+        cost = random.randint(5, 100)
+        status = random.choice(STATUS)
         start_date = datetime.datetime.now() + datetime.timedelta(days=random.randint(1, 30))
         end_date = start_date + datetime.timedelta(days=random.randint(1, 30))
-        eventdf.loc[len(eventdf)] = {"event_id": len(eventdf), "map_id" :random_map_id, "Name": name, "Location": location, "StartDate": start_date, "EndDate": end_date, "Description": description}
+        eventdf.loc[len(eventdf)] = {"id": str(uuid4()), "createdby" :random_map_id, "event_name": name, "location": location, "startdate": start_date, "enddate": end_date, "description": description, "cost": cost, "status" : status }
 
 
     # add event interest 
-    event_interestdf = pd.DataFrame(columns=["interest_id", "user_map_id", "event_id", "createdat" , "status"])
+    event_interestdf = pd.DataFrame(columns=["id", "userid", "eventid", "createdat" , "status"])
 
     for i in range(len(eventdf)):
         for j in range(INTEREST_COUNT):
-            event_id = i
-            user_map_id = random.choice(user_onlydf["map_id"].tolist())
-            event_interestdf.loc[len(event_interestdf)] = {"interest_id": len(event_interestdf), "map_id": user_map_id, "event_id": event_id}
+            event_id = eventdf.iloc[i]["id"]
+            user_map_id = random.choice(user_onlydf["userid"].tolist())
+            event_interestdf.loc[len(event_interestdf)] = {"id": str(uuid4()), "userid": user_map_id, "eventid": event_id}
 
     # add adoption 
-    adoptiondf = pd.DataFrame(columns=["adoption_id", "agency_map_id", "petid", "description", "status", "createdat", "updatedat"])
+    adoptiondf = pd.DataFrame(columns=["id", "agentid", "petid", "description", "status", "createdat", "updatedat"])
     ADOPTION_DESCRIPTIONS = [
     "Looking for a new home for this cute pet.",
     "Adopt this pet and give it a loving home.",
@@ -228,26 +242,27 @@ if __name__=="__main__":
     ]
 
     for i in range(REQUEST_COUNT):
-        random_map_id = random.choice(agencydf["map_id"].tolist())
-        pet_id = random.randint(0, len(petdf))
+        random_map_id = random.choice(agencydf["userid"].tolist())
+        pet_id = str(uuid4())
         description = random.choice(ADOPTION_DESCRIPTIONS)
         status = random.choice(STATUS)
-        adoptiondf.loc[len(adoptiondf)] = {"adoption_id": len(adoptiondf), "agency_map_id" :random_map_id, "petid": pet_id, "Description": description, "Status": status}
+        adoptiondf.loc[len(adoptiondf)] = {"id": str(uuid4()), "agentid" :random_map_id, "petid": pet_id, "description": description, "status": status}
 
     # add adoption interest
-    adoption_interestdf = pd.DataFrame(columns=["interest_id", "user_map_id", "adoption_id", "createdat" , "status"])
+    adoption_interestdf = pd.DataFrame(columns=["id", "userid", "adoptionid", "createdat" , "status"])
     
     for i in range(len(adoptiondf)):
         for j in range(INTEREST_COUNT):
-            adoption_id = i
-            user_map_id = random.choice(user_onlydf["map_id"].tolist())
-            adoption_interestdf.loc[len(adoption_interestdf)] = {"interest_id": len(adoption_interestdf), "map_id": user_map_id, "adoption_id": adoption_id}
+            adoption_id = adoptiondf.iloc[i]["id"]
+            user_map_id = random.choice(user_onlydf["userid"].tolist())
+            adoption_interestdf.loc[len(adoption_interestdf)] = {"id": str(uuid4()), "userid": user_map_id, "adoptionid": adoption_id}
 
     userdf.to_csv(os.path.join(DIR ,"user.csv"))
     agencydf.to_csv(os.path.join(DIR ,"agency.csv"))
     petdf.to_csv(os.path.join(DIR ,"pet.csv"))
     sittingdf.to_csv(os.path.join(DIR ,"sitting.csv"))
     sitting_interestdf.to_csv(os.path.join(DIR ,"sitting_interest.csv"))
+    pet_sitting_df.to_csv(os.path.join(DIR ,"pet_sitting_request.csv"))
     eventdf.to_csv(os.path.join(DIR ,"event.csv"))
     event_interestdf.to_csv(os.path.join(DIR ,"event_interest.csv"))
     adoptiondf.to_csv(os.path.join(DIR ,"adoption.csv"))
