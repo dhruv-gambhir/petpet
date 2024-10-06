@@ -9,14 +9,14 @@ export default function EventCreationForm({}) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {  },
   } = useForm();
 
   const submitAction = async (data) => {
     const body = {
       event_name: data.eventName,
       createdby: "1",
-      startdate: (new Date.parse(data.date + "T" + data.time)).toString(),
+      startdate: data.date.toString(),
       location: data.location,
       description: data.description,
     }
@@ -31,9 +31,12 @@ export default function EventCreationForm({}) {
     }
 
     body["dogPhoto"] = url;
-    console.log(body);
 
-    await createEvent(body);
+    try {
+      await createEvent(body);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -51,12 +54,6 @@ export default function EventCreationForm({}) {
           placeholder="Date"
           className="border border-gray-300 rounded-md p-2 flex-1"
           {...register("date", { required: true })}
-        />
-        <input
-          type="time"
-          placeholder="Time"
-          className="border border-gray-300 rounded-md p-2 flex-1"
-          {...register("time", { required: true })}
         />
         <input
           type="text"

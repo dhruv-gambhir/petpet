@@ -11,13 +11,14 @@ const fetcher = async (url, options) => await fetch(`${process.env.NEXT_PUBLIC_B
  * @property {string} status
  * @property {string} location
  * @property {string} cost
+ * @property {string} imageurl
  */
 
 /**
  * Unpacks a throwable function and returns its value or null if an error occurs.
  * @template T Return value type
  * @param {() => T} throwable 
- * @returns {Promise<Awaited<T> | null>}
+ * @returns {Promise<Awaited<T | null>>}
  */
 export const unpacker = async (throwable) => {
   try {

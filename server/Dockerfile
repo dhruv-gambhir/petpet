@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
+# Run the data creation code
+RUN python create_data.py
+
 # Expose the port the app runs on
 EXPOSE 5000
 

@@ -10,9 +10,10 @@ const staticEvents = [
     location: "Location 3",
     description: "This is the first event.",
     coordinator: "Coordinator 1",
-    dogPhoto: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
+    imageurl: "https://petpet.blob.core.windows.net/images/1728219253664-truck.jpg",
   },
 ];
+
 // need query by user id
 export default async function MyEventsPage() {
   const events = staticEvents;

@@ -15,7 +15,7 @@ export default function EventCard({ event, organizerView }) {
       <div className="flex-none w-60 relative">
         <img
           className="object-scale-down mx-auto h-full aspect-auto"
-          src={event.dogPhoto}
+          src={event.imageurl}
           alt="A dog photo."
         />
         <div className="absolute w-4/5 text-center bg-gray-300 px-2 py-1 rounded z-50 text-nowrap shadow-sm shadow-black bottom-[-1rem] left-[50%] translate-x-[-50%]">
