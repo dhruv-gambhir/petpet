@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 export default function SitterPage() {
 
-  const router = useRouter(); 
+  const router = useRouter();
 
   return (
     <div>
@@ -43,7 +43,22 @@ export default function SitterPage() {
             </button>
           </div>
         </div>
+
       </section>
+      <div className="flex-initial self-stretch w-[83.3%] mx-auto">
+      <form className="flex m-4 h-8">
+        <input
+          className="flex-1 mr-2 w-[40rem] px-2"
+          type="text"
+          placeholder="Location"
+        />
+        <div className="flex gap-2">
+          <input className="px-2" type="text" placeholder="Sitting Type" />
+          <input className="px-2" type="text" placeholder="Animal Type" />
+          <input className="px-2" type="date" />
+        </div>
+      </form>
+      </div>
     </div>
   );
 }
