@@ -9,13 +9,11 @@ export default function WebappLayout({ children }) {
     const { zIsLoggedIn } = useStore();
     const router = useRouter();
 
-    console.log(zIsLoggedIn);
-
-    // useEffect(() => {
-    //     if (!zIsLoggedIn) {
-    //         router.push("/login");
-    //     }
-    // }, [zIsLoggedIn, router]);
+    useEffect(() => {
+        if (!zIsLoggedIn) {
+            router.push("/login");
+        }
+    }, [zIsLoggedIn, router]);
 
     return (
         <>

@@ -12,10 +12,13 @@ export default function EventCreationForm({}) {
     formState: {  },
   } = useForm();
 
+  const userId = "a2b88379-aa4e-420b-a442-1bbeea9bb7f6"; 
+  // TODO replace with actual user id
+
   const submitAction = async (data) => {
     const body = {
       event_name: data.eventName,
-      createdby: "1",
+      createdby: userId,
       startdate: data.date.toString(),
       location: data.location,
       description: data.description,
@@ -30,7 +33,7 @@ export default function EventCreationForm({}) {
       return;
     }
 
-    body["dogPhoto"] = url;
+    body["imageurl"] = url;
 
     try {
       await createEvent(body);
@@ -50,7 +53,7 @@ export default function EventCreationForm({}) {
           {...register("eventName", { required: true })}
         />
         <input
-          type="date"
+          type="datetime-local"
           placeholder="Date"
           className="border border-gray-300 rounded-md p-2 flex-1"
           {...register("date", { required: true })}
