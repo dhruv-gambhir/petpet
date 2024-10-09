@@ -3,33 +3,101 @@ import catBg from "../../../../public/cat_bg.png";
 import { useRouter } from "next/navigation";
 import JobsCard from "./JobsCard";
 
-const staticJobsData = [
+const staticPetsData = [
   {
-    sittingtype: "Walking",
-    animaltype: "Dog",
-    price: "$40/hr",
+    petId: 1,
+    petName: "Bella",
+    petType: "Dog",
+    breed: "Labrador Retriever",
+    age: 3,
+    ownerName: "Alice Smith",
+    ownerContact: "alice@example.com",
     location: "Bukit Batok",
-    description: "Description about the request.",
-    photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
+    datesNeeded: "2023-11-20 to 2023-11-25",
+    specialNeeds: "Needs medication twice a day",
+    description: "Bella is a friendly Labrador who loves to play fetch.",
+    photo: "/d1.jpeg",
   },
   {
-    sittingtype: "Walking",
-    animaltype: "Cat",
-    price: "$20/hr",
+    petId: 2,
+    petName: "Whiskers",
+    petType: "Cat",
+    breed: "Persian",
+    age: 2,
+    ownerName: "John Doe",
+    ownerContact: "john@example.com",
     location: "Jurong West",
-    description: "Description about the request.",
-    photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
+    datesNeeded: "2023-11-22 to 2023-11-24",
+    specialNeeds: "Shy, prefers quiet environments",
+    description: "Whiskers is a calm Persian cat who enjoys quiet company.",
+    photo: "https://placekitten.com/300/300",
+  },
+  {
+    petId: 3,
+    petName: "Max",
+    petType: "Dog",
+    breed: "Golden Retriever",
+    age: 4,
+    ownerName: "Emily Tan",
+    ownerContact: "emily@example.com",
+    location: "Tampines",
+    datesNeeded: "2023-11-27 to 2023-12-02",
+    specialNeeds: "Very energetic, needs daily walks",
+    description: "Max loves outdoor activities and is very friendly.",
+    photo: "/d2.jpeg",
+  },
+  {
+    petId: 4,
+    petName: "Luna",
+    petType: "Cat",
+    breed: "Siamese",
+    age: 5,
+    ownerName: "David Lee",
+    ownerContact: "david@example.com",
+    location: "Clementi",
+    datesNeeded: "2023-12-05 to 2023-12-10",
+    specialNeeds: "Requires special diet",
+    description: "Luna is affectionate and enjoys being around people.",
+    photo: "/c1.jpeg",
+  },
+  {
+    petId: 5,
+    petName: "Charlie",
+    petType: "Dog",
+    breed: "Beagle",
+    age: 2,
+    ownerName: "Sophia Lim",
+    ownerContact: "sophia@example.com",
+    location: "Woodlands",
+    datesNeeded: "2023-12-12 to 2023-12-15",
+    specialNeeds: "None",
+    description: "Charlie is curious and loves exploring new places.",
+    photo: "https://images.dog.ceo/breeds/beagle/n02088364_11136.jpg",
+  },
+  {
+    petId: 6,
+    petName: "Milo",
+    petType: "Cat",
+    breed: "Maine Coon",
+    age: 3,
+    ownerName: "Karen Ng",
+    ownerContact: "karen@example.com",
+    location: "Pasir Ris",
+    datesNeeded: "2023-12-18 to 2023-12-22",
+    specialNeeds: "Needs grooming every other day",
+    description: "Milo is playful and enjoys interactive toys.",
+    photo: "/c2.jpeg",
   },
 ];
 
 export default function SitterPage() {
-
   const router = useRouter();
-  const jobsData = staticJobsData;
+  const petsData = staticPetsData;
 
   return (
     <div>
-      <section className="relative w-screen h-28 bg-left flex flex-row items-center justify-center">
+      {/* Header Section */}
+      <section className="relative w-screen h-28 bg-left flex items-center justify-center">
         <div
           className="absolute inset-0 bg-cover bg-no-repeat"
           style={{
@@ -39,15 +107,15 @@ export default function SitterPage() {
             opacity: "0.4",
           }}
         ></div>
-        <div className="relative flex flex-row justify-between items-center w-full z-10">
-          <div className="mx-10">
+        <div className="relative flex justify-between items-center w-full z-10 px-10">
+          <div>
             <p className="text-xl text-black font-bold">
               Find the purrfect match for all your pet needs
             </p>
           </div>
-          <div>
+          <div className="flex">
             <button
-              className="h-14 w-36 border border-black rounded-full mx-10 justify-end"
+              className="h-14 w-36 border border-black rounded-full mx-2 hover:bg-gray-200"
               onClick={() => {
                 router.push("./owner");
               }}
@@ -55,7 +123,7 @@ export default function SitterPage() {
               Owners
             </button>
             <button
-              className="h-14 w-36 bg-white border border-black rounded-full mx-10 justify-end"
+              className="h-14 w-36 bg-white border border-black rounded-full mx-2 hover:bg-gray-200"
               onClick={() => {
                 router.push("./sitter");
               }}
@@ -64,29 +132,45 @@ export default function SitterPage() {
             </button>
           </div>
         </div>
-
       </section>
-      <div className="flex-initial self-stretch w-[83.3%] mx-auto">
-        <form className="flex m-4 h-8">
+
+      {/* Search and Filter Form */}
+      <div className="flex-initial self-stretch w-5/6 mx-auto mt-6">
+        <form className="flex flex-col md:flex-row items-center m-4">
           <input
-            className="flex-1 mr-2 w-[40rem] px-2"
+            className="flex-1 mr-2 w-full md:w-auto px-4 py-2 border border-gray-300 rounded-md mb-2 md:mb-0"
             type="text"
             placeholder="Location"
           />
-          <div className="flex gap-2">
-            <input className="px-2" type="text" placeholder="Sitting Type" />
-            <input className="px-2" type="text" placeholder="Animal Type" />
-            <input className="px-2" type="date" />
+          <div className="flex flex-col md:flex-row gap-2">
+            <input
+              className="px-4 py-2 border border-gray-300 rounded-md"
+              type="text"
+              placeholder="Pet Type"
+            />
+            <input
+              className="px-4 py-2 border border-gray-300 rounded-md"
+              type="text"
+              placeholder="Breed"
+            />
+            <input
+              className="px-4 py-2 border border-gray-300 rounded-md"
+              type="date"
+            />
           </div>
         </form>
-        <a>Sitting Requests</a>
-        <div className="flex flex-col items-start gap-4 m-2 mt-8">
-        {jobsData.map((detail, index) => (
-          <JobsCard detail={detail} key={index} />
-        ))}
-      </div>
-      </div>
 
+        {/* Title */}
+        <h2 className="text-2xl font-semibold m-4">Pets Needing Sitting</h2>
+
+        {/* Pets List */}
+        <div className="flex flex-col items-start gap-6 m-4">
+          {petsData.map((pet) => (
+            <JobsCard pet={pet} key={pet.petId} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
+

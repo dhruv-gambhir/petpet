@@ -863,6 +863,20 @@ def get_all_users():
 
     return jsonify(users_data), 200
 
+# Route to get user ID from email
+@app.route('/users/id', methods=['GET'])
+def get_user_id():
+    email = request.args.get('email')
+    if not email:
+        abort(400, description="Email parameter is required.")
+    
+    user = Users.query.filter_by(email=email).first()
+    if not user:
+        abort(404, description="User not found.")
+    
+    return jsonify({'user_id': user.userid}), 200
+
+
 #Route to post new user 
 @app.route('/users', methods=['POST'])
 def create_user():
