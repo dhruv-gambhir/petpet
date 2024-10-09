@@ -1,3 +1,5 @@
+import InterestedButton from "@/app/Components/InterestedButton";
+
 export default function JobsCard({ detail, isOrganizer }) {
   isOrganizer = isOrganizer ?? false;
   
@@ -19,10 +21,7 @@ export default function JobsCard({ detail, isOrganizer }) {
         </div>
       ) : (
         <div className="absolute top-2 right-2 bg-white">
-          <button className="p-2 font-bold hover:underline">Interested</button>
-          <button className="p-2 hover:drop-shadow hover:shadow-gray-300">
-            ❤️
-          </button>
+            <InterestedButton/>
         </div>
       )}
     </div>
