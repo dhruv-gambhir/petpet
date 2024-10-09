@@ -11,11 +11,11 @@ export default function WebappLayout({ children }) {
 
     console.log(zIsLoggedIn);
 
-    // useEffect(() => {
-    //     if (!zIsLoggedIn) {
-    //         router.push("/login");
-    //     }
-    // }, [zIsLoggedIn, router]);
+    useEffect(() => {
+         if (!zIsLoggedIn) {
+             router.push("/login");
+         }
+    }, [zIsLoggedIn, router]);
 
     return (
         <>
