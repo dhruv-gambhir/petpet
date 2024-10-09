@@ -10,18 +10,20 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./PETPAL_DB/Scripts/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+      # - ./PETPAL_DB/data/csv:/var/lib/postgresql/csv
+
     ports:
       - "5432:5432"
     restart: unless-stopped
 
   web:
     build: ./server
-    volumes:
-      - ./server:/app
     ports:
       - "5000:5000"
     environment:
       DATABASE_URL: postgresql://myuser:mypassword@db/mydb
+      SSL_ENABLED: true
+      SSL_DISABLE: False
     depends_on:
       - db
     restart: unless-stopped
