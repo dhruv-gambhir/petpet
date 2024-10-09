@@ -61,3 +61,4 @@ export default function EventCard({ event, organizerView }) {
       )}
     </div>
   );
+}
