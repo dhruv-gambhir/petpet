@@ -797,6 +797,8 @@ def delete_sitter_interest(sitter_interest_id):
 @app.route('/events/user/<string:user_id>', methods=['GET'])
 def get_events_by_user(user_id):
     events = Event.query.filter_by(createdby=user_id).all()
+    if not events:
+        abort(404, description="No events found for this user")
     event_list = [{
         'id': event.id,
         'createdby': event.createdby,
@@ -833,6 +835,27 @@ def get_user(user_id):
     }
     return jsonify(user_data), 200
 
+#Route to get user info from email
+@app.route('/users/email/<string:email>', methods=['GET'])
+def get_user_by_email(email):
+    user = Users.query.filter_by(email=email).first()
+    if not user:
+        abort(404, description="User not found")
+
+    user_data = {
+        'userid': user.userid,
+        'name': user.name,
+        'email': user.email,
+        'phonenumber': user.phonenumber,
+        'createdat': user.createdat,
+        'updatedat': user.updatedat,
+        'bio': user.bio,
+        'imageurl': user.imageurl,
+        'isagency': user.isagency,
+        'address': user.address,
+        'licensenumber': user.licensenumber
+    }
+    return jsonify(user_data), 200
 
 #Route to post new user 
 @app.route('/users', methods=['POST'])
@@ -878,6 +901,26 @@ def update_user(user_id):
     db.session.commit()
     return jsonify({'message': 'User updated successfully'}), 200
 
+#Route to update a user by email
+@app.route('/users/email/<string:email>', methods=['PUT'])
+def update_user_by_email(email):
+    user = Users.query.filter_by(email=email).first()
+    if not user:
+        abort(404, description="User not found")
+
+    data = request.get_json()
+    user.name = data.get('name', user.name)
+    user.email = data.get('email', user.email)
+    user.phonenumber = data.get('phonenumber', user.phonenumber)
+    user.bio = data.get('bio', user.bio)
+    user.imageurl = data.get('imageurl', user.imageurl)
+    user.isagency = data.get('isagency', user.isagency)
+    user.address = data.get('address', user.address)
+    user.licensenumber = data.get('licensenumber', user.licensenumber)
+
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully by email'}), 200
+
 #can obtain the docs by going to {local_host_ip}/docs
 @app.route("/swagger.json")
 def swagger_json():
@@ -888,7 +931,7 @@ def swagger_json():
             "description": "API for managing pet adoption, sitting requests, and events.",
             "version": "1.0.0"
         },
-        "host": "127.0.0.1:5000",
+        "host": "127.0.0.1:5001",
         "basePath": "/",
         "schemes": ["http"],
         "paths": {
@@ -975,6 +1018,85 @@ def swagger_json():
                             "required": True,
                             "type": "string",
                             "description": "User ID"
+                        },
+                        {
+                            "name": "body",
+                            "in": "body",
+                            "required": True,
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {"type": "string"},
+                                    "email": {"type": "string"},
+                                    "phonenumber": {"type": "string"},
+                                    "bio": {"type": "string"},
+                                    "imageurl": {"type": "string"},
+                                    "isagency": {"type": "boolean"},
+                                    "address": {"type": "string"},
+                                    "licensenumber": {"type": "string"}
+                                }
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "User updated successfully"
+                        },
+                        "404": {
+                            "description": "User not found"
+                        }
+                    }
+                }
+            },
+            # Users by Email
+            "/users/email/{email}": {
+                "get": {
+                    "summary": "Fetch a specific user by email",
+                    "description": "Retrieve a user by email.",
+                    "parameters": [
+                        {
+                            "name": "email",
+                            "in": "path",
+                            "required": True,
+                            "type": "string",
+                            "description": "User Email"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "User details",
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userid": {"type": "string"},
+                                    "name": {"type": "string"},
+                                    "email": {"type": "string"},
+                                    "phonenumber": {"type": "string"},
+                                    "createdat": {"type": "string"},
+                                    "updatedat": {"type": "string"},
+                                    "bio": {"type": "string"},
+                                    "imageurl": {"type": "string"},
+                                    "isagency": {"type": "boolean"},
+                                    "address": {"type": "string"},
+                                    "licensenumber": {"type": "string"}
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "User not found"
+                        }
+                    }
+                },
+                "put": {
+                    "summary": "Update a specific user by email",
+                    "description": "Update a user by email.",
+                    "parameters": [
+                        {
+                            "name": "email",
+                            "in": "path",
+                            "required": True,
+                            "type": "string",
+                            "description": "User Email"
                         },
                         {
                             "name": "body",
