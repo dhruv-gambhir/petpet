@@ -1,22 +1,14 @@
+"use client";
+
+import useSWR from "swr";
 import EventCard from "../EventCard";
+import { getEventsBy } from "../events";
 import EventCreationForm from "./EventCreationForm";
 
-const staticEvents = [
-  {
-    id: 3,
-    name: "Event 3",
-    date: "2021-03-03",
-    time: "3:00 PM",
-    location: "Location 3",
-    description: "This is the first event.",
-    coordinator: "Coordinator 1",
-    imageurl: "https://petpet.blob.core.windows.net/images/1728219253664-truck.jpg",
-  },
-];
+export default function MyEventsPage() {
+  const userId = "a2b88379-aa4e-420b-a442-1bbeea9bb7f6";
 
-// need query by user id
-export default async function MyEventsPage() {
-  const events = staticEvents;
+  const { data: events, isLoading } = useSWR(["events/user", userId], ([_, args]) => getEventsBy(args));
 
   return (
     <div className='flex flex-col self-stretch w-[83.3%] mx-auto'>
@@ -25,7 +17,7 @@ export default async function MyEventsPage() {
       <EventCreationForm />
 
       <div className="relative flex flex-col items-start gap-4 m-2 mt-8">
-        {events.map((event) => (
+        {events?.map((event) => (
           <EventCard key={event.id} event={event} organizerView={true} />
         ))}
       </div>
