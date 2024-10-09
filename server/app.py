@@ -793,6 +793,25 @@ def delete_sitter_interest(sitter_interest_id):
     db.session.commit()
     return jsonify({'message': 'Sitter interest deleted successfully'}), 200
 
+#Route to get all events based on user id
+@app.route('/events/user/<string:user_id>', methods=['GET'])
+def get_events_by_user(user_id):
+    events = Event.query.filter_by(createdby=user_id).all()
+    event_list = [{
+        'id': event.id,
+        'createdby': event.createdby,
+        'event_name': event.event_name,
+        'description': event.description,
+        'location': event.location,
+        'startdate': event.startdate.strftime('%Y-%m-%d') if event.startdate else None,
+        'cost': event.cost,
+        'status': event.status,
+        'imageurl': event.imageurl,
+        'createdat': event.createdat
+    } for event in events]
+    return jsonify(event_list), 200
+
+#can obtain the docs by going to {local_host_ip}/docs
 @app.route("/swagger.json")
 def swagger_json():
     swagger_spec = {
@@ -973,6 +992,47 @@ def swagger_json():
                     }
                 }
             },
+            # Events by User
+            "/events/user/{user_id}": {
+                "get": {
+                    "summary": "Fetch all events by a specific user",
+                    "description": "Retrieve all events from the database by the user_id.",
+                    "parameters": [
+                        {
+                            "name": "user_id",
+                            "in": "path",
+                            "required": True,
+                            "type": "string",
+                            "description": "User ID"
+                        }
+                    ],
+                    "produces": ["application/json"],
+                    "responses": {
+                        "200": {
+                            "description": "A list of events by the user",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {"type": "string"},
+                                        "createdby": {"type": "string"},
+                                        "event_name": {"type": "string"},
+                                        "description": {"type": "string"},
+                                        "location": {"type": "string"},
+                                        "startdate": {"type": "string"},
+                                        "cost": {"type": "integer"},
+                                        "status": {"type": "string"},
+                                        "imageurl": {"type": "string"},
+                                        "createdat": {"type": "string"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
             # Event Interests
             "/event_interests": {
                 "get": {
