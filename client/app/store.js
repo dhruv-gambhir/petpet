@@ -27,6 +27,7 @@ const useStore = create(
       onRehydrateStorage: () => (state) => {
         state.setHasHydrated(true);
       },
+      listenToStorageChanges: true, 
     },
   ),
 );
