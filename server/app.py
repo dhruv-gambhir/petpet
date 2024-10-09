@@ -811,6 +811,73 @@ def get_events_by_user(user_id):
     } for event in events]
     return jsonify(event_list), 200
 
+#Route to get user info
+@app.route('/users/<string:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = Users.query.get(user_id)
+    if not user:
+        abort(404, description="User not found")
+
+    user_data = {
+        'userid': user.userid,
+        'name': user.name,
+        'email': user.email,
+        'phonenumber': user.phonenumber,
+        'createdat': user.createdat,
+        'updatedat': user.updatedat,
+        'bio': user.bio,
+        'imageurl': user.imageurl,
+        'isagency': user.isagency,
+        'address': user.address,
+        'licensenumber': user.licensenumber
+    }
+    return jsonify(user_data), 200
+
+
+#Route to post new user 
+@app.route('/users', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    if not data or not data.get('name') or not data.get('email'):
+        abort(400, description="Invalid user data. 'name' and 'email' are required.")
+    
+    if Users.query.filter_by(email=data['email']).first():
+        abort(400, description="User with this email already exists.")
+    
+    new_user = Users(
+        name=data['name'],
+        email=data['email'],
+        phonenumber=data.get('phonenumber'),
+        bio=data.get('bio'),
+        imageurl=data.get('imageurl'),
+        isagency=data.get('isagency', False),
+        address=data.get('address'),
+        licensenumber=data.get('licensenumber')
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'User created successfully', 'user_id': new_user.userid}), 201
+
+#Route to update user info
+@app.route('/users/<string:user_id>', methods=['PUT'])
+def update_user(user_id):
+    user = Users.query.get(user_id)
+    if not user:
+        abort(404, description="User not found")
+
+    data = request.get_json()
+    user.name = data.get('name', user.name)
+    user.email = data.get('email', user.email)
+    user.phonenumber = data.get('phonenumber', user.phonenumber)
+    user.bio = data.get('bio', user.bio)
+    user.imageurl = data.get('imageurl', user.imageurl)
+    user.isagency = data.get('isagency', user.isagency)
+    user.address = data.get('address', user.address)
+    user.licensenumber = data.get('licensenumber', user.licensenumber)
+
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'}), 200
+
 #can obtain the docs by going to {local_host_ip}/docs
 @app.route("/swagger.json")
 def swagger_json():
@@ -825,6 +892,119 @@ def swagger_json():
         "basePath": "/",
         "schemes": ["http"],
         "paths": {
+            # Users
+            "/users": {
+                "post": {
+                    "summary": "Create a new user",
+                    "description": "Create a new user in the database.",
+                    "parameters": [
+                        {
+                            "name": "body",
+                            "in": "body",
+                            "required": True,
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {"type": "string"},
+                                    "email": {"type": "string"},
+                                    "phonenumber": {"type": "string"},
+                                    "bio": {"type": "string"},
+                                    "imageurl": {"type": "string"},
+                                    "isagency": {"type": "boolean"},
+                                    "address": {"type": "string"},
+                                    "licensenumber": {"type": "string"}
+                                }
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "201": {
+                            "description": "User created successfully"
+                        },
+                        "400": {
+                            "description": "Invalid user data"
+                        }
+                    }
+                }
+            },
+            "/users/{user_id}": {
+                "get": {
+                    "summary": "Fetch a specific user",
+                    "description": "Retrieve a user by ID.",
+                    "parameters": [
+                        {
+                            "name": "user_id",
+                            "in": "path",
+                            "required": True,
+                            "type": "string",
+                            "description": "User ID"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "User details",
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userid": {"type": "string"},
+                                    "name": {"type": "string"},
+                                    "email": {"type": "string"},
+                                    "phonenumber": {"type": "string"},
+                                    "createdat": {"type": "string"},
+                                    "updatedat": {"type": "string"},
+                                    "bio": {"type": "string"},
+                                    "imageurl": {"type": "string"},
+                                    "isagency": {"type": "boolean"},
+                                    "address": {"type": "string"},
+                                    "licensenumber": {"type": "string"}
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "User not found"
+                        }
+                    }
+                },
+                "put": {
+                    "summary": "Update a specific user",
+                    "description": "Update a user by ID.",
+                    "parameters": [
+                        {
+                            "name": "user_id",
+                            "in": "path",
+                            "required": True,
+                            "type": "string",
+                            "description": "User ID"
+                        },
+                        {
+                            "name": "body",
+                            "in": "body",
+                            "required": True,
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {"type": "string"},
+                                    "email": {"type": "string"},
+                                    "phonenumber": {"type": "string"},
+                                    "bio": {"type": "string"},
+                                    "imageurl": {"type": "string"},
+                                    "isagency": {"type": "boolean"},
+                                    "address": {"type": "string"},
+                                    "licensenumber": {"type": "string"}
+                                }
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "User updated successfully"
+                        },
+                        "404": {
+                            "description": "User not found"
+                        }
+                    }
+                }
+            },
             # Events
             "/events": {
                 "get": {
