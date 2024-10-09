@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import PopupForm from "./NewSittingRequest";
 
 export default function OwnerPage() {
+
+  const router = useRouter(); 
+
   return (
     <div>
       <section className="relative w-screen h-28 bg-left flex flex-row items-center justify-center">
@@ -34,7 +37,7 @@ export default function OwnerPage() {
             <button
               className="h-14 w-36 border border-black rounded-full mx-10 justify-end"
               onClick={() => {
-                router.push("./sitters");
+                router.push("./sitter");
               }}
             >
               Sitters

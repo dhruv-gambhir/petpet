@@ -1,4 +1,5 @@
 import AdoptionCard from "../AdoptionCard";
+import PreviewForm from "./PreviewForm";
 
 // const commonAnimals = ["🐱 Cat", "🐶 Dog", "🐢 Turtle", "🐹 Hams", "🐰 Rabbit"];
 
@@ -22,6 +23,44 @@ export default function AgencyAdoptionPage() {
 
   return (
     <div className="flex-initial self-stretch w-[83.3%] mx-auto">
+       <form className="flex flex-col p-4 gap-4 border border-mypurple m-4 rounded">
+        <label className="text-lg font-semibold">List a pet for adoption</label>
+        <div className="flex flex-row gap-8">
+          <input
+            type="text"
+            placeholder="Pet Name"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
+          <select
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          >
+            <option value="" disabled selected hidden>Sex</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Color"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
+          <input
+            type="text"
+            placeholder="Breed"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
+          <input
+            type="number"
+            placeholder="Weight (in kg)"
+            className="border border-gray-300 rounded-md p-2 flex-1"
+          />
+        </div>
+        <div className="basis-32 flex flex-row gap-8">
+          <textarea type='text' placeholder='Description' className='border border-gray-300 rounded-md p-2 resize-none flex-auto' />
+          <PreviewForm className="basis-1/3" />
+        </div>
+        <button className='bg-mypurple text-white rounded-md p-2 self-center w-80 hover:underline'>Submit</button>
+      </form>
+
       <h1 className="text-3xl font-bold m-4">
         Pets listed for adoption:
       </h1>

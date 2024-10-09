@@ -1,0 +1,31 @@
+,map_id,Name,Email,Phonenumber,Role,CreatedAt,updatedAt,Bio,IsAgency
+0,0,Heather Crawford,james78@example.org,6592871335,user,,,I am a proud pet enthusiast who loves every moment with my furry friends.,False
+1,1,Jennifer Velasquez MD,kathrynroy@example.org,6562272858,user,,,"As a passionate pet owner, I enjoy exploring pet-friendly places.",False
+2,2,Dillon Dean,xross@example.com,6595293957,user,,,"As a cat mom, my life revolves around my playful kittens.",False
+3,3,Mr. Michael Alvarez,rcrawford@example.org,6573955745,user,,,"As a cat mom, my life revolves around my playful kittens.",False
+4,4,Kimberly Davis,hdean@example.net,6584605637,user,,,"I’m a proud dog lover, and my pup is my best friend.",False
+5,5,Jacob Roach,fernandezsheri@example.net,6532030878,user,,,"As a pet enthusiast, I love sharing tips on caring for animals.",False
+6,6,Whitney Day,zpierce@example.net,6597893597,user,,,"As a cat mom, my life revolves around my playful kittens.",False
+7,7,Carol Hutchinson,ilewis@example.net,6538478244,user,,,"As a pet enthusiast, I love sharing tips on caring for animals.",False
+8,8,Calvin Hanna,idavidson@example.net,6592576365,user,,,"As a passionate pet owner, I enjoy exploring pet-friendly places.",False
+9,9,Pamela Jenkins,hannah59@example.net,6599831533,user,,,Being an animal lover means my heart is full of affection for all creatures.,False
+10,10,Jerry Price,brandon43@example.net,6541122782,user,,,"As a passionate pet owner, I enjoy exploring pet-friendly places.",False
+11,11,Philip James,perezgary@example.com,6549461503,user,,,I’m a devoted dog mom who cherishes every wag of the tail.,False
+12,12,Monica Hunt,petersmark@example.org,6536170224,user,,,"Being an animal lover, I always advocate for adopting pets in need.",False
+13,13,Mason Williams,annajones@example.net,6548070760,user,,,"As a passionate pet owner, I enjoy exploring pet-friendly places.",False
+14,14,Robert Weaver,johnsonmaria@example.net,6586046151,user,,,"Being a dedicated animal enthusiast, I enjoy learning about wildlife conservation.",False
+15,15,Pet Paradise Grooming Lounge,daniel09@example.org,6581941031,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
+16,16,Tail Waggers Playtime Partners,fuentespatrick@example.net,6583590550,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
+17,17,Canine Companions Pet Services,riveradaniel@example.org,6530629550,agency,,,Our agency is committed to ensuring your pets receive the best care and attention.,
+18,18,Pet Paradise Wellness Hub,sarahgrant@example.net,6592083386,agency,,,Our agency is committed to ensuring your pets receive the best care and attention.,
+19,19,Pet Paradise Boarding Haven,browndarren@example.org,6554831930,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
+20,20,Animal Allies Companionship Agency,miguel64@example.net,6550087511,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
+21,21,Pawsitive Care Crew,jason04@example.com,6517613512,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
+22,22,Tail Waggers Luxury Retreat,wilsonkristi@example.org,6577960293,agency,,,Our agency is committed to ensuring your pets receive the best care and attention.,
+23,23,Purrfect Wellness Hub,paulle@example.org,6522432631,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
+24,24,Critter Comforts Adventure Co.,pdeleon@example.com,6572335338,agency,,,Our agency is committed to ensuring your pets receive the best care and attention.,
+25,25,Canine Companions Wellness Hub,trujillomelissa@example.net,6566383872,agency,,,Our agency is committed to ensuring your pets receive the best care and attention.,
+26,26,Pet Paradise Training Academy,jason04@example.com,6555238599,agency,,,Our agency is committed to ensuring your pets receive the best care and attention.,
+27,27,Pet Haven Boarding Haven,stuartcassandra@example.com,6529493491,agency,,,Our agency is committed to ensuring your pets receive the best care and attention.,
+28,28,Furry Friends Training Academy,tracypowell@example.org,6524069446,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
+29,29,Tail Waggers Boarding Haven,hartkimberly@example.net,6581594029,agency,,,We are a team of dedicated pet lovers who provide top-notch care for your furry friends.,
