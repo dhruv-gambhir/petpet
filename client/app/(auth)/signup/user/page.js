@@ -14,12 +14,41 @@ function UserSignUp() {
     const [error, setError] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState("");
+    const [uploading, setUploading] = useState(false);
 
     const router = useRouter();
     const fileInputRef = useRef(null);
 
     async function addUser(imageUrl) {
-        console.log("User added: ", email, name, phone, imageUrl);
+        const data = {
+            name: name,
+            email: email,
+            phonenumber: phone,
+            imageurl: imageUrl,
+            isagency: false,
+        };
+
+        try {
+            const response = await fetch('http://localhost:5000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('User created successfully:', result);
+            } else {
+                const errorData = await response.json();
+                console.error('Error creating user:', errorData);
+                setError(errorData.description || 'Error creating user');
+            }
+        } catch (error) {
+            console.error('Error creating user:', error);
+            setError(error.message);
+        }
     }
 
     const handleSignUp = async (event) => {
@@ -32,11 +61,13 @@ function UserSignUp() {
         try {
             let imageUrl = "";
             if (selectedFile) {
+                setUploading(true);
                 imageUrl = await uploadFile(selectedFile); 
+                setUploading(false);
             }
 
             const user = await signup(email, password);
-            addUser(imageUrl);
+            await addUser(imageUrl);
             router.push("/login");
         } catch (error) {
             setError(error.message);
@@ -77,7 +108,6 @@ function UserSignUp() {
     return (
         <div className="flex flex-col justify-center items-center h-full w-full">
             <div className="w-3/4 h-3/4 bg-white shadow-lg rounded-lg flex flex-row">
-                {/* Left side - Form */}
                 <form
                     className="w-1/2 p-8 flex flex-col justify-center"
                     onSubmit={handleSignUp}
@@ -93,6 +123,7 @@ function UserSignUp() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -102,6 +133,7 @@ function UserSignUp() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -120,6 +152,7 @@ function UserSignUp() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -129,10 +162,18 @@ function UserSignUp() {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            required
                         />
                     </div>
+                    <button
+                        type="submit"
+                        className="bg-mypurple text-white w-full py-3 rounded-lg text-xl"
+                        disabled={uploading}
+                    >
+                        {uploading ? 'Uploading...' : 'Next'}
+                    </button>
                 </form>
-                {/* Right side - Profile Picture Upload */}
+
                 <div className="w-1/2 p-8 flex flex-col justify-center items-center">
                     <div
                         className="border-2 border-dashed border-mypurple w-full h-64 flex justify-center items-center rounded-lg mb-4 cursor-pointer"
@@ -164,13 +205,6 @@ function UserSignUp() {
                             ref={fileInputRef}
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="bg-mypurple text-white w-full py-3 rounded-lg text-xl"
-                        onClick={handleSignUp}
-                    >
-                        Next
-                    </button>
                 </div>
             </div>
             <div className="mt-4">
@@ -186,3 +220,4 @@ function UserSignUp() {
 }
 
 export default UserSignUp;
+

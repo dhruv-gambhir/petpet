@@ -836,6 +836,32 @@ def get_user(user_id):
     }
     return jsonify(user_data), 200
 
+# Route to get all users
+@app.route('/all_users', methods=['GET'])
+def get_all_users():
+    # Query to get all users from the database
+    users = Users.query.all() 
+    if not users:
+        abort(505, description="No users found")
+    
+    users_data = []
+    for user in users:
+        user_data = {
+            'userid': user.userid,
+            'name': user.name,
+            'email': user.email,
+            'phonenumber': user.phonenumber,
+            'createdat': user.createdat,
+            'updatedat': user.updatedat,
+            'bio': user.bio,
+            'imageurl': user.imageurl,
+            'isagency': user.isagency,
+            'address': user.address,
+            'licensenumber': user.licensenumber
+        }
+        users_data.append(user_data)
+
+    return jsonify(users_data), 200
 
 #Route to post new user 
 @app.route('/users', methods=['POST'])
