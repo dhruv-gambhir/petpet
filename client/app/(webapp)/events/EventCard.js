@@ -1,13 +1,16 @@
+
+import InterestedButton from "@/app/Components/InterestedButton";
+
 /**
- * 
+ *
  * @param {{
  *    event: import("./events").Event,
  *    organizerView?: boolean
  * }} param0
- * @returns 
+ * @returns
  */
 export default function EventCard({ event, organizerView }) {
-  const isOrganizer = organizerView ?? false;
+    const isOrganizer = organizerView ?? false;
 
   return (
     <div className="relative bg-white rounded w-4/5 h-80 ml-8 flex flex-row p-3 gap-8 shadow-sm shadow-black">
@@ -51,12 +54,10 @@ export default function EventCard({ event, organizerView }) {
         </div>
       ) : (
         <div className="absolute top-2 right-2 bg-white">
-          <button className="p-2 font-bold hover:underline">Interested</button>
-          <button className="p-2 hover:drop-shadow hover:shadow-gray-300">
-            ❤️
-          </button>
+          <div className="absolute top-2 right-2 bg-white">
+                    <InterestedButton />
+                </div>
         </div>
       )}
     </div>
   );
-}
