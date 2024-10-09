@@ -1,24 +1,29 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import NavBar from "../Components/NavBar";
-import useStore from "../store";
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation'; 
+import useStore from '../store';
+import NavBar from '../Components/NavBar';
 
 export default function WebappLayout({ children }) {
-    const { zIsLoggedIn } = useStore();
-    const router = useRouter();
+  const router = useRouter();
+  const { zIsLoggedIn, hasHydrated } = useStore();
 
-    useEffect(() => {
-        if (!zIsLoggedIn) {
-            router.push("/login");
-        }
-    }, [zIsLoggedIn, router]);
+  useEffect(() => {
+    if (hasHydrated && !zIsLoggedIn) {
+      router.push('/login');
+    }
+  }, [zIsLoggedIn, hasHydrated, router]);
 
-    return (
-        <>
-            <NavBar />
-            {children}
-        </>
-    );
+  if (!hasHydrated) {
+    return null;
+  }
+
+  return (
+    <>
+      <NavBar/>
+      {children}
+    </>
+  );
 }
+
