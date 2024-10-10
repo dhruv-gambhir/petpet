@@ -30,7 +30,7 @@ const staticPetsData = [
     datesNeeded: "2023-11-22 to 2023-11-24",
     specialNeeds: "Shy, prefers quiet environments",
     description: "Whiskers is a calm Persian cat who enjoys quiet company.",
-    photo: "https://placekitten.com/300/300",
+    photo: "/c3.jpeg",
   },
   {
     petId: 3,

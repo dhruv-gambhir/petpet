@@ -10,7 +10,7 @@ export default function ProfilePage() {
     email: "dhruv@gmail.com",
     phone: "8123-4567",
     location: "Bukit Batok",
-    profilePhoto: "p1.png",
+    profilePhoto: "/p1.png",
   };
 
   // Pets Data
@@ -23,7 +23,7 @@ export default function ProfilePage() {
       age: 3,
       specialNeeds: "Needs medication twice a day",
       description: "Bella is a friendly Labrador who loves to play fetch.",
-      petPhoto: "d1.jpeg",
+      petPhoto: "/d1.jpeg",
     },
     {
       petId: 2,
@@ -33,7 +33,7 @@ export default function ProfilePage() {
       age: 2,
       specialNeeds: "Shy, prefers quiet environments",
       description: "Whiskers is a calm Persian cat who enjoys quiet company.",
-      petPhoto: "c2.jpeg",
+      petPhoto: "/c2.jpeg",
     },
   ];
 
