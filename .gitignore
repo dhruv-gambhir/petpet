@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Flask environment
+instance/
+.env
+
+# Database and logs
+*.db
+*.sqlite3
+*.log
+
+# Virtual environments
+venv/
+env/
+.venv/
+.venv/
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Python debug logs
+.pytest_cache/
+.coverage
+
+# Swagger UI cache (if generated)
+swagger-ui/

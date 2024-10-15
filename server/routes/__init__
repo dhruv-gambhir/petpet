@@ -1,0 +1,7 @@
+from .adoption_interest_route import adoption_interest_bp
+from .adoption_route import adoption_bp
+from .event_interest_route import event_interest_bp
+from .event_route import event_bp
+from .sitting_request_route import sitting_request_bp
+from .sitting_interest_route import sitting_interest_bp
+from .users_route import users_bp
