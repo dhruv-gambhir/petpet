@@ -1,0 +1,22 @@
+
+name: "Format and Test"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  format_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: cd client && npm install
+      - name: Format code
+        run: cd client && npm run format
+      - name: Test code
+        run: cd client && npm run test
+      

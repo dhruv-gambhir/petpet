@@ -13,6 +13,7 @@ def create_app():
     db.init_app(app)
 
 
+
     # Register blueprints (API routes)
     from routes.users_route import users_bp
     from routes.event_route import event_bp
