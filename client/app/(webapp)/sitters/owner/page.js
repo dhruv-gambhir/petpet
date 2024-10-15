@@ -2,10 +2,61 @@
 import catBg from "../../../../public/cat_bg.png";
 import { useRouter } from "next/navigation";
 import PopupForm from "./NewSittingRequest";
+import { useState } from "react";
+import icon from "../../../../public/profile_icon.jpg";
+
 
 export default function OwnerPage() {
 
-  const router = useRouter(); 
+  const router = useRouter();
+
+  const sittingRequests = [
+    {
+      id: "101",
+      type: "Dog Walking",
+      pay: 50,
+      startdate: "2024-10-16",
+      enddate: "2024-10-20",
+      description: "Daily dog walking in the park",
+      location: "Park Avenue",
+      interestedUsers: [
+        { id: "10001", name: "Jane Doe", location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com" },
+        { id: "10002", name: "Alice" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
+      ],
+    },
+    {
+      id: "102",
+      type: "Overnight Stays",
+      pay: 75,
+      startdate: "2024-10-18",
+      enddate: "2024-10-22",
+      description: "Take care of my cat while I'm away",
+      location: "Downtown",
+      interestedUsers: [{ id: "103", name: "Jane Doe", location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com" }],
+    },
+    {
+      id: "103",
+      type: "Drop-In Pet Visits",
+      pay: 60,
+      startdate: "2024-10-25",
+      enddate: "2024-10-28",
+      description: "Groom my two pets",
+      location: "Elm Street",
+      interestedUsers: [
+        { id: "104", name: "Jane Doe" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
+        { id: "105", name: "Alice" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
+        { id: "106", name: "Bob" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
+      ],
+    },
+  ];
+
+  const [selectedRequest, setSelectedRequest] = useState(null);
+
+  const handleRequestChange = (e) => {
+    const requestId = e.target.value;
+    const request = sittingRequests.find((req) => req.id === requestId);
+    setSelectedRequest(request);
+  };
 
   return (
     <div>
@@ -37,7 +88,7 @@ export default function OwnerPage() {
             <button
               className="h-14 w-36 border border-black rounded-full mx-10 justify-end"
               onClick={() => {
-                router.push("./sitter");
+                router.push("./sitters");
               }}
             >
               Sitters
@@ -45,21 +96,106 @@ export default function OwnerPage() {
           </div>
         </div>
       </section>
-      <PopupForm />
 
-      {/* <div class="max-w-sm rounded overflow-hidden shadow-lg">
-          <div class="px-6 py-4">
-            <div class="font-bold text-xl mb-2">The Coldest Sunset</div>
-            <p class="text-gray-700 text-base">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.
-            </p>
-          </div>
-          <div class="px-6 pt-4 pb-2">
-            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-          </div>
-          </div> */}
+      <div className="flex flex-row mt-2">
+        <div className="w-1/2 p-5">
+          <h2 className="text-lg font-bold mb-3 ">Select Sitting Request</h2>
+          <select
+            className="w-full h-10 border border-gray-300 rounded mb-5 pl-3"
+            onChange={handleRequestChange}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              -- Select a request --
+            </option>
+            {sittingRequests.map((request) => (
+              <option key={`Sitting Request ${request.id}`} value={request.id}>
+              Sitting Request #{request.id}
+            </option>
+            ))}
+          </select>
+
+          {selectedRequest && (
+            <div>
+              <h3 className="text-md font-bold">Request Details</h3>
+              <div className="bg-white p-4 rounded-md shadow-md">        
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">  
+                  <div className="flex flex-col">
+                    <label className="text-gray-700 font-bold mb-1">Type</label>
+                    <p className="p-4 border rounded w-full bg-mybg shadow-md">{selectedRequest.type}</p>
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-gray-700 font-bold mb-1">Pay</label>
+                    <p className="p-4 border rounded w-full bg-mybg shadow-md">${selectedRequest.pay}</p>
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-gray-700 font-bold mb-1">Start Date</label>
+                    <p className="p-4 border rounded w-full bg-mybg shadow-md">{selectedRequest.startdate}</p>
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-gray-700 font-bold mb-1">End Date</label>
+                    <p className="p-4 border rounded w-full bg-mybg shadow-md">{selectedRequest.enddate}</p>
+                  </div>
+                  <div className="flex flex-col col-span-2">
+                    <label className="text-gray-700 font-bold mb-1">Description</label>
+                    <p className="p-4 border rounded w-full bg-mybg shadow-md">{selectedRequest.description}</p>
+                  </div>
+                </div>
+              </div>
+
+              <h3 className="text-md font-bold mt-3">Interested Users</h3>
+              <div className="grid grid-cols-1 gap-4">
+                {selectedRequest.interestedUsers.map((user) => (
+                  <div key={user.id} className="bg-white p-4 rounded-md shadow-md flex items-center">
+                    <img
+                      src={icon.src} 
+                      alt="Profile Icon"
+                      className="w-32 h-32 rounded-full mr-4" 
+                    />
+                    <div className="flex-grow">
+                      <h4 className="font-bold">{user.name} (ID: {user.id})</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                        <div className="flex flex-col">
+                          <span className="font-semibold">Location:</span>
+                          <p>{user.location}</p>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-semibold">Phone:</span>
+                          <p>{user.phone}</p>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-semibold">Email:</span>
+                          <p>{user.email}</p>
+                        </div>
+                        <div className="flex flex-col col-span-2">
+                          <span className="font-semibold">Description:</span>
+                          <p>{user.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button
+        className=" bg-mypurple text-white px-4 py-2 rounded shadow"
+      >
+        Cancel Request
+      </button>
+      <button
+        className=" bg-mypurple text-white px-4 py-2 rounded shadow"
+      >
+        Complete Request
+      </button>
+            </div>
+            
+          )}
+          
+        </div>
+
+        <div className="w-1/2 p-5">
+          <PopupForm />
+        </div>
+      </div>
     </div>
   );
 }
