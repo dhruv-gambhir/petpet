@@ -54,9 +54,7 @@ export default function EventCard({ event, organizerView }) {
         </div>
       ) : (
         <div className="absolute top-2 right-2 bg-white">
-          <div className="absolute top-2 right-2 bg-white">
-                    <InterestedButton />
-                </div>
+          <InterestedButton />
         </div>
       )}
     </div>

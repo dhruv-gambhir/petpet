@@ -1,4 +1,8 @@
+"use client";
+
+import useSWR from "swr";
 import AdoptionCard from "./AdoptionCard";
+import { getAdoptions } from "./adoptions";
 
 const commonAnimals = ["🐱 Cat", "🐶 Dog", "🐢 Turtle", "🐹 Hams", "🐰 Rabbit"];
 
@@ -18,7 +22,9 @@ const staticAdoptionData = [
 
 
 export default function AdoptionPage() {
-  const adoptionData = staticAdoptionData;
+
+  const { data: adoptionData, isLoading } = useSWR("adoption_listings", getAdoptions);
+  // const adoptionData = staticAdoptionData;
 
   return (
     <div className="flex-initial self-stretch w-[83.3%] mx-auto">
@@ -39,8 +45,11 @@ export default function AdoptionPage() {
         </div>
       </form>
 
+
+      {isLoading && <div>Loading...</div>}
+
       <div className="flex flex-col items-start gap-4 m-2 mt-8">
-        {adoptionData.map((detail, index) => (
+        {adoptionData?.map((detail, index) => (
           <AdoptionCard detail={detail} key={index} />
         ))}
       </div>
