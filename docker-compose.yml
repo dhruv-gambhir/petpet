@@ -28,5 +28,11 @@ services:
       - db
     restart: unless-stopped
 
+  adminer:
+    image: adminer
+    ports:
+      - "8888:8080"
+    restart: unless-stopped
+
 volumes:
   db_data:

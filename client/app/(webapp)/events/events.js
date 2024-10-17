@@ -35,11 +35,16 @@ export const unpacker = async (throwable) => {
  */
 export const getEvents = async () => {
   const response = await fetcher('events')
-  return response.json()
+  return await response.json()
 }
 
-export const getEvent = async (id) => {
-  const response = await fetcher(`events/${id}`)
+/**
+ * Fetches a list of events by user 'id' from the backend.
+ * @param {string} id User UUID
+ * @returns {Promise<Event[]>} Returns a list of events.
+ */
+export const getEventsBy = async (id) => {
+  const response = await fetcher(`events/user/${id}`)
   if (!response.ok) {
     throw new Error(response.statusText)
   }

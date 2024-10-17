@@ -1,8 +1,11 @@
-import EventCard from "./EventCard";
-import { getEvents, unpacker } from "./events";
+"use client";
 
-export default async function EventsPage() {
-  const events = await unpacker(() => getEvents());
+import useSWR from "swr";
+import EventCard from "./EventCard";
+import { getEvents } from "./events";
+
+export default function EventsPage() {
+  const { data: events, isLoading } = useSWR("events", getEvents);
 
   return (
     <div className="flex-initial self-stretch w-[83.3%] mx-auto">
