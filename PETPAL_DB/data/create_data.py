@@ -9,10 +9,6 @@ import os
 '''
 RUN THIS SCRIPT TO GENERATE FAKE DATA FOR THE DATABASE.
 python .\PETPAL_DB\data\create_data.py
-
-TODO: 
-TASK TYPE NEEDS TO MOVE TO SITTING REQUEST CURRENTLY IN ADOPTION
-
 '''
 
 # total number of users - half User and half Agency 
@@ -194,8 +190,8 @@ if __name__=="__main__":
 
 
     # add sitting 
-    sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location"])
-    # sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location", "TaskType"])
+    # sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location"])
+    sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location", "TaskType"])
     pet_sitting_df = pd.DataFrame(columns=["Id", "SittingRequestId", "PetId"])
     for i in range(REQUEST_COUNT):
         random_map_id = random.choice(petdf["OwnerId"].tolist())
@@ -209,8 +205,8 @@ if __name__=="__main__":
         tasktype = random.choice(TASK_TYPES)
         sittingid = str(uuid4())
         location = random.choice(PINCODES)
-        sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location }
-        # sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location, "TaskType": tasktype }
+        # sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location }
+        sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location, "TaskType": tasktype }
         pet_sitting_df.loc[len(pet_sitting_df)] = {"id": str(uuid4()), "sittingrequestid": sittingid, "petid": petid}
 
 
