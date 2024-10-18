@@ -8,8 +8,8 @@
 6. python data_to_db.py
 
 Checking created data:
-7. Open postgreSQL shell with 
-    psql -U postgres -d postgres
+
+7. Open postgreSQL shell with psql -U postgres -d postgres
 8. \l to list all databases, check mydb is present
 9. \c mydb
 10. \dt to list all tables in mydb
