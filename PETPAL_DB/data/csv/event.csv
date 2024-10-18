@@ -1,6 +1,6 @@
-,event_id,map_id,event_name,description,location,startdate,enddate,createdat
-0,0,1,,,,,,
-1,1,7,,,,,,
-2,2,15,,,,,,
-3,3,1,,,,,,
-4,4,20,,,,,,
+Id,CreatedBy,Event_name,Description,Location,StartDate,CreatedAt,Cost,ImageUrl,Status
+927dee73-d83e-4c9c-8686-8d0073828f53,ee21e734-285f-402b-adeb-10a926f747cf,Pet Adoption Drive,Come and meet our pets at our adoption drive.,"1 Commonwealth Lane, #07-02, The Metropolis Singapore 149556",2024-10-25 07:42:07.149115,2024-10-18 07:42:07.149132,99,,decided
+18bb4434-b301-4097-9c19-6d1cf28fabf9,5b1c076a-726d-4f36-b451-f1b68a998dea,Pet Training Workshop,Learn how to train your pet at woodlands,"1 HarbourFront Avenue, #07-02, HarbourFront Tower 1 Singapore 099253",2024-11-02 07:42:07.149751,2024-10-18 07:42:07.149767,81,,pending
+95e75e1a-4179-4a85-b4eb-fd0f474fe83a,f6cacf1d-a208-4d17-8271-5716f7d06bce,Pet Training Workshop,Learn how to train your pet at woodlands,"1 Raffles Boulevard, #07-02, Marina Square Singapore 039595",2024-10-28 07:42:07.150800,2024-10-18 07:42:07.150815,56,,decided
+0d560d56-b4a2-4b2a-8b40-808f741e4b79,ee21e734-285f-402b-adeb-10a926f747cf,Pet Grooming Workshop,Join us for a pet grooming workshop.,"1 Boon Leat Terrace, #07-02, Harbourside Building 1 Singapore 119843",2024-10-30 07:42:07.151815,2024-10-18 07:42:07.151830,49,,decided
+8867915b-6e88-435b-b8d8-143809d1a931,7089ed87-0d27-4d9f-bf05-565f5b6254de,Pet Friendly Movie Night,Join us for a pet friendly movie night.,"1 Commonwealth Lane, #07-02, The Metropolis Singapore 149556",2024-10-22 07:42:07.152829,2024-10-18 07:42:07.152843,58,,pending
