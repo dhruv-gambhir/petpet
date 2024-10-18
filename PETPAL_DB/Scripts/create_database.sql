@@ -41,7 +41,6 @@ CREATE TABLE Adoption_Listings (
     PetId UUID REFERENCES Pets(Id) ON DELETE CASCADE,
     Description TEXT,
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
-    TaskType task_enum,  -- Using the custom ENUM type for TaskType
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -65,6 +64,7 @@ CREATE TABLE Sitting_Requests (
     Description TEXT,
     Location VARCHAR(255),
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
+    TaskType task_enum,  -- Using the custom ENUM type for TaskType
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -11,6 +11,7 @@ adoption_bp = Blueprint('adoption_bp', __name__)
 @adoption_bp.route('/', methods=['GET'])
 def get_adoption_listings():
     adoption_listings = Adoption.query.all()
+
     adoption_list = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
@@ -19,12 +20,12 @@ def get_adoption_listings():
         'createdat': adoption.createdat,
         'updatedat': adoption.updatedat,
         'pet': {  # Include pet details in the response
-            'id': adoption.pet.id,
-            'name': adoption.pet.name,
-            'species': adoption.pet.species,
-            'breed': adoption.pet.breed,
-            'age': adoption.pet.age,
-            'image_url': adoption.pet.image_url
+            'id': adoption.petid,
+            'name': Pets.query.get(adoption.petid).name,
+            'species': Pets.query.get(adoption.petid).species,
+            'breed': Pets.query.get(adoption.petid).breed,
+            'age': Pets.query.get(adoption.petid).age,
+            'image_url': Pets.query.get(adoption.petid).image_url
         }
     } for adoption in adoption_listings]
     return jsonify(adoption_list), 200
@@ -40,12 +41,12 @@ def get_adoption_listing(adoption_id):
         'id': adoption.id,
         'agentid': adoption.agentid,
         'pet': {  # Include pet details in the response
-            'id': adoption.pet.id,
-            'name': adoption.pet.name,
-            'species': adoption.pet.species,
-            'breed': adoption.pet.breed,
-            'age': adoption.pet.age,
-            'image_url': adoption.pet.image_url
+            'id': adoption.petid,
+            'name': Pets.query.get(adoption.petid).name,
+            'species': Pets.query.get(adoption.petid).species,
+            'breed': Pets.query.get(adoption.petid).breed,
+            'age': Pets.query.get(adoption.petid).age,
+            'image_url': Pets.query.get(adoption.petid).image_url
         },
         'description': adoption.description,
         'status': adoption.status,
