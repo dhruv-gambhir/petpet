@@ -281,16 +281,16 @@ if __name__=="__main__":
             user_map_id = random.choice(user_onlydf["userid"].tolist())
             adoption_interestdf.loc[len(adoption_interestdf)] = {"Id": str(uuid4()), "UserId": user_map_id, "AdoptionListingId": adoption_id, "CreatedAt": datetime.datetime.now(), "Status": "pending"}
 
-    userdf.to_csv(os.path.join(DIR ,"user.csv"))
-    # agencydf.to_csv(os.path.join(DIR ,"agency.csv"))
-    petdf.to_csv(os.path.join(DIR ,"pet.csv"))
-    sittingdf.to_csv(os.path.join(DIR ,"sitting.csv"))
-    sitting_interestdf.to_csv(os.path.join(DIR ,"sitting_interest.csv"))
-    pet_sitting_df.to_csv(os.path.join(DIR ,"pet_sitting_request.csv"))
-    eventdf.to_csv(os.path.join(DIR ,"event.csv"))
-    event_interestdf.to_csv(os.path.join(DIR ,"event_interest.csv"))
-    adoptiondf.to_csv(os.path.join(DIR ,"adoption.csv"))
-    adoption_interestdf.to_csv(os.path.join(DIR ,"adoption_interest.csv"))
+    userdf.to_csv(os.path.join(DIR, "user.csv"), index=False)
+    # agencydf.to_csv(os.path.join(DIR, "agency.csv"), index=False)
+    petdf.to_csv(os.path.join(DIR, "pet.csv"), index=False)
+    sittingdf.to_csv(os.path.join(DIR, "sitting.csv"), index=False)
+    sitting_interestdf.to_csv(os.path.join(DIR, "sitting_interest.csv"), index=False)
+    pet_sitting_df.to_csv(os.path.join(DIR, "pet_sitting_request.csv"), index=False)
+    eventdf.to_csv(os.path.join(DIR, "event.csv"), index=False)
+    event_interestdf.to_csv(os.path.join(DIR, "event_interest.csv"), index=False)
+    adoptiondf.to_csv(os.path.join(DIR, "adoption.csv"), index=False)
+    adoption_interestdf.to_csv(os.path.join(DIR, "adoption_interest.csv"), index=False)
 
 
 
