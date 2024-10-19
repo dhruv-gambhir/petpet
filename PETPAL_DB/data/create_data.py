@@ -16,7 +16,7 @@ COUNT = 30
 # number of requests for events, sitting and adoption each
 REQUEST_COUNT = 5 
 # total number of pets randomly assigned 
-PET_COUNT = 5
+PET_COUNT = 10
 # total number of interests for each events, sitting and adoption request 
 INTEREST_COUNT = 2
 
@@ -142,7 +142,8 @@ if __name__=="__main__":
     user_onlydf = userdf[userdf["IsAgency"]==False]
 
     for i in range(PET_COUNT):
-        user_id = random.choice(user_onlydf["userid"].tolist())
+        # user_id = random.choice(user_onlydf["userid"].tolist())
+        user_id = random.choice(userdf["userid"].tolist())
         pet_name = random.choice(PET_NAMES)
         age = random.randint(1, 20)
         species = random.choice(list(SPECIES.keys()))
@@ -291,9 +292,24 @@ if __name__=="__main__":
     "Looking for a new family for this pet.",
     ]
 
+    # Get initial list of available pet IDs where OwnerId is in agencydf["userid"]
+    available_pets = petdf[petdf["OwnerId"].isin(agencydf["userid"].tolist())]["Id"].tolist()
+    # Initialize a set to store used pet_id values
+    used_pet_ids = set()
+
     for i in range(REQUEST_COUNT):
         random_map_id = random.choice(agencydf["userid"].tolist())
-        pet_id = str(uuid4())
+
+        # Get available pet IDs by excluding the used ones from the initial available_pets
+        available_pet_ids = list(set(available_pets) - used_pet_ids)
+        if not available_pet_ids:
+            print("No more unique pet IDs available, stopping.")
+            break  # Stop the loop if there are no available pet IDs
+        # Select a random pet ID from the available ones
+        pet_id = random.choice(available_pet_ids)
+
+        # Add the selected pet_id to the used_pet_ids set
+        used_pet_ids.add(pet_id)
         description = random.choice(ADOPTION_DESCRIPTIONS)
         status = random.choice(STATUS)
         adoptiondf.loc[len(adoptiondf)] = {"Id": str(uuid4()), "AgentId" :random_map_id, "PetId": pet_id, "Description": description, "Status": status, "CreatedAt": datetime.datetime.now(), "UpdatedAt": datetime.datetime.now()}
