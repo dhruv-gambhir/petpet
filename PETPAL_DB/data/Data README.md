@@ -1,11 +1,11 @@
 1. Setup postgresSQL and create database with Scripts
 2. Ensure dependencies pandas, sqlalchemy, faker (for create_data.py) are installed
 3. If csv files are not already present under data/csv
-    change directory to petpet
-    python create_data.py
-4. Look for the ENTER PASSWORD comment in data_to_db.py and replace it with your postgres role password
-5. Ensure current directory is petpet
-6. python data_to_db.py
+    - change directory to petpet
+    - python ./PETPAL_DB/data/create_data.py
+5. Look for the ENTER PASSWORD comment in data_to_db.py and replace it with your postgres role password
+6. Ensure current directory is petpet
+7. python data_to_db.py
 
 Checking created data:
 
