@@ -193,9 +193,17 @@ if __name__=="__main__":
     # sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location"])
     sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location", "TaskType"])
     pet_sitting_df = pd.DataFrame(columns=["Id", "SittingRequestId", "PetId"])
-    for i in range(REQUEST_COUNT):
+
+    i = 0
+    while i < REQUEST_COUNT:
         random_map_id = random.choice(petdf["OwnerId"].tolist())
-        pets_for_sitting_df = petdf[petdf["OwnerId"]==random_map_id]
+        pets_for_sitting_df = petdf[petdf["OwnerId"] == random_map_id]
+
+        # Check if there are pets associated with the selected OwnerId
+        if pets_for_sitting_df.empty:
+            print(f"No pets found for OwnerId {random_map_id}, skipping this iteration.")
+            continue  # Skip to the next iteration without adding to DataFrame
+        
         petid = random.choice(pets_for_sitting_df["Id"].tolist())
         pay = random.randint(5, 100)
         start_date = datetime.datetime.now() + datetime.timedelta(days=random.randint(1, 30))
@@ -205,10 +213,28 @@ if __name__=="__main__":
         tasktype = random.choice(TASK_TYPES)
         sittingid = str(uuid4())
         location = random.choice(PINCODES)
-        # sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location }
-        sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location, "TaskType": tasktype }
-        pet_sitting_df.loc[len(pet_sitting_df)] = {"id": str(uuid4()), "sittingrequestid": sittingid, "petid": petid}
 
+        # Adding the sitting request to sittingdf
+        sittingdf.loc[len(sittingdf)] = {
+            "Id": sittingid,
+            "UserId": random_map_id,
+            "Pay": pay,
+            "StartDate": start_date,
+            "EndDate": end_date,
+            "Status": status,
+            "Description": description,
+            "CreatedAt": datetime.datetime.now(),
+            "Location": location,
+            "TaskType": tasktype
+        }
+        
+        # Adding the sitting request and pet relationship to pet_sitting_df
+        pet_sitting_df.loc[len(pet_sitting_df)] = {
+            "Id": str(uuid4()), 
+            "SittingRequestId": sittingid, 
+            "PetId": petid
+        }
+        i += 1  # Increment only when a valid entry is added
 
     # add interest
     sitting_interestdf = pd.DataFrame(columns=["Id", "UserId", "SittingRequestId", "CreatedAt" , "Status"])
