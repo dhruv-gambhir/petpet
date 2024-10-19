@@ -16,6 +16,11 @@ def load_csv_into_table(engine, table_name, csv_file_path, columns):
         df.columns = df.columns.str.lower()
         if df.shape[1] > len(columns.split(',')):  # Check if there's an extra column
             df.drop(df.columns[0], axis=1, inplace=True)  # Drop the first column (index column)
+        
+        # Fix for inconsistent data
+        if (table_name == "users"):
+            df["isagency"] = df["isagency"].apply(lambda x: False if x == 0.0 else True if pd.isna(x) else x)
+
         # Load DataFrame into the database
         df.to_sql(table_name, engine, if_exists='append', index=False)
         print(f"{len(df)} rows of data loaded into {table_name} from {csv_file_path}")
