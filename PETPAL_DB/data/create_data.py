@@ -315,7 +315,7 @@ if __name__=="__main__":
         adoptiondf.loc[len(adoptiondf)] = {"Id": str(uuid4()), "AgentId" :random_map_id, "PetId": pet_id, "Description": description, "Status": status, "CreatedAt": datetime.datetime.now(), "UpdatedAt": datetime.datetime.now()}
 
     # add adoption interest
-    adoption_interestdf = pd.DataFrame(columns=["Id", "UserId", "AdoptionLisitingId", "Createdat" , "Status"])
+    adoption_interestdf = pd.DataFrame(columns=["Id", "UserId", "AdoptionListingId", "Createdat" , "Status"])
     
     for i in range(len(adoptiondf)):
         for j in range(INTEREST_COUNT):
