@@ -5,7 +5,7 @@
     - python ./PETPAL_DB/data/create_data.py
 5. Look for the ENTER PASSWORD comment in data_to_db.py and replace it with your postgres role password
 6. Ensure current directory is petpet
-7. python data_to_db.py
+7. python ./PETPAL_DB/data/data_to_db.py
 
 Checking created data:
 
