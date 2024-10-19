@@ -1,6 +1,6 @@
 Id,OwnerId,Name,Age,Sex,Species,Breed,CreatedAt,ImageUrl
-f2009570-a4fa-4d73-8d5f-395b0893f1fd,c0ef1599-82de-4f81-a786-72044e211098,Cooper,15,female,Cat,Siamese,2024-10-18 07:42:07.125889,
-249b3664-77d3-468d-86bb-834c34b2c2c9,faa8782f-3f95-4083-9d48-012f351df67a,Daisy,9,female,Guinea Pig,Abyssinian Guinea Pig,2024-10-18 07:42:07.126509,
-59f0c7dd-66d5-45e8-9ca7-5768f66aefab,c120a395-0227-4e29-9941-38c3efa8d294,Bailey,17,male,Bird,Cockatiel,2024-10-18 07:42:07.127465,
-82d8f62b-a7d0-490e-aaf8-e2b18fe7330c,16261d8d-0831-4551-ad91-d9c04c8fc03f,Buddy,18,female,Guinea Pig,Abyssinian Guinea Pig,2024-10-18 07:42:07.128390,
-7e795640-7c89-4108-8ea8-158d990a9639,0d8d36a1-d604-4627-9211-3e5a5da84137,Daisy,18,female,Dog,German Shepherd,2024-10-18 07:42:07.129299,
+8b5e961f-87e1-468e-8613-85cb7280aecc,18bfd988-dc35-400c-b1ed-5ed282832215,Lucy,18,female,Hamster,Syrian Hamster,2024-10-19 17:33:42.686443,
+7653b636-ff0e-4887-8d29-d364c4a4b09b,95fe76e7-7646-4de6-8f63-50ff2800e95c,Bailey,3,female,Hamster,Syrian Hamster,2024-10-19 17:33:42.687148,
+ebab08e0-1db3-40f6-a5ae-66ed55a7d33d,6e40396a-b3da-426d-a084-4bd92bf09648,Buddy,20,female,Dog,German Shepherd,2024-10-19 17:33:42.688183,
+79d386d6-cead-432f-95f9-6b6ec8473cbd,de785eeb-eaa1-4b0b-a549-16ded0b3cf47,Charlie,10,male,Turtle,Red-Eared Slider,2024-10-19 17:33:42.689157,
+ee505de8-8fe7-4aa7-acf4-7626beb2d6b9,78bad018-86c8-4fde-8055-1b407f02c3c9,Daisy,16,female,Frog,African Bullfrog,2024-10-19 17:33:42.690082,
