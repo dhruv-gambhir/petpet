@@ -8,7 +8,7 @@ from db import db
 adoption_bp = Blueprint('adoption_bp', __name__)
 
 # Route to all adoption listings available
-@adoption_bp.route('/', methods=['GET'])
+@adoption_bp.route('', methods=['GET'])
 def get_adoption_listings():
     adoption_listings = Adoption.query.all()
 
@@ -25,7 +25,7 @@ def get_adoption_listings():
             'species': Pets.query.get(adoption.petid).species,
             'breed': Pets.query.get(adoption.petid).breed,
             'age': Pets.query.get(adoption.petid).age,
-            'image_url': Pets.query.get(adoption.petid).image_url
+            'imageurl': Pets.query.get(adoption.petid).imageurl
         }
     } for adoption in adoption_listings]
     return jsonify(adoption_list), 200
@@ -46,7 +46,7 @@ def get_adoption_listing(adoption_id):
             'species': Pets.query.get(adoption.petid).species,
             'breed': Pets.query.get(adoption.petid).breed,
             'age': Pets.query.get(adoption.petid).age,
-            'image_url': Pets.query.get(adoption.petid).image_url
+            'imageurl': Pets.query.get(adoption.petid).imageurl
         },
         'description': adoption.description,
         'status': adoption.status,
@@ -56,14 +56,14 @@ def get_adoption_listing(adoption_id):
     return jsonify(adoption_data), 200
 
 # Route to create a new adoption listing (POST)
-@adoption_bp.route('/', methods=['POST'])
+@adoption_bp.route('', methods=['POST'])
 def create_adoption_listing():
     data = request.get_json()
     if not data or not data.get('agentid') or not data.get('petid'):
         abort(400, description="Invalid adoption listing data. 'agentid', 'petid' are required.")
 
     pet_data= data.get('pet')
-    if not pet_data or not pet_data.get('name') or not pet_data.get('species') or not pet_data.get('breed') or not pet_data.get('image_url'):
+    if not pet_data or not pet_data.get('name') or not pet_data.get('species') or not pet_data.get('breed') or not pet_data.get('imageurl'):
         abort(400, description="Invalid pet data. 'name', 'species', 'breed', 'image' are required.")
     
     #create a new pet
@@ -73,7 +73,7 @@ def create_adoption_listing():
         species=pet_data['species'],
         breed=pet_data['breed'],
         age=pet_data.get('age', 0),
-        imageurl=pet_data['image_url']
+        imageurl=pet_data['imageurl']
     )
     db.session.add(new_pet)
     db.session.flush()  # Flush the session to get the pet ID
@@ -113,7 +113,7 @@ def update_adoption_listing(adoption_id):
                 species=pet_data['species'],
                 breed=pet_data['breed'],
                 age=pet_data.get('age', 0),
-                imageurl=pet_data['image_url']
+                imageurl=pet_data['imageurl']
             )
             db.session.add(pet)  # Add the new pet to the session
             db.session.flush()  # Flush to get the new pet.id
@@ -130,7 +130,7 @@ def update_adoption_listing(adoption_id):
             pet.species = pet_data.get('species', pet.species)
             pet.breed = pet_data.get('breed', pet.breed)
             pet.age = pet_data.get('age', pet.age)
-            pet.imageurl = pet_data.get('image_url', pet.imageurl)
+            pet.imageurl = pet_data.get('imageurl', pet.imageurl)
 
             db.session.add(pet)  # Update the pet details in the session
             db.session.flush()

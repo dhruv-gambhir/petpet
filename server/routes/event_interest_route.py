@@ -7,7 +7,7 @@ from db import db
 event_interest_bp = Blueprint('event_interest_bp', __name__)
 
 # Route to fetch all event interests (GET)
-@event_interest_bp.route('/', methods=['GET'])
+@event_interest_bp.route('', methods=['GET'])
 def get_event_interests():
     event_interests = EventInterest.query.all()
     event_interest_list = [{
@@ -37,7 +37,7 @@ def get_event_interest(event_interest_id):
     return jsonify(event_interest_data), 200
 
 # Route to create a new event interest (POST)
-@event_interest_bp.route('/', methods=['POST'])
+@event_interest_bp.route('', methods=['POST'])
 def create_event_interest():
     data = request.get_json()
     if not data or not data.get('eventid') or not data.get('userid'):

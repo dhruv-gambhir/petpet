@@ -37,15 +37,22 @@ def get_sitting_request_with_pet(sitting_request_id):
 
     # Fetch all associated pets through the one-to-many relationship from pet_sitting_requests
     # Access pets directly because the relationship is defined in the PetSittingRequests model
-    pet_info = [{
-        'id': pet_sitting.pet.id,
-        'name': pet_sitting.pet.name,
-        'species': pet_sitting.pet.species,
-        'breed': pet_sitting.pet.breed,
-        'age': pet_sitting.pet.age,
-        'image_url': pet_sitting.pet.image_url
-    } for pet_sitting in sitting_request.pet_sitting_requests]
+    # Query PetSittingRequests to get all entries related to this sitting request
+    pet_sitting_requests = PetSittingRequests.query.filter_by(sittingrequestid=sitting_request_id).all()
 
+    # Query the Pets table for each petid in pet_sitting_requests
+    pet_info = []
+    for pet_sitting in pet_sitting_requests:
+        pet = Pets.query.get(pet_sitting.petid)
+        if pet:
+            pet_info.append({
+                'id': pet.id,
+                'name': pet.name,
+                'species': pet.species,
+                'breed': pet.breed,
+                'age': pet.age,
+                'imageurl': pet.imageurl
+            })
 
     sitting_request_data = {
         'id': sitting_request.id,
@@ -103,7 +110,7 @@ def create_sitting_request():
             species=pet['species'],
             breed=pet['breed'],
             age=pet.get('age', 0),
-            imageurl=pet['image_url']
+            imageurl=pet['imageurl']
         )
         db.session.add(new_pet)
         db.session.flush()  # Flush the session to get the pet ID
@@ -115,8 +122,7 @@ def create_sitting_request():
         )
         db.session.add(new_pet_sitting_request)
         db.session.flush() # Flush the session to get the pet_sitting_request ID
-        new_pet_sitting_request_ids.sitting_request_bpend(new_pet_sitting_request.id)
-        
+        new_pet_sitting_request_ids.append(new_pet_sitting_request.id)
     db.session.commit()
 
     #should return the sitting request id and list of new pet_sitting_request id
@@ -156,7 +162,7 @@ def update_sitting_request(sitting_request_id):
                     existing_pet.species = pet.get('species', existing_pet.species)
                     existing_pet.breed = pet.get('breed', existing_pet.breed)
                     existing_pet.age = pet.get('age', existing_pet.age)
-                    existing_pet.imageurl = pet.get('image_url', existing_pet.imageurl)
+                    existing_pet.imageurl = pet.get('imageurl', existing_pet.imageurl)
             else:
                 # If pet data is new, create a new pet and add to the sitting request
                 new_pet = Pets(
@@ -165,7 +171,7 @@ def update_sitting_request(sitting_request_id):
                     species=pet['species'],
                     breed=pet.get('breed'),
                     age=pet.get('age', 0),
-                    imageurl=pet.get('image_url')
+                    imageurl=pet.get('imageurl')
                 )
                 db.session.add(new_pet)
                 db.session.flush()  # Flush to get the new pet ID
