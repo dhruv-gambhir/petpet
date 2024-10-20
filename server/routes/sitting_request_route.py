@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify, request, abort
 from models.sitting_request_model import SittingRequests
 from models.pets_sitting_request_model import PetSittingRequests
+from models.sitter_interest_model import SitterInterests
 from models.users_model import Users
 from models.pets_model import Pets
 from datetime import datetime
@@ -11,6 +12,11 @@ sitting_request_bp = Blueprint('sitting_request_bp', __name__)
 
 @sitting_request_bp.route('', methods=['GET'])
 def get_sitting_requests():
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
+
     sitting_requests = SittingRequests.query.all()
 
     #keeping the pet details seperate from the all sitting request details, 
@@ -26,7 +32,8 @@ def get_sitting_requests():
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
         'location': sitting_request.location,
-        'tasktype': sitting_request.tasktype
+        'tasktype': sitting_request.tasktype,
+        'interested': bool(SitterInterests.query.filter_by(userid=userid, sittingrequestid=sitting_request.id).first())
     } for sitting_request in sitting_requests]
     return jsonify(sitting_request_list), 200
 
@@ -34,6 +41,11 @@ def get_sitting_requests():
 @sitting_request_bp.route('/<string:sitting_request_id>', methods=['GET'])
 def get_sitting_request_with_pet(sitting_request_id):
     sitting_request = SittingRequests.query.get(sitting_request_id)
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
+
     if not sitting_request:
         abort(404, description="Sitting request not found")
 
@@ -67,7 +79,8 @@ def get_sitting_request_with_pet(sitting_request_id):
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
         'location': sitting_request.location,
-        'tasktype': sitting_request.tasktype
+        'tasktype': sitting_request.tasktype,
+        'interested': bool(SitterInterests.query.filter_by(userid=userid, sittingrequestid=sitting_request.id).first())
     }
     return jsonify(
         {'sitting_request': sitting_request_data, 'pets': pet_info}

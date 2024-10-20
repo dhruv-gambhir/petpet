@@ -4,15 +4,24 @@ from models.users_model import Users
 from models.adoption_model import Adoption
 from models.pets_model import Pets
 from datetime import datetime
+import logging
 from db import db
+from flask import current_app
 
 adoption_bp = Blueprint('adoption_bp', __name__)
 
 # Route to all adoption listings available
 @adoption_bp.route('', methods=['GET'])
 def get_adoption_listings():
+
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
+
     adoption_listings = Adoption.query.all()
 
+    
     adoption_list = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
@@ -28,13 +37,19 @@ def get_adoption_listings():
             'breed': Pets.query.get(adoption.petid).breed,
             'age': Pets.query.get(adoption.petid).age,
             'imageurl': Pets.query.get(adoption.petid).imageurl
-        }
+        },
+        # shown interest
+        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
     } for adoption in adoption_listings]
     return jsonify(adoption_list), 200
 
 # Route to fetch a single adoption listing by ID (GET)
 @adoption_bp.route('/<string:adoption_id>', methods=['GET'])
 def get_adoption_listing(adoption_id):
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
     adoption = Adoption.query.get(adoption_id)
     if not adoption:
         abort(404, description="Adoption listing not found")
@@ -54,7 +69,8 @@ def get_adoption_listing(adoption_id):
         'description': adoption.description,
         'status': adoption.status,
         'createdat': adoption.createdat,
-        'updatedat': adoption.updatedat
+        'updatedat': adoption.updatedat,
+        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
     }
     return jsonify(adoption_data), 200
 

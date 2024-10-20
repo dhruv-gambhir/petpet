@@ -7,7 +7,7 @@ def get_swagger_spec():
                 "description": "API for managing pet adoption, sitting requests, and events.",
                 "version": "1.0.0"
             },
-            "host": "127.0.0.1:5001",
+            "host": "127.0.0.1:5000",
             "basePath": "/",
             "schemes": ["http"],
             "paths": {
@@ -208,6 +208,15 @@ def get_swagger_spec():
                     "get": {
                         "summary": "Fetch all events",
                         "description": "Retrieve all events from the database.",
+                        "parameters": [
+                        {
+                            "name": "userid",
+                            "in": "query",
+                            "description": "User ID to filter events of interest",
+                            "required": False,
+                            "type": "string"
+                        }
+                    ],
                         "produces": ["application/json"],
                         "responses": {
                             "200": {
@@ -564,6 +573,15 @@ def get_swagger_spec():
                     "get": {
                         "summary": "Fetch all adoption listings",
                         "description": "Retrieve all adoption listings from the database.",
+                        "parameters": [
+                        {
+                            "name": "userid",
+                            "in": "query",
+                            "description": "User ID to filter events of interest",
+                            "required": False,
+                            "type": "string"
+                        }
+                    ],
                         "produces": ["application/json"],
                         "responses": {
                             "200": {
@@ -863,6 +881,15 @@ def get_swagger_spec():
                     "get": {
                         "summary": "Fetch all sitting requests",
                         "description": "Retrieve all sitting requests from the database.",
+                        "parameters": [
+                        {
+                            "name": "userid",
+                            "in": "query",
+                            "description": "User ID to filter events of interest",
+                            "required": False,
+                            "type": "string"
+                        }
+                    ],
                         "produces": ["application/json"],
                         "responses": {
                             "200": {

@@ -11,6 +11,10 @@ event_bp = Blueprint('event_bp', __name__)
 
 @event_bp.route('', methods=['GET'])
 def get_events():
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
     events = Event.query.all()
     event_list = [{
         'id': event.id,
@@ -23,13 +27,20 @@ def get_events():
         'cost': event.cost,
         'status': event.status,
         'imageurl': event.imageurl,
-        'createdat': event.createdat
+        'createdat': event.createdat,
+        'interested': bool(EventInterest.query.filter_by(userid=userid, eventid=event.id).first())
     } for event in events]
     return jsonify(event_list), 200
 
 # Route to fetch a single event by ID (GET)
 @event_bp.route('/<string:event_id>', methods=['GET'])
 def get_event(event_id):
+
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
+    
     event = Event.query.get(event_id)
     if not event:
         abort(404, description="Event not found")
@@ -45,7 +56,8 @@ def get_event(event_id):
         'cost': event.cost,
         'status': event.status,
         'imageurl': event.imageurl,
-        'createdat': event.createdat
+        'createdat': event.createdat,
+        'interested': bool(EventInterest.query.filter_by(userid=userid, eventid=event.id).first())
     }
     return jsonify(event_data), 200
 
