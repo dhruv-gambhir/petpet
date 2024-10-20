@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, abort
 from models.sitting_request_model import SittingRequests
 from models.sitter_interest_model import SitterInterests
+from models.users_model import Users
 from models.pets_model import Pets
 from datetime import datetime
 from db import db
@@ -14,6 +15,7 @@ def get_sitter_interests():
     sitter_interest_list = [{
         'id': sitter_interest.id,
         'userid': sitter_interest.userid,
+        'name': Users.query.get(sitter_interest.userid).name,
         'sittingrequestid': sitter_interest.sittingrequestid,
         'status': sitter_interest.status,
         'createdat': sitter_interest.createdat
@@ -30,6 +32,7 @@ def get_sitter_interest(sitter_interest_id):
     sitter_interest_data = {
         'id': sitter_interest.id,
         'userid': sitter_interest.userid,
+        'name': Users.query.get(sitter_interest.userid).name,
         'sittingrequestid': sitter_interest.sittingrequestid,
         'status': sitter_interest.status,
         'createdat': sitter_interest.createdat

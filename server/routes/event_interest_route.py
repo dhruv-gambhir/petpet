@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.event_model import Event
+from models.users_model import Users
 from models.event_interest_model import EventInterest
 from datetime import datetime
 from db import db
@@ -14,6 +15,7 @@ def get_event_interests():
         'id': event_interest.id,
         'eventid': event_interest.eventid,
         'userid': event_interest.userid,
+        'name': Users.query.get(event_interest.userid).name,
         'status': event_interest.status,
         'createdat': event_interest.createdat
     } for event_interest in event_interests]
@@ -31,6 +33,7 @@ def get_event_interest(event_interest_id):
         'id': event_interest.id,
         'eventid': event_interest.eventid,
         'userid': event_interest.userid,
+        'name': Users.query.get(event_interest.userid).name,
         'status': event_interest.status,
         'createdat': event_interest.createdat
     }

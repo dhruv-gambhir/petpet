@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify, request, abort
 from models.sitting_request_model import SittingRequests
 from models.pet_sitting_request_model import PetSittingRequests
+from models.users_model import Users
 from models.pets_model import Pets
 from datetime import datetime
 from db import db
@@ -17,6 +18,7 @@ def get_sitting_requests():
     sitting_request_list = [{
         'id': sitting_request.id,
         'userid': sitting_request.userid,
+        'name': Users.query.get(sitting_request.userid).name,
         'pay': sitting_request.pay,
         'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
         'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
@@ -57,6 +59,7 @@ def get_sitting_request_with_pet(sitting_request_id):
     sitting_request_data = {
         'id': sitting_request.id,
         'userid': sitting_request.userid,
+        'name': Users.query.get(sitting_request.userid).name,
         'pay': sitting_request.pay,
         'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
         'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,

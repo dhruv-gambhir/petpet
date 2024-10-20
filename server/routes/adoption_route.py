@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.adoption_interest_model import AdoptionInterest
+from models.users_model import Users
 from models.adoption_model import Adoption
 from models.pets_model import Pets
 from datetime import datetime
@@ -15,6 +16,7 @@ def get_adoption_listings():
     adoption_list = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
+        'name': Users.query.get(adoption.agentid).name,
         'description': adoption.description,
         'status': adoption.status,
         'createdat': adoption.createdat,
@@ -40,6 +42,7 @@ def get_adoption_listing(adoption_id):
     adoption_data = {
         'id': adoption.id,
         'agentid': adoption.agentid,
+        'name': Users.query.get(adoption.agentid).name,
         'pet': {  # Include pet details in the response
             'id': adoption.petid,
             'name': Pets.query.get(adoption.petid).name,
