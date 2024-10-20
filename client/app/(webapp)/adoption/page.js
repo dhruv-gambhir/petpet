@@ -6,25 +6,10 @@ import { getAdoptions } from "./adoptions";
 
 const commonAnimals = ["🐱 Cat", "🐶 Dog", "🐢 Turtle", "🐹 Hams", "🐰 Rabbit"];
 
-const staticAdoptionData = [
-  {
-    name: "Lulia",
-    sex: "Male",
-    color: "Black",
-    breed: "Labrador",
-    weight: "20",
-    agency: "Good Boy Agency",
-    location: "Bukit Batok",
-    description: "This is the first event.",
-    photo: "https://images.dog.ceo/breeds/pyrenees/n02111500_5225.jpg",
-  },
-];
-
-
 export default function AdoptionPage() {
 
   const { data: adoptionData, isLoading } = useSWR("adoption_listings", getAdoptions);
-  // const adoptionData = staticAdoptionData;
+  console.log(adoptionData);
 
   return (
     <div className="flex-initial self-stretch w-[83.3%] mx-auto">
