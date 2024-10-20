@@ -31,7 +31,8 @@ CREATE TABLE Pets (
     Breed VARCHAR(100),
     Age INT,
     ImageUrl TEXT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+
 );
 
 -- Adoption_Listings Table

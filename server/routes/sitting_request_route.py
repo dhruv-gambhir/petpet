@@ -1,7 +1,7 @@
 
 from flask import Blueprint, jsonify, request, abort
 from models.sitting_request_model import SittingRequests
-from models.pet_sitting_request_model import PetSittingRequests
+from models.pets_sitting_request_model import PetSittingRequests
 from models.users_model import Users
 from models.pets_model import Pets
 from datetime import datetime
@@ -200,3 +200,23 @@ def delete_sitting_request(sitting_request_id):
     db.session.delete(sitting_request)
     db.session.commit()
     return jsonify({'message': 'Sitting request deleted successfully'}), 200
+
+# Route to fetch all sitting request of a user (GET)
+@sitting_request_bp.route('/user/<string:user_id>', methods=['GET'])
+def get_user_sitting_requests(user_id):
+    sitting_requests = SittingRequests.query.filter_by(userid=user_id).all()
+
+    sitting_request_list = [{
+        'id': sitting_request.id,
+        'userid': sitting_request.userid,
+        'name': Users.query.get(sitting_request.userid).name,
+        'pay': sitting_request.pay,
+        'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
+        'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
+        'description': sitting_request.description,
+        'status': sitting_request.status,
+        'createdat': sitting_request.createdat,
+        'location': sitting_request.location,
+        'tasktype': sitting_request.tasktype
+    } for sitting_request in sitting_requests]
+    return jsonify(sitting_request_list), 200

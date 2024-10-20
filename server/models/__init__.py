@@ -3,7 +3,7 @@ from .event_model import Event
 from .event_interest_model import EventInterest
 from .adoption_interest_model import AdoptionInterest
 from .adoption_model import Adoption
-from .pet_sitting_request_model import PetSittingRequests
+from .pets_sitting_request_model import PetSittingRequests
 from .pets_model import Pets
 from .sitting_request_model import SittingRequests
 from .sitter_interest_model import SitterInterests
