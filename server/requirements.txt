@@ -4,4 +4,4 @@ psycopg2-binary
 Faker
 pandas
 flask-swagger-ui
-flask_cors
+flask-cors

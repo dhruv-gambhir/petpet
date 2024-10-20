@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from swagger.swagger_config import get_swagger_spec
 from db import db
@@ -7,12 +8,12 @@ from db import db
 # Create the app factory
 def create_app():
     app = Flask(__name__)
+    CORS(app)
+    
     app.config.from_object('config.Config')
 
     # Initialize extensions
     db.init_app(app)
-
-
 
     # Register blueprints (API routes)
     from routes.users_route import users_bp

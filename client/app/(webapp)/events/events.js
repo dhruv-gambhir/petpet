@@ -78,3 +78,34 @@ export const updateEvent = async (event) => {
   }
   return response.json()
 }
+
+export const registerInterestInEvent = async (eventId, userId) => {
+  console.log('registerInterestInEvent', eventId, userId)
+  const response = await fetcher(`event_interests/${eventId}`, {
+    method: 'POST',
+    body: JSON.stringify({
+      eventid: eventId,
+      userid: userId
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+  return response.json()
+}
+
+export const unregisterInterestInEvent = async (eventId, userId) => {
+  const response = await fetcher(`event_interests/${eventId}`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      eventid: eventId,
+      userid: userId
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+  return response.json()
+}
