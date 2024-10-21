@@ -31,6 +31,8 @@ CREATE TABLE Pets (
     Breed VARCHAR(100),
     Age INT,
     ImageUrl TEXT,
+    Color VARCHAR(50),
+    Weight FLOAT,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
 
 );
