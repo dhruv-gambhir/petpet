@@ -241,7 +241,46 @@ def get_swagger_spec():
                                 }
                             }
                         }
-                    }
+                    },
+                    "post": {
+                        "summary": "Create a new event",
+                        "description": "Create a new event in the database.",
+                        "parameters": [
+                            {
+                                "name": "event_id",
+                                "in": "path",
+                                "required": True,
+                                "type": "string",
+                                "description": "Event ID"
+                            },
+                            {
+                                "name": "body",
+                                "in": "body",
+                                "required": True,
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "createdby": {"type": "string"},
+                                        "event_name": {"type": "string"},
+                                        "description": {"type": "string"},
+                                        "location": {"type": "string"},
+                                        "startdate": {"type": "string"},
+                                        "cost": {"type": "integer"},
+                                        "status": {"type": "string"},
+                                        "imageurl": {"type": "string"}
+                                    }
+                                }
+                            }
+                        ],
+                        "responses": {
+                            "201": {
+                                "description": "Event created successfully"
+                            },
+                            "400": {
+                                "description": "Invalid event data"
+                            }
+                        }
+                    },
                 },
                 "/events/{event_id}": {
                     "get": {
@@ -277,45 +316,6 @@ def get_swagger_spec():
                             },
                             "404": {
                                 "description": "Event not found"
-                            }
-                        }
-                    },
-                    "post": {
-                        "summary": "Create a new event under a specific ID",
-                        "description": "Create a new event in the database.",
-                        "parameters": [
-                            {
-                                "name": "event_id",
-                                "in": "path",
-                                "required": True,
-                                "type": "string",
-                                "description": "Event ID"
-                            },
-                            {
-                                "name": "body",
-                                "in": "body",
-                                "required": True,
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "createdby": {"type": "string"},
-                                        "event_name": {"type": "string"},
-                                        "description": {"type": "string"},
-                                        "location": {"type": "string"},
-                                        "startdate": {"type": "string"},
-                                        "cost": {"type": "integer"},
-                                        "status": {"type": "string"},
-                                        "imageurl": {"type": "string"}
-                                    }
-                                }
-                            }
-                        ],
-                        "responses": {
-                            "201": {
-                                "description": "Event created successfully"
-                            },
-                            "400": {
-                                "description": "Invalid event data"
                             }
                         }
                     },
@@ -444,7 +444,41 @@ def get_swagger_spec():
                                 }
                             }
                         }
-                    }
+                    },
+                    "post": {
+                        "summary": "Create a new event interest",
+                        "description": "Create a new event interest in the database.",
+                        "parameters": [
+                            {
+                                "name": "event_interest_id",
+                                "in": "path",
+                                "required": True,
+                                "type": "string",
+                                "description": "Event interest ID"
+                            },
+                            {
+                                "name": "body",
+                                "in": "body",
+                                "required": True,
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "eventid": {"type": "string"},
+                                        "userid": {"type": "string"},
+                                        "status": {"type": "string"}
+                                    }
+                                }
+                            }
+                        ],
+                        "responses": {
+                            "201": {
+                                "description": "Event interest created successfully"
+                            },
+                            "400": {
+                                "description": "Invalid event interest data"
+                            }
+                        }
+                    },
                 },
                 "/event_interests/{event_interest_id}": {
                     "get": {
@@ -475,40 +509,6 @@ def get_swagger_spec():
                             },
                             "404": {
                                 "description": "Event interest not found"
-                            }
-                        }
-                    },
-                    "post": {
-                        "summary": "Create a new event interest under a specific ID",
-                        "description": "Create a new event interest in the database.",
-                        "parameters": [
-                            {
-                                "name": "event_interest_id",
-                                "in": "path",
-                                "required": True,
-                                "type": "string",
-                                "description": "Event interest ID"
-                            },
-                            {
-                                "name": "body",
-                                "in": "body",
-                                "required": True,
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "eventid": {"type": "string"},
-                                        "userid": {"type": "string"},
-                                        "status": {"type": "string"}
-                                    }
-                                }
-                            }
-                        ],
-                        "responses": {
-                            "201": {
-                                "description": "Event interest created successfully"
-                            },
-                            "400": {
-                                "description": "Invalid event interest data"
                             }
                         }
                     },
@@ -603,7 +603,42 @@ def get_swagger_spec():
                                 }
                             }
                         }
-                    }
+                    },
+                    "post": {
+                        "summary": "Create a new adoption listing",
+                        "description": "Create a new adoption listing in the database.",
+                        "parameters": [
+                            {
+                                "name": "adoption_id",
+                                "in": "path",
+                                "required": True,
+                                "type": "string",
+                                "description": "Adoption listing ID"
+                            },
+                            {
+                                "name": "body",
+                                "in": "body",
+                                "required": True,
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "agentid": {"type": "string"},
+                                        "petid": {"type": "string"},
+                                        "description": {"type": "string"},
+                                        "status": {"type": "string"}
+                                    }
+                                }
+                            }
+                        ],
+                        "responses": {
+                            "201": {
+                                "description": "Adoption listing created successfully"
+                            },
+                            "400": {
+                                "description": "Invalid adoption listing data"
+                            }
+                        }
+                    },
                 },
                 # Adoption Listings
                 "/adoption_listings/{adoption_id}": {
@@ -637,41 +672,6 @@ def get_swagger_spec():
                             },
                             "404": {
                                 "description": "Adoption listing not found"
-                            }
-                        }
-                    },
-                    "post": {
-                        "summary": "Create a new adoption listing under a specific ID",
-                        "description": "Create a new adoption listing in the database.",
-                        "parameters": [
-                            {
-                                "name": "adoption_id",
-                                "in": "path",
-                                "required": True,
-                                "type": "string",
-                                "description": "Adoption listing ID"
-                            },
-                            {
-                                "name": "body",
-                                "in": "body",
-                                "required": True,
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "agentid": {"type": "string"},
-                                        "petid": {"type": "string"},
-                                        "description": {"type": "string"},
-                                        "status": {"type": "string"}
-                                    }
-                                }
-                            }
-                        ],
-                        "responses": {
-                            "201": {
-                                "description": "Adoption listing created successfully"
-                            },
-                            "400": {
-                                "description": "Invalid adoption listing data"
                             }
                         }
                     },
@@ -755,7 +755,40 @@ def get_swagger_spec():
                                 }
                             }
                         }
-                    }
+                    },
+                    "post": {
+                        "summary": "Create a new adoption interest",
+                        "description": "Create a new adoption interest in the database.",
+                        "parameters": [
+                            {
+                                "name": "adoption_interest_id",
+                                "in": "path",
+                                "required": True,
+                                "type": "string",
+                                "description": "Adoption interest ID"
+                            },
+                            {
+                                "name": "body",
+                                "in": "body",
+                                "required": True,
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "userid": {"type": "string"},
+                                        "status": {"type": "string"}
+                                    }
+                                }
+                            }
+                        ],
+                        "responses": {
+                            "201": {
+                                "description": "Adoption interest created successfully"
+                            },
+                            "400": {
+                                "description": "Invalid adoption interest data"
+                            }
+                        }
+                    },
                 },
                 "/adoption_interests/{adoption_interest_id}": {
                     "get": {
@@ -785,39 +818,6 @@ def get_swagger_spec():
                             },
                             "404": {
                                 "description": "Adoption interest not found"
-                            }
-                        }
-                    },
-                    "post": {
-                        "summary": "Create a new adoption interest under a specific ID",
-                        "description": "Create a new adoption interest in the database.",
-                        "parameters": [
-                            {
-                                "name": "adoption_interest_id",
-                                "in": "path",
-                                "required": True,
-                                "type": "string",
-                                "description": "Adoption interest ID"
-                            },
-                            {
-                                "name": "body",
-                                "in": "body",
-                                "required": True,
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "userid": {"type": "string"},
-                                        "status": {"type": "string"}
-                                    }
-                                }
-                            }
-                        ],
-                        "responses": {
-                            "201": {
-                                "description": "Adoption interest created successfully"
-                            },
-                            "400": {
-                                "description": "Invalid adoption interest data"
                             }
                         }
                     },
@@ -914,7 +914,46 @@ def get_swagger_spec():
                                 }
                             }
                         }
-                    }
+                    },
+                    "post": {
+                        "summary": "Create a new sitting request",
+                        "description": "Create a new sitting request in the database.",
+                        "parameters": [
+                            {
+                                "name": "sitting_request_id",
+                                "in": "path",
+                                "required": True,
+                                "type": "string",
+                                "description": "Sitting request ID"
+                            },
+                            {
+                                "name": "body",
+                                "in": "body",
+                                "required": True,
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "userid": {"type": "string"},
+                                        "pay": {"type": "integer"},
+                                        "startdate": {"type": "string"},
+                                        "enddate": {"type": "string"},
+                                        "description": {"type": "string"},
+                                        "status": {"type": "string"},
+                                        "location": {"type": "string"},
+                                        "tasktype": {"type": "string"}
+                                    }
+                                }
+                            }
+                        ],
+                        "responses": {
+                            "201": {
+                                "description": "Sitting request created successfully"
+                            },
+                            "400": {
+                                "description": "Invalid sitting request data"
+                            }
+                        }
+                    },
                 },
                 "/sitting_requests/{sitting_request_id}": {
                     "get": {
@@ -950,45 +989,6 @@ def get_swagger_spec():
                             },
                             "404": {
                                 "description": "Sitting request not found"
-                            }
-                        }
-                    },
-                    "post": {
-                        "summary": "Create a new sitting request under a specific ID",
-                        "description": "Create a new sitting request in the database.",
-                        "parameters": [
-                            {
-                                "name": "sitting_request_id",
-                                "in": "path",
-                                "required": True,
-                                "type": "string",
-                                "description": "Sitting request ID"
-                            },
-                            {
-                                "name": "body",
-                                "in": "body",
-                                "required": True,
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "userid": {"type": "string"},
-                                        "pay": {"type": "integer"},
-                                        "startdate": {"type": "string"},
-                                        "enddate": {"type": "string"},
-                                        "description": {"type": "string"},
-                                        "status": {"type": "string"},
-                                        "location": {"type": "string"},
-                                        "tasktype": {"type": "string"}
-                                    }
-                                }
-                            }
-                        ],
-                        "responses": {
-                            "201": {
-                                "description": "Sitting request created successfully"
-                            },
-                            "400": {
-                                "description": "Invalid sitting request data"
                             }
                         }
                     },
@@ -1077,7 +1077,41 @@ def get_swagger_spec():
                                 }
                             }
                         }
-                    }
+                    },
+                    "post": {
+                        "summary": "Create a new sitter interest",
+                        "description": "Create a new sitter interest in the database.",
+                        "parameters": [
+                            {
+                                "name": "sitter_interest_id",
+                                "in": "path",
+                                "required": True,
+                                "type": "string",
+                                "description": "Sitter interest ID"
+                            },
+                            {
+                                "name": "body",
+                                "in": "body",
+                                "required": True,
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "userid": {"type": "string"},
+                                        "sittingrequestid": {"type": "string"},
+                                        "status": {"type": "string"}
+                                    }
+                                }
+                            }
+                        ],
+                        "responses": {
+                            "201": {
+                                "description": "Sitter interest created successfully"
+                            },
+                            "400": {
+                                "description": "Invalid sitter interest data"
+                            }
+                        }
+                    },
                 },
                 "/sitter_interests/{sitter_interest_id}": {
                     "get": {
@@ -1108,40 +1142,6 @@ def get_swagger_spec():
                             },
                             "404": {
                                 "description": "Sitter interest not found"
-                            }
-                        }
-                    },
-                    "post": {
-                        "summary": "Create a new sitter interest under a specific ID",
-                        "description": "Create a new sitter interest in the database.",
-                        "parameters": [
-                            {
-                                "name": "sitter_interest_id",
-                                "in": "path",
-                                "required": True,
-                                "type": "string",
-                                "description": "Sitter interest ID"
-                            },
-                            {
-                                "name": "body",
-                                "in": "body",
-                                "required": True,
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "userid": {"type": "string"},
-                                        "sittingrequestid": {"type": "string"},
-                                        "status": {"type": "string"}
-                                    }
-                                }
-                            }
-                        ],
-                        "responses": {
-                            "201": {
-                                "description": "Sitter interest created successfully"
-                            },
-                            "400": {
-                                "description": "Invalid sitter interest data"
                             }
                         }
                     },
