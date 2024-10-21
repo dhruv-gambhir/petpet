@@ -1,31 +1,37 @@
 "use client";
+
+import useSWR from "swr";
+import { getSittingRequests } from "./sittingrequests";
+import useStore from "@/app/store";
 import catBg from "../../../../public/cat_bg.png";
 import { useRouter } from "next/navigation";
 import JobsCard from "./JobsCard";
 
-const staticJobsData = [
-  {
-    sittingtype: "Walking",
-    animaltype: "Dog",
-    price: "$40/hr",
-    location: "Bukit Batok",
-    description: "Description about the request.",
-    photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
-  },
-  {
-    sittingtype: "Walking",
-    animaltype: "Cat",
-    price: "$20/hr",
-    location: "Jurong West",
-    description: "Description about the request.",
-    photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
-  },
-];
+// const staticJobsData = [
+//   {
+//     sittingtype: "Walking",
+//     animaltype: "Dog",
+//     price: "$40/hr",
+//     location: "Bukit Batok",
+//     description: "Description about the request.",
+//     photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
+//   },
+//   {
+//     sittingtype: "Walking",
+//     animaltype: "Cat",
+//     price: "$20/hr",
+//     location: "Jurong West",
+//     description: "Description about the request.",
+//     photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
+//   },
+// ];
 
 export default function SitterPage() {
 
   const router = useRouter();
-  const jobsData = staticJobsData;
+  const userId = useStore((state) => state.zId);
+  const { data: jobsData, isLoading } = useSWR("sitting_requests", getSittingRequests);
+  // const jobsData = staticJobsData;
 
   return (
     <div>
@@ -81,8 +87,8 @@ export default function SitterPage() {
         </form>
         <a>Sitting Requests</a>
         <div className="flex flex-col items-start gap-4 m-2 mt-8">
-        {jobsData.map((detail, index) => (
-          <JobsCard detail={detail} key={index} />
+        {jobsData?.map((detail) => (
+          <JobsCard detail={detail} key={detail.id} userId={userId}/>
         ))}
       </div>
       </div>
