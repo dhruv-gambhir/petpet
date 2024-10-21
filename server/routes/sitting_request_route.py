@@ -65,6 +65,9 @@ def get_sitting_request_with_pet(sitting_request_id):
                 'species': pet.species,
                 'breed': pet.breed,
                 'age': pet.age,
+                'sex': pet.sex, 
+                'color': pet.color,
+                'weight': pet.weight,
                 'imageurl': pet.imageurl
             })
 
@@ -126,6 +129,9 @@ def create_sitting_request():
             species=pet['species'],
             breed=pet['breed'],
             age=pet.get('age', 0),
+            sex=pet.get('sex'),
+            color=pet.get('color'),
+            weight=pet.get('weight'),
             imageurl=pet['imageurl']
         )
         db.session.add(new_pet)
@@ -178,6 +184,9 @@ def update_sitting_request(sitting_request_id):
                     existing_pet.species = pet.get('species', existing_pet.species)
                     existing_pet.breed = pet.get('breed', existing_pet.breed)
                     existing_pet.age = pet.get('age', existing_pet.age)
+                    existing_pet.sex= pet.get('sex', existing_pet.sex)
+                    existing_pet.color= pet.get('color', existing_pet.color)
+                    existing_pet.weight= pet.get('weight', existing_pet.weight)
                     existing_pet.imageurl = pet.get('imageurl', existing_pet.imageurl)
             else:
                 # If pet data is new, create a new pet and add to the sitting request
@@ -187,6 +196,9 @@ def update_sitting_request(sitting_request_id):
                     species=pet['species'],
                     breed=pet.get('breed'),
                     age=pet.get('age', 0),
+                    sex= pet.get('sex'),
+                    color= pet.get('color'),
+                    weight= pet.get('weight'),
                     imageurl=pet.get('imageurl')
                 )
                 db.session.add(new_pet)

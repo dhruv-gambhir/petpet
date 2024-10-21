@@ -36,6 +36,9 @@ def get_adoption_listings():
             'species': Pets.query.get(adoption.petid).species,
             'breed': Pets.query.get(adoption.petid).breed,
             'age': Pets.query.get(adoption.petid).age,
+            'sex': Pets.query.get(adoption.petid).sex,
+            'color': Pets.query.get(adoption.petid).color,
+            'weight': Pets.query.get(adoption.petid).weight,
             'imageurl': Pets.query.get(adoption.petid).imageurl
         },
         # shown interest
@@ -64,6 +67,9 @@ def get_adoption_listing(adoption_id):
             'species': Pets.query.get(adoption.petid).species,
             'breed': Pets.query.get(adoption.petid).breed,
             'age': Pets.query.get(adoption.petid).age,
+            'sex': Pets.query.get(adoption.petid).sex,
+            'color': Pets.query.get(adoption.petid).color,
+            'weight': Pets.query.get(adoption.petid).weight,
             'imageurl': Pets.query.get(adoption.petid).imageurl
         },
         'description': adoption.description,
@@ -92,6 +98,9 @@ def create_adoption_listing():
         species=pet_data['species'],
         breed=pet_data['breed'],
         age=pet_data.get('age', 0),
+        sex= pet_data.get('sex'),
+        color= pet_data.get('color'),
+        weight= pet_data.get('weight'),
         imageurl=pet_data['imageurl']
     )
     db.session.add(new_pet)
@@ -132,6 +141,9 @@ def update_adoption_listing(adoption_id):
                 species=pet_data['species'],
                 breed=pet_data['breed'],
                 age=pet_data.get('age', 0),
+                sex= pet_data.get('sex'),
+                color= pet_data.get('color'),
+                weight= pet_data.get('weight'),
                 imageurl=pet_data['imageurl']
             )
             db.session.add(pet)  # Add the new pet to the session
@@ -149,6 +161,9 @@ def update_adoption_listing(adoption_id):
             pet.species = pet_data.get('species', pet.species)
             pet.breed = pet_data.get('breed', pet.breed)
             pet.age = pet_data.get('age', pet.age)
+            pet.sex= pet_data.get('sex', pet.sex)
+            pet.color= pet_data.get('color', pet.color)
+            pet.weight= pet_data.get('weight', pet.weight)
             pet.imageurl = pet_data.get('imageurl', pet.imageurl)
 
             db.session.add(pet)  # Update the pet details in the session
