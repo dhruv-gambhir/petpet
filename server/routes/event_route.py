@@ -23,7 +23,7 @@ def get_events():
         'event_name': event.event_name,
         'description': event.description,
         'location': event.location,
-        'startdate': event.startdate.strftime('%Y-%m-%d') if event.startdate else None,
+        'startdate': event.startdate.strftime('%Y-%m-%d %H:%M:%S') if event.startdate else None,
         'cost': event.cost,
         'status': event.status,
         'imageurl': event.imageurl,
@@ -52,7 +52,7 @@ def get_event(event_id):
         'event_name': event.event_name,
         'description': event.description,
         'location': event.location,
-        'startdate': event.startdate.strftime('%Y-%m-%d') if event.startdate else None,
+        'startdate': event.startdate.strftime('%Y-%m-%d %H:%M:%S') if event.startdate else None,
         'cost': event.cost,
         'status': event.status,
         'imageurl': event.imageurl,
@@ -68,10 +68,11 @@ def create_event():
     if not data or not data.get('event_name') or not data.get('createdby'):
         abort(400, description="Invalid event data. 'event_name' and 'createdby' are required.")
     
+    # Use datetime.datetime to parse both date and time
     try:
-        startdate = datetime.strptime(data.get('startdate'), '%Y-%m-%d').date() if data.get('startdate') else None
+        startdate = datetime.strptime(data.get('startdate'), '%Y-%m-%d %H:%M:%S') if data.get('startdate') else None
     except ValueError:
-        abort(400, description="Invalid date format for 'startdate'. Expected format: YYYY-MM-DD")
+        abort(400, description="Invalid date format for 'startdate'. Expected format: YYYY-MM-DD HH:MM:SS")
 
     new_event = Event(
         createdby=data['createdby'],
@@ -98,10 +99,10 @@ def update_event(event_id):
 
     try:
         if 'startdate' in data:
-            startdate = datetime.strptime(data.get('startdate'), '%Y-%m-%d').date()
+            startdate = datetime.strptime(data.get('startdate'), '%Y-%m-%d %H:%M:%S') if data.get('startdate') else None
             event.startdate = startdate
     except ValueError:
-        abort(400, description="Invalid date format for 'startdate'. Expected format: YYYY-MM-DD")
+        abort(400, description="Invalid date format for 'startdate'. Expected format: YYYY-MM-DD HH:MM:SS")
 
     event.event_name = data.get('event_name', event.event_name)
     event.description = data.get('description', event.description)
@@ -137,7 +138,7 @@ def get_events_by_user(user_id):
         'event_name': event.event_name,
         'description': event.description,
         'location': event.location,
-        'startdate': event.startdate.strftime('%Y-%m-%d') if event.startdate else None,
+        'startdate': event.startdate.strftime('%Y-%m-%d %H:%M:%S') if event.startdate else None,
         'cost': event.cost,
         'status': event.status,
         'imageurl': event.imageurl,

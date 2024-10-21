@@ -87,7 +87,7 @@ CREATE TABLE Events (
     Event_name VARCHAR(255),
     Description TEXT,
     Location VARCHAR(255),
-    StartDate DATE,
+    StartDate TIMESTAMP,
     Cost INT,
     ImageUrl TEXT, 
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
