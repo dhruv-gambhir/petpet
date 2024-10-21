@@ -12,7 +12,7 @@ export default function JobsCard({ detail, userId }) {
           alt="A dog photo."
         />      </div>
       <div className="flex-1 flex flex-col ">
-        <h2 className="text-lg">{detail.sittingtype} {detail.animaltype} Request</h2>
+        <h2 className="text-lg">{detail.name}'s Request</h2>
         <p className="text-nowrap">
             ${detail.pay}/hour | {detail.location}
         </p>
@@ -21,8 +21,8 @@ export default function JobsCard({ detail, userId }) {
         <div className="absolute top-2 right-2 bg-white">
         <InterestedButton 
             isInterested={detail.interested}
-            onInterested={() => registerInterestInEvent(detail.id, userId)} 
-            onNotInterested={() => unregisterInterestInEvent(detail.id, userId)}
+            onInterested={() => registerInterestInSitting(detail.id, userId)} 
+            onNotInterested={() => unregisterInterestInSitting(detail.id, userId)}
             />
         </div>
     </div>

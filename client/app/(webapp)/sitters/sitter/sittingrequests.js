@@ -38,17 +38,14 @@ export const getSittingRequests = async () => {
 }
 
 /**
- * Fetches a list of sitting requests by user 'id' from the backend.
- * @param {string} id User UUID
- * @returns {Promise<SittingRequest[]>} Returns a list of sitting requests.
+ * Fetches a user by their userid from the backend.
+ * @param {string} userid The userid of the user to fetch.
+ * @returns {Promise<User>} Returns the user data.
  */
-export const getSittingRequestsBy = async (id) => {
-  const response = await fetcher(`sitting_requests/user/${id}`)
-  if (!response.ok) {
-    throw new Error(response.statusText)
-  }
-  return response.json()
-}
+ export const getUserById = async (userid) => {
+    const response = await fetcher(`users/${userid}`);
+    return await response.json();
+  };
 
 
 export const registerInterestInSitting = async (sittingId, userId) => {
