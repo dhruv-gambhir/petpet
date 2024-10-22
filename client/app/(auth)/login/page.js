@@ -13,7 +13,7 @@ export default function Login() {
     const { zLogin } = useStore();
 
     const fetchUserId = async (email) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${email}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/id/email/${email}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
