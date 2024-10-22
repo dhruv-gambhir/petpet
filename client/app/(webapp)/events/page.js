@@ -3,8 +3,10 @@
 import useSWR from "swr";
 import EventCard from "./EventCard";
 import { getEvents } from "./events";
+import useStore from "@/app/store";
 
 export default function EventsPage() {
+  const userId = useStore((state) => state.zId);
   const { data: events, isLoading } = useSWR("events", getEvents);
 
   return (
@@ -31,7 +33,7 @@ export default function EventsPage() {
           </a>
         </div>
         {events?.map((event) => (
-          <EventCard event={event} key={event.id} />
+          <EventCard event={event} key={event.id} userId={userId} />
         ))}
       </div>
     </div>

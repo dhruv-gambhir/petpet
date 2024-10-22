@@ -1,5 +1,6 @@
 
 import InterestedButton from "@/app/Components/InterestedButton";
+import { registerInterestInEvent, unregisterInterestInEvent } from "./events";
 
 /**
  *
@@ -9,7 +10,7 @@ import InterestedButton from "@/app/Components/InterestedButton";
  * }} param0
  * @returns
  */
-export default function EventCard({ event, organizerView }) {
+export default function EventCard({ event, organizerView, userId }) {
     const isOrganizer = organizerView ?? false;
 
   return (
@@ -54,9 +55,11 @@ export default function EventCard({ event, organizerView }) {
         </div>
       ) : (
         <div className="absolute top-2 right-2 bg-white">
-          <div className="absolute top-2 right-2 bg-white">
-                    <InterestedButton />
-                </div>
+          <InterestedButton 
+            isInterested={event.interested}
+            onInterested={() => registerInterestInEvent(event.id, userId)} 
+            onNotInterested={() => unregisterInterestInEvent(event.id, userId)}
+            />
         </div>
       )}
     </div>

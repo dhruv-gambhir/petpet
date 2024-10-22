@@ -111,7 +111,7 @@ def create_sitting_request():
         description=data['description'],
         status=data.get('status', 'pending'),
         location=data.get('location'),
-        tasktype=data.get('tasktype')
+   
     )
 
     db.session.add(new_sitting_request)
@@ -169,7 +169,6 @@ def update_sitting_request(sitting_request_id):
     sitting_request.enddate = datetime.strptime(data['enddate'], '%Y-%m-%d').date()
     sitting_request.description = data.get('description', sitting_request.description)
     sitting_request.status = data.get('status', sitting_request.status)
-    sitting_request.tasktype = data.get('tasktype', sitting_request.tasktype)
     sitting_request.location = data.get('location', sitting_request.location)  # Add location field
 
     # Check for pet data in the request
