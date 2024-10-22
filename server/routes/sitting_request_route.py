@@ -1,7 +1,9 @@
 
 from flask import Blueprint, jsonify, request, abort
 from models.sitting_request_model import SittingRequests
-from models.pet_sitting_request_model import PetSittingRequests
+from models.pets_sitting_request_model import PetSittingRequests
+from models.sitter_interest_model import SitterInterests
+from models.users_model import Users
 from models.pets_model import Pets
 from datetime import datetime
 from db import db
@@ -10,6 +12,11 @@ sitting_request_bp = Blueprint('sitting_request_bp', __name__)
 
 @sitting_request_bp.route('', methods=['GET'])
 def get_sitting_requests():
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
+
     sitting_requests = SittingRequests.query.all()
 
     #keeping the pet details seperate from the all sitting request details, 
@@ -17,6 +24,7 @@ def get_sitting_requests():
     sitting_request_list = [{
         'id': sitting_request.id,
         'userid': sitting_request.userid,
+        'name': Users.query.get(sitting_request.userid).name,
         'pay': sitting_request.pay,
         'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
         'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
@@ -24,7 +32,8 @@ def get_sitting_requests():
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
         'location': sitting_request.location,
-        'tasktype': sitting_request.tasktype
+        'tasktype': sitting_request.tasktype,
+        'interested': bool(SitterInterests.query.filter_by(userid=userid, sittingrequestid=sitting_request.id).first())
     } for sitting_request in sitting_requests]
     return jsonify(sitting_request_list), 200
 
@@ -32,24 +41,40 @@ def get_sitting_requests():
 @sitting_request_bp.route('/<string:sitting_request_id>', methods=['GET'])
 def get_sitting_request_with_pet(sitting_request_id):
     sitting_request = SittingRequests.query.get(sitting_request_id)
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
+
     if not sitting_request:
         abort(404, description="Sitting request not found")
 
     # Fetch all associated pets through the one-to-many relationship from pet_sitting_requests
     # Access pets directly because the relationship is defined in the PetSittingRequests model
-    pet_info = [{
-        'id': pet_sitting.pet.id,
-        'name': pet_sitting.pet.name,
-        'species': pet_sitting.pet.species,
-        'breed': pet_sitting.pet.breed,
-        'age': pet_sitting.pet.age,
-        'image_url': pet_sitting.pet.image_url
-    } for pet_sitting in sitting_request.pet_sitting_requests]
+    # Query PetSittingRequests to get all entries related to this sitting request
+    pet_sitting_requests = PetSittingRequests.query.filter_by(sittingrequestid=sitting_request_id).all()
 
+    # Query the Pets table for each petid in pet_sitting_requests
+    pet_info = []
+    for pet_sitting in pet_sitting_requests:
+        pet = Pets.query.get(pet_sitting.petid)
+        if pet:
+            pet_info.append({
+                'id': pet.id,
+                'name': pet.name,
+                'species': pet.species,
+                'breed': pet.breed,
+                'age': pet.age,
+                'sex': pet.sex, 
+                'color': pet.color,
+                'weight': pet.weight,
+                'imageurl': pet.imageurl
+            })
 
     sitting_request_data = {
         'id': sitting_request.id,
         'userid': sitting_request.userid,
+        'name': Users.query.get(sitting_request.userid).name,
         'pay': sitting_request.pay,
         'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
         'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
@@ -57,7 +82,8 @@ def get_sitting_request_with_pet(sitting_request_id):
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
         'location': sitting_request.location,
-        'tasktype': sitting_request.tasktype
+        'tasktype': sitting_request.tasktype,
+        'interested': bool(SitterInterests.query.filter_by(userid=userid, sittingrequestid=sitting_request.id).first())
     }
     return jsonify(
         {'sitting_request': sitting_request_data, 'pets': pet_info}
@@ -85,7 +111,7 @@ def create_sitting_request():
         description=data['description'],
         status=data.get('status', 'pending'),
         location=data.get('location'),
-        tasktype=data.get('tasktype')
+   
     )
 
     db.session.add(new_sitting_request)
@@ -103,7 +129,10 @@ def create_sitting_request():
             species=pet['species'],
             breed=pet['breed'],
             age=pet.get('age', 0),
-            imageurl=pet['image_url']
+            sex=pet.get('sex'),
+            color=pet.get('color'),
+            weight=pet.get('weight'),
+            imageurl=pet['imageurl']
         )
         db.session.add(new_pet)
         db.session.flush()  # Flush the session to get the pet ID
@@ -115,8 +144,7 @@ def create_sitting_request():
         )
         db.session.add(new_pet_sitting_request)
         db.session.flush() # Flush the session to get the pet_sitting_request ID
-        new_pet_sitting_request_ids.sitting_request_bpend(new_pet_sitting_request.id)
-        
+        new_pet_sitting_request_ids.append(new_pet_sitting_request.id)
     db.session.commit()
 
     #should return the sitting request id and list of new pet_sitting_request id
@@ -141,7 +169,6 @@ def update_sitting_request(sitting_request_id):
     sitting_request.enddate = datetime.strptime(data['enddate'], '%Y-%m-%d').date()
     sitting_request.description = data.get('description', sitting_request.description)
     sitting_request.status = data.get('status', sitting_request.status)
-    sitting_request.tasktype = data.get('tasktype', sitting_request.tasktype)
     sitting_request.location = data.get('location', sitting_request.location)  # Add location field
 
     # Check for pet data in the request
@@ -156,7 +183,10 @@ def update_sitting_request(sitting_request_id):
                     existing_pet.species = pet.get('species', existing_pet.species)
                     existing_pet.breed = pet.get('breed', existing_pet.breed)
                     existing_pet.age = pet.get('age', existing_pet.age)
-                    existing_pet.imageurl = pet.get('image_url', existing_pet.imageurl)
+                    existing_pet.sex= pet.get('sex', existing_pet.sex)
+                    existing_pet.color= pet.get('color', existing_pet.color)
+                    existing_pet.weight= pet.get('weight', existing_pet.weight)
+                    existing_pet.imageurl = pet.get('imageurl', existing_pet.imageurl)
             else:
                 # If pet data is new, create a new pet and add to the sitting request
                 new_pet = Pets(
@@ -165,7 +195,10 @@ def update_sitting_request(sitting_request_id):
                     species=pet['species'],
                     breed=pet.get('breed'),
                     age=pet.get('age', 0),
-                    imageurl=pet.get('image_url')
+                    sex= pet.get('sex'),
+                    color= pet.get('color'),
+                    weight= pet.get('weight'),
+                    imageurl=pet.get('imageurl')
                 )
                 db.session.add(new_pet)
                 db.session.flush()  # Flush to get the new pet ID
@@ -191,3 +224,23 @@ def delete_sitting_request(sitting_request_id):
     db.session.delete(sitting_request)
     db.session.commit()
     return jsonify({'message': 'Sitting request deleted successfully'}), 200
+
+# Route to fetch all sitting request of a user (GET)
+@sitting_request_bp.route('/user/<string:user_id>', methods=['GET'])
+def get_user_sitting_requests(user_id):
+    sitting_requests = SittingRequests.query.filter_by(userid=user_id).all()
+
+    sitting_request_list = [{
+        'id': sitting_request.id,
+        'userid': sitting_request.userid,
+        'name': Users.query.get(sitting_request.userid).name,
+        'pay': sitting_request.pay,
+        'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
+        'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
+        'description': sitting_request.description,
+        'status': sitting_request.status,
+        'createdat': sitting_request.createdat,
+        'location': sitting_request.location,
+        'tasktype': sitting_request.tasktype
+    } for sitting_request in sitting_requests]
+    return jsonify(sitting_request_list), 200

@@ -12,7 +12,7 @@ class SittingRequests(db.Model):
     status= db.Column(db.Enum('pending', 'decided', name='status_enum'), default='pending')  # Status of the sitting request
     createdat= db.Column(db.TIMESTAMP, default=db.func.current_timestamp())
     location = db.Column(db.String(255))
-    tasktype= db.Column(db.Enum('day_boarding', 'doggy_day_care', 'dog_walking', 'home_visits', 'house_sitting', name='task_enum'))  # Type of the task
+    #tasktype= db.Column(db.Enum('day_boarding', 'doggy_day_care', 'dog_walking', 'home_visits', 'house_sitting', name='task_enum'))  # Type of the task
 
     #add relationship to user table and sitter interest table and pet sitting request table
     sitter_interest= db.relationship('SitterInterests', backref='sitting_requests_made')

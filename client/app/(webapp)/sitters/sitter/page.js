@@ -1,31 +1,39 @@
 "use client";
+
+import useSWR from "swr";
+import { getSittingRequests, getUserById } from "./sittingrequests";
+import useStore from "@/app/store";
 import catBg from "../../../../public/cat_bg.png";
 import { useRouter } from "next/navigation";
 import JobsCard from "./JobsCard";
-
-const staticJobsData = [
-  {
-    sittingtype: "Walking",
-    animaltype: "Dog",
-    price: "$40/hr",
-    location: "Bukit Batok",
-    description: "Description about the request.",
-    photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
-  },
-  {
-    sittingtype: "Walking",
-    animaltype: "Cat",
-    price: "$20/hr",
-    location: "Jurong West",
-    description: "Description about the request.",
-    photo: "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg",
-  },
-];
+import { useState, useEffect } from "react";
+import GoogleMapView from "./map";
 
 export default function SitterPage() {
-
   const router = useRouter();
-  const jobsData = staticJobsData;
+  const userId = useStore((state) => state.zId);
+  const { data: jobsData, isLoading: isLoadingJobs } = useSWR("sitting_requests", getSittingRequests);
+  const [combinedData, setCombinedData] = useState([]);
+ 
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (jobsData) {
+        const jobsWithUserDetails = await Promise.all(
+          jobsData.map(async (job) => {
+            const user = await getUserById(job.userid); // Fetch user by userid
+            return {
+              ...job,
+              name: user?.name || "Unknown",     // Add name from user data
+              imageurl: user?.imageurl || "",    // Add imageurl from user data
+            };
+          })
+        );
+        setCombinedData(jobsWithUserDetails); // Set the combined data
+      }
+    };
+
+    fetchUserDetails();
+  }, [jobsData]);
 
   return (
     <div>
@@ -64,8 +72,8 @@ export default function SitterPage() {
             </button>
           </div>
         </div>
-
       </section>
+
       <div className="flex-initial self-stretch w-[83.3%] mx-auto">
         <form className="flex m-4 h-8">
           <input
@@ -79,14 +87,19 @@ export default function SitterPage() {
             <input className="px-2" type="date" />
           </div>
         </form>
-        <a>Sitting Requests</a>
-        <div className="flex flex-col items-start gap-4 m-2 mt-8">
-        {jobsData.map((detail, index) => (
-          <JobsCard detail={detail} key={index} />
-        ))}
-      </div>
-      </div>
 
+        <a>Sitting Requests</a>
+        <div className="flex flex-row gap-4 mt-8">
+          <div className="flex flex-col flex-1 gap-4">
+            {combinedData?.map((detail) => (
+              <JobsCard detail={detail} key={detail.id} userId={userId} />
+            ))}
+          </div>
+          <div className="flex-1">
+            <GoogleMapView />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
