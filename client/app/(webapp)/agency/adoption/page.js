@@ -1,5 +1,11 @@
-import AdoptionCard from "../AdoptionCard";
+"use client";
+
+import AdoptionCard from "../../adoption/AdoptionCard";
+import { ADOPTION_BY_USER_PATH } from "../../adoption/adoptions";
 import PreviewForm from "./PreviewForm";
+import useStore from "@/app/store";
+import useSWR from "swr";
+import { getAdoptionByUser } from "../../adoption/adoptions";
 
 // const commonAnimals = ["🐱 Cat", "🐶 Dog", "🐢 Turtle", "🐹 Hams", "🐰 Rabbit"];
 
@@ -18,7 +24,10 @@ const staticAdoptionData = [
 ];
 
 export default function AgencyAdoptionPage() {
-  const adoptionData = staticAdoptionData;
+  const zId = useStore(state => state.zId);
+  console.log(useStore());
+  const { data: adoptionData, isLoading } = useSWR([ADOPTION_BY_USER_PATH, zId], getAdoptionByUser);
+
   const agencyName = "Ministry of Pets";
 
   return (
@@ -33,8 +42,9 @@ export default function AgencyAdoptionPage() {
           />
           <select
             className="border border-gray-300 rounded-md p-2 flex-1"
+            value=""
           >
-            <option value="" disabled selected hidden>Sex</option>
+            <option value="" disabled hidden>Sex</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -82,7 +92,7 @@ export default function AgencyAdoptionPage() {
       </form>
 
       <div className="flex flex-col items-start gap-4 m-2 mt-8">
-        {adoptionData.map((detail, index) => (
+        {adoptionData?.map((detail, index) => (
           <AdoptionCard detail={detail} key={index} isOrganizer={true} />
         ))}
       </div>

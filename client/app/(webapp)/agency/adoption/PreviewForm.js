@@ -11,7 +11,7 @@ export default function PreviewForm({ className }) {
 
   return (
     <div className={`flex flex-row p-2 border border-gray-300 rounded-md bg-white gap-4 ${className}`}>
-      <label for="image_upload" className='px-4 py-10 border rounded cursor-pointer flex-initial'>Choose images to upload.</label>
+      <label htmlFor="image_upload" className='px-4 py-10 border rounded cursor-pointer flex-initial'>Choose images to upload.</label>
       <input onChange={handleFileChange} id="image_upload" type="file" accept="image/*" className="invisible absolute"/>
       <div className='px-4 py-10 border rounded flex-auto'>
         {

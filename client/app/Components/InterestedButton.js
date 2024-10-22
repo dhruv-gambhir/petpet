@@ -1,16 +1,36 @@
 "use client";
 import { useState } from "react";
 
-export default function InterestedButton() {
-  const [pressed, setPressed] = useState(false);
+/**
+ * 
+ * @param {React.ComponentPropsWithRef<'button'> & {
+ *  isInterested?: boolean,
+ *  onInterested?: () => Promise<void>,
+ *  onNotInterested?: () => Promise<void>,
+ * }} props 
+ * @returns 
+ */
+export default function InterestedButton(props) {
+  const { isInterested, onInterested, onNotInterested, ...rest } = props;
+  const [pressed, setPressed] = useState(isInterested ?? false);
 
-  const togglePressed = () => {
+  const togglePressed = async () => {
+    try {
+      if (pressed) {
+        await onNotInterested?.();
+      } else {
+        await onInterested?.();
+      }
+    } catch (e) {
+      console.error(e);
+    }
     setPressed(!pressed);
   };
 
   return (
     <button
       className="border border-black rounded px-2 py-1 flex items-center"
+      {...rest}
       onClick={togglePressed}
     >
       <p className="text-black mr-2">Interested</p>

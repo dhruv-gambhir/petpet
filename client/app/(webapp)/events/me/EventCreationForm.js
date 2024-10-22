@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import PreviewForm from "./PreviewForm";
 import { uploadFile } from "@/app/lib/uploadFile";
 import { createEvent } from "../events";
+import useStore from "@/app/store";
 
 export default function EventCreationForm({}) {
   const {
@@ -12,8 +13,7 @@ export default function EventCreationForm({}) {
     formState: {  },
   } = useForm();
 
-  const userId = "a2b88379-aa4e-420b-a442-1bbeea9bb7f6"; 
-  // TODO replace with actual user id
+  const userId = useStore(state => state.zId);
 
   const submitAction = async (data) => {
     const body = {

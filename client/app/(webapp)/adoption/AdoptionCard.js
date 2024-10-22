@@ -1,4 +1,8 @@
+"use client";
+
+import useStore from "@/app/store";
 import InterestedButton from "../../Components/InterestedButton";
+import { registerInterestInAdoption, unregisterInterestInAdoption } from "./adoptions";
 
 const AdoptionTile = ({ label, content, units }) => {
     return (
@@ -12,6 +16,8 @@ const AdoptionTile = ({ label, content, units }) => {
 };
 
 export default function AdoptionCard({ detail, isOrganizer }) {
+    const userId = useStore((state) => state.zId);
+
     isOrganizer = isOrganizer ?? false;
 
     return (
@@ -19,11 +25,11 @@ export default function AdoptionCard({ detail, isOrganizer }) {
             <div className="flex-none w-60 relative">
                 <img
                     className="object-scale-down mx-auto h-full aspect-auto"
-                    src={detail.photo}
+                    src={detail.pet?.image_url}
                     alt="A dog photo."
                 />
                 <div className="absolute w-4/5 text-center bg-gray-300 px-2 py-1 rounded z-50 text-nowrap shadow-sm shadow-black bottom-[-1rem] left-[50%] translate-x-[-50%]">
-                    <p>{detail.name}</p>
+                    <p>{detail.pet?.name}</p>
                 </div>
             </div>
             <div className="flex-1 flex flex-col ">
@@ -31,7 +37,7 @@ export default function AdoptionCard({ detail, isOrganizer }) {
                 <div className="flex flex-row gap-4 my-4">
                     <AdoptionTile content={detail.sex} label="Sex" />
                     <AdoptionTile content={detail.color} label="Color" />
-                    <AdoptionTile content={detail.breed} label="Breed" />
+                    <AdoptionTile content={detail.pet?.species} label="Breed" />
                     <AdoptionTile
                         content={detail.weight}
                         label="Weight"
@@ -49,7 +55,11 @@ export default function AdoptionCard({ detail, isOrganizer }) {
                 </div>
             ) : (
                 <div className="absolute top-2 right-2 bg-white">
-                    <InterestedButton />
+                    <InterestedButton 
+                        isInterested={detail.interested}
+                        onInterested={() => registerInterestInAdoption(detail.id, userId)} 
+                        onNotInterested={() => unregisterInterestInAdoption(detail.id)}
+                    />
                 </div>
             )}
         </div>
