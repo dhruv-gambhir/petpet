@@ -34,7 +34,7 @@ def main():
     # Map each table to its corresponding CSV file and column list
     table_csv_map = {
         "users": ("user.csv", "userid, Name, Email, PhoneNumber, CreatedAt, updatedAt, Bio, IsAgency, Address, LicenseNumber, ImageUrl"),
-        "pets": ("pet.csv", "id, ownerid, name, age, sex, species, breed, createdat, ImageUrl"),
+        "pets": ("pet.csv", "id, ownerid, name, age, sex, species, breed, color, weight, createdat, ImageUrl"),
         "sitting_requests": ("sitting.csv", "id, userid, pay, startdate, enddate, status, description, createdat, location, tasktype"),
         "sitter_interests": ("sitting_interest.csv", "id, userid, sittingrequestid, createdat, status"),
         "pets_sitting_requests": ("pet_sitting_request.csv", "id, sittingrequestid, petid"),
