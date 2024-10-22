@@ -6,18 +6,15 @@ import useStore from "@/app/store";
 import catBg from "../../../../public/cat_bg.png";
 import { useRouter } from "next/navigation";
 import JobsCard from "./JobsCard";
-import { useState } from "react";
-import { useEffect } from "react";
-export default function SitterPage() {
+import { useState, useEffect } from "react";
+import GoogleMapView from "./map";
 
+export default function SitterPage() {
   const router = useRouter();
   const userId = useStore((state) => state.zId);
-
-  // Fetch sitting requests
   const { data: jobsData, isLoading: isLoadingJobs } = useSWR("sitting_requests", getSittingRequests);
   const [combinedData, setCombinedData] = useState([]);
-
-  // Fetch users data once jobsData is available
+ 
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (jobsData) {
@@ -37,7 +34,6 @@ export default function SitterPage() {
 
     fetchUserDetails();
   }, [jobsData]);
-
 
   return (
     <div>
@@ -76,8 +72,8 @@ export default function SitterPage() {
             </button>
           </div>
         </div>
-
       </section>
+
       <div className="flex-initial self-stretch w-[83.3%] mx-auto">
         <form className="flex m-4 h-8">
           <input
@@ -91,14 +87,19 @@ export default function SitterPage() {
             <input className="px-2" type="date" />
           </div>
         </form>
-        <a>Sitting Requests</a>
-        <div className="flex flex-col items-start gap-4 m-2 mt-8">
-        {combinedData?.map((detail) => (
-          <JobsCard detail={detail} key={detail.id} userId={userId}/>
-        ))}
-      </div>
-      </div>
 
+        <a>Sitting Requests</a>
+        <div className="flex flex-row gap-4 mt-8">
+          <div className="flex flex-col flex-1 gap-4">
+            {combinedData?.map((detail) => (
+              <JobsCard detail={detail} key={detail.id} userId={userId} />
+            ))}
+          </div>
+          <div className="flex-1">
+            <GoogleMapView />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

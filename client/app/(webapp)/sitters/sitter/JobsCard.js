@@ -4,8 +4,8 @@ import { registerInterestInSitting, unregisterInterestInSitting } from "./sittin
 export default function JobsCard({ detail, userId }) {
   
   return (
-    <div className="relative bg-white rounded w-4/5 h-40 ml-8 flex flex-row p-3 gap-8 shadow-sm shadow-black">
-      <div className="flex-none w-60 relative">
+    <div className="relative bg-white rounded h-40 flex flex-row p-3 shadow-sm shadow-black">
+      <div className="flex-none w-40 relative">
       <img
           className="object-scale-down mx-auto h-full aspect-auto"
           src={detail.imageurl}
