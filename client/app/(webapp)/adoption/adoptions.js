@@ -7,7 +7,7 @@ export const getAdoptions = async ([_, userId]) => {
 
 export const ADOPTION_BY_USER_PATH = 'adoption_listings'
 export const getAdoptionByUser = async ([_, userId]) => {
-  const response = await fetcher(`${ADOPTION_BY_USER_PATH}/${userId}`)
+  const response = await fetcher(`${ADOPTION_BY_USER_PATH}/user/${userId}`)
   return await response.json()
 };
 
@@ -34,6 +34,18 @@ export const unregisterInterestInAdoption = async (adoptionId, userId) => {
     body: JSON.stringify({ 
       userid: userId,
     })
+  })
+
+  return response.ok
+}
+
+export const createAdoption = async (adoptionData) => {
+  const response = await fetcher('adoption_listings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(adoptionData)
   })
 
   return response.ok

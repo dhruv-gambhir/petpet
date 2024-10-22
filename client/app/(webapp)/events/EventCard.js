@@ -13,8 +13,6 @@ import { registerInterestInEvent, unregisterInterestInEvent } from "./events";
 export default function EventCard({ event, organizerView, userId }) {
     const isOrganizer = organizerView ?? false;
 
-    console.log(userId)
-
   return (
     <div className="relative bg-white rounded w-4/5 h-80 ml-8 flex flex-row p-3 gap-8 shadow-sm shadow-black">
       <div className="flex-none w-60 relative">

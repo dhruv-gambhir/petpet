@@ -41,7 +41,7 @@ export default function AdoptionCard({ detail, isOrganizer }) {
                     {detail.pet?.color && <AdoptionTile content={detail.pet?.color} label="Color" />}
                     <AdoptionTile content={detail.pet?.species} label="Breed" />
                     <AdoptionTile
-                        content={detail.weight}
+                        content={detail.pet?.weight}
                         label="Weight"
                         units="kg"
                     />
