@@ -15,6 +15,8 @@ const AdoptionTile = ({ label, content, units }) => {
     );
 };
 
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
 export default function AdoptionCard({ detail, isOrganizer }) {
     const userId = useStore((state) => state.zId);
 
@@ -35,8 +37,8 @@ export default function AdoptionCard({ detail, isOrganizer }) {
             <div className="flex-1 flex flex-col ">
                 <h2 className="text-lg">{detail.agency}</h2>
                 <div className="flex flex-row gap-4 my-4">
-                    <AdoptionTile content={detail.sex} label="Sex" />
-                    <AdoptionTile content={detail.color} label="Color" />
+                    <AdoptionTile content={detail.pet?.sex && capitalize(detail.pet?.sex)} label="Sex" />
+                    {detail.pet?.color && <AdoptionTile content={detail.pet?.color} label="Color" />}
                     <AdoptionTile content={detail.pet?.species} label="Breed" />
                     <AdoptionTile
                         content={detail.weight}
@@ -58,7 +60,7 @@ export default function AdoptionCard({ detail, isOrganizer }) {
                     <InterestedButton 
                         isInterested={detail.interested}
                         onInterested={() => registerInterestInAdoption(detail.id, userId)} 
-                        onNotInterested={() => unregisterInterestInAdoption(detail.id)}
+                        onNotInterested={() => unregisterInterestInAdoption(detail.id, userId)}
                     />
                 </div>
             )}

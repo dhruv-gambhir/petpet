@@ -4,9 +4,10 @@ import useSWR from "swr";
 import EventCard from "../EventCard";
 import { getEventsBy } from "../events";
 import EventCreationForm from "./EventCreationForm";
+import useStore from "@/app/store";
 
 export default function MyEventsPage() {
-  const userId = "a2b88379-aa4e-420b-a442-1bbeea9bb7f6";
+  const userId = useStore((state) => state.zId);
 
   const { data: events, isLoading } = useSWR(["events/user", userId], ([_, args]) => getEventsBy(args));
 

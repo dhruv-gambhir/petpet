@@ -3,13 +3,13 @@
 import useSWR from "swr";
 import AdoptionCard from "./AdoptionCard";
 import { getAdoptions } from "./adoptions";
+import useStore from "@/app/store";
 
 const commonAnimals = ["🐱 Cat", "🐶 Dog", "🐢 Turtle", "🐹 Hams", "🐰 Rabbit"];
 
 export default function AdoptionPage() {
-
-  const { data: adoptionData, isLoading } = useSWR("adoption_listings", getAdoptions);
-  console.log(adoptionData);
+  const userId = useStore((state) => state.zId);
+  const { data: adoptionData, isLoading } = useSWR(["adoption_listings", userId], getAdoptions);
 
   return (
     <div className="flex-initial self-stretch w-[83.3%] mx-auto">

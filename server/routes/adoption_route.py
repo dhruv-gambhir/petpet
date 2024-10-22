@@ -16,12 +16,9 @@ def get_adoption_listings():
 
     #for now without jwt auth just use user id in the url
     userid = request.args.get('userid')  # Fetch userid from query parameters
-    if not userid:
-        abort(400, description="Invalid request. 'userid' is required.")
 
     adoption_listings = Adoption.query.all()
 
-    
     adoption_list = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
@@ -42,7 +39,7 @@ def get_adoption_listings():
             'imageurl': Pets.query.get(adoption.petid).imageurl
         },
         # shown interest
-        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
+        'interested': userid is not None and bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
     } for adoption in adoption_listings]
     return jsonify(adoption_list), 200
 

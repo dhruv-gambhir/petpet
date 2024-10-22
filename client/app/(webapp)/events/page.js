@@ -7,7 +7,7 @@ import useStore from "@/app/store";
 
 export default function EventsPage() {
   const userId = useStore((state) => state.zId);
-  const { data: events, isLoading } = useSWR("events", getEvents);
+  const { data: events, isLoading } = useSWR(["events", userId], getEvents);
 
   return (
     <div className="flex-initial self-stretch w-[83.3%] mx-auto">

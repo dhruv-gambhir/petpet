@@ -33,8 +33,7 @@ CREATE TABLE Pets (
     ImageUrl TEXT,
     Color VARCHAR(50),
     Weight FLOAT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Adoption_Listings Table

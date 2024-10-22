@@ -13,8 +13,7 @@ event_bp = Blueprint('event_bp', __name__)
 def get_events():
     #for now without jwt auth just use user id in the url
     userid = request.args.get('userid')  # Fetch userid from query parameters
-    if not userid:
-        abort(400, description="Invalid request. 'userid' is required.")
+    
     events = Event.query.all()
     event_list = [{
         'id': event.id,
@@ -28,7 +27,7 @@ def get_events():
         'status': event.status,
         'imageurl': event.imageurl,
         'createdat': event.createdat,
-        'interested': bool(EventInterest.query.filter_by(userid=userid, eventid=event.id).first())
+        'interested': userid is not None and bool(EventInterest.query.filter_by(userid=userid, eventid=event.id).first())
     } for event in events]
     return jsonify(event_list), 200
 
@@ -70,7 +69,7 @@ def create_event():
     
     # Use datetime.datetime to parse both date and time
     try:
-        startdate = datetime.strptime(data.get('startdate'), '%Y-%m-%d %H:%M:%S') if data.get('startdate') else None
+        startdate = datetime.strptime(data.get('startdate'), '%Y-%m-%dT%H:%M') if data.get('startdate') else None
     except ValueError:
         abort(400, description="Invalid date format for 'startdate'. Expected format: YYYY-MM-DD HH:MM:SS")
 
@@ -135,6 +134,7 @@ def get_events_by_user(user_id):
     event_list = [{
         'id': event.id,
         'createdby': event.createdby,
+        'name': Users.query.get(event.createdby).name,
         'event_name': event.event_name,
         'description': event.description,
         'location': event.location,
