@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.adoption_interest_model import AdoptionInterest
+from models.users_model import Users
 from datetime import datetime
 from db import db
 
@@ -12,6 +13,7 @@ def get_adoption_interests():
     adoption_interest_list = [{
         'id': adoption_interest.id,
         'userid': adoption_interest.userid,
+        'name': Users.query.get(adoption_interest.userid).name,
         'status': adoption_interest.status,
         'createdat': adoption_interest.createdat
     } for adoption_interest in adoption_interests]
@@ -27,6 +29,7 @@ def get_adoption_interest(adoption_interest_id):
     adoption_interest_data = {
         'id': adoption_interest.id,
         'userid': adoption_interest.userid,
+        'name': Users.query.get(adoption_interest.userid).name,
         'status': adoption_interest.status,
         'createdat': adoption_interest.createdat
     }

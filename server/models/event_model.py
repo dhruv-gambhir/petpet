@@ -8,7 +8,7 @@ class Event(db.Model):
     event_name = db.Column(db.String(255))
     description = db.Column(db.Text)
     location = db.Column(db.String(255))
-    startdate = db.Column(db.Date)
+    startdate = db.Column(db.DateTime)  # Changed to DateTime to store both date and time
     cost = db.Column(db.Integer)
     status = db.Column(db.Enum('pending', 'decided', 'accepted', 'rejected', name='status_enum'), default='pending')
     imageurl = db.Column(db.Text)  

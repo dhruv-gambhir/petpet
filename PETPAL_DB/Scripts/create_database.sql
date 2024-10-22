@@ -31,7 +31,10 @@ CREATE TABLE Pets (
     Breed VARCHAR(100),
     Age INT,
     ImageUrl TEXT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    Color VARCHAR(50),
+    Weight FLOAT,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+
 );
 
 -- Adoption_Listings Table
@@ -84,7 +87,7 @@ CREATE TABLE Events (
     Event_name VARCHAR(255),
     Description TEXT,
     Location VARCHAR(255),
-    StartDate DATE,
+    StartDate TIMESTAMP,
     Cost INT,
     ImageUrl TEXT, 
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status

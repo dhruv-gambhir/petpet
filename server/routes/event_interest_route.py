@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.event_model import Event
+from models.users_model import Users
 from models.event_interest_model import EventInterest
 from datetime import datetime
 from db import db
@@ -7,13 +8,14 @@ from db import db
 event_interest_bp = Blueprint('event_interest_bp', __name__)
 
 # Route to fetch all event interests (GET)
-@event_interest_bp.route('/', methods=['GET'])
+@event_interest_bp.route('', methods=['GET'])
 def get_event_interests():
     event_interests = EventInterest.query.all()
     event_interest_list = [{
         'id': event_interest.id,
         'eventid': event_interest.eventid,
         'userid': event_interest.userid,
+        'name': Users.query.get(event_interest.userid).name,
         'status': event_interest.status,
         'createdat': event_interest.createdat
     } for event_interest in event_interests]
@@ -31,13 +33,14 @@ def get_event_interest(event_interest_id):
         'id': event_interest.id,
         'eventid': event_interest.eventid,
         'userid': event_interest.userid,
+        'name': Users.query.get(event_interest.userid).name,
         'status': event_interest.status,
         'createdat': event_interest.createdat
     }
     return jsonify(event_interest_data), 200
 
 # Route to create a new event interest (POST)
-@event_interest_bp.route('/', methods=['POST'])
+@event_interest_bp.route('', methods=['POST'])
 def create_event_interest():
     data = request.get_json()
     if not data or not data.get('eventid') or not data.get('userid'):

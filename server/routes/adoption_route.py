@@ -1,20 +1,31 @@
 from flask import Blueprint, jsonify, request, abort
 from models.adoption_interest_model import AdoptionInterest
+from models.users_model import Users
 from models.adoption_model import Adoption
 from models.pets_model import Pets
 from datetime import datetime
+import logging
 from db import db
+from flask import current_app
 
 adoption_bp = Blueprint('adoption_bp', __name__)
 
 # Route to all adoption listings available
-@adoption_bp.route('/', methods=['GET'])
+@adoption_bp.route('', methods=['GET'])
 def get_adoption_listings():
+
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
+
     adoption_listings = Adoption.query.all()
 
+    
     adoption_list = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
+        'name': Users.query.get(adoption.agentid).name,
         'description': adoption.description,
         'status': adoption.status,
         'createdat': adoption.createdat,
@@ -25,14 +36,23 @@ def get_adoption_listings():
             'species': Pets.query.get(adoption.petid).species,
             'breed': Pets.query.get(adoption.petid).breed,
             'age': Pets.query.get(adoption.petid).age,
-            'image_url': Pets.query.get(adoption.petid).image_url
-        }
+            'sex': Pets.query.get(adoption.petid).sex,
+            'color': Pets.query.get(adoption.petid).color,
+            'weight': Pets.query.get(adoption.petid).weight,
+            'imageurl': Pets.query.get(adoption.petid).imageurl
+        },
+        # shown interest
+        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
     } for adoption in adoption_listings]
     return jsonify(adoption_list), 200
 
 # Route to fetch a single adoption listing by ID (GET)
 @adoption_bp.route('/<string:adoption_id>', methods=['GET'])
 def get_adoption_listing(adoption_id):
+    #for now without jwt auth just use user id in the url
+    userid = request.args.get('userid')  # Fetch userid from query parameters
+    if not userid:
+        abort(400, description="Invalid request. 'userid' is required.")
     adoption = Adoption.query.get(adoption_id)
     if not adoption:
         abort(404, description="Adoption listing not found")
@@ -40,30 +60,35 @@ def get_adoption_listing(adoption_id):
     adoption_data = {
         'id': adoption.id,
         'agentid': adoption.agentid,
+        'name': Users.query.get(adoption.agentid).name,
         'pet': {  # Include pet details in the response
             'id': adoption.petid,
             'name': Pets.query.get(adoption.petid).name,
             'species': Pets.query.get(adoption.petid).species,
             'breed': Pets.query.get(adoption.petid).breed,
             'age': Pets.query.get(adoption.petid).age,
-            'image_url': Pets.query.get(adoption.petid).image_url
+            'sex': Pets.query.get(adoption.petid).sex,
+            'color': Pets.query.get(adoption.petid).color,
+            'weight': Pets.query.get(adoption.petid).weight,
+            'imageurl': Pets.query.get(adoption.petid).imageurl
         },
         'description': adoption.description,
         'status': adoption.status,
         'createdat': adoption.createdat,
-        'updatedat': adoption.updatedat
+        'updatedat': adoption.updatedat,
+        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
     }
     return jsonify(adoption_data), 200
 
 # Route to create a new adoption listing (POST)
-@adoption_bp.route('/', methods=['POST'])
+@adoption_bp.route('', methods=['POST'])
 def create_adoption_listing():
     data = request.get_json()
     if not data or not data.get('agentid') or not data.get('petid'):
         abort(400, description="Invalid adoption listing data. 'agentid', 'petid' are required.")
 
     pet_data= data.get('pet')
-    if not pet_data or not pet_data.get('name') or not pet_data.get('species') or not pet_data.get('breed') or not pet_data.get('image_url'):
+    if not pet_data or not pet_data.get('name') or not pet_data.get('species') or not pet_data.get('breed') or not pet_data.get('imageurl'):
         abort(400, description="Invalid pet data. 'name', 'species', 'breed', 'image' are required.")
     
     #create a new pet
@@ -73,7 +98,10 @@ def create_adoption_listing():
         species=pet_data['species'],
         breed=pet_data['breed'],
         age=pet_data.get('age', 0),
-        imageurl=pet_data['image_url']
+        sex= pet_data.get('sex'),
+        color= pet_data.get('color'),
+        weight= pet_data.get('weight'),
+        imageurl=pet_data['imageurl']
     )
     db.session.add(new_pet)
     db.session.flush()  # Flush the session to get the pet ID
@@ -113,7 +141,10 @@ def update_adoption_listing(adoption_id):
                 species=pet_data['species'],
                 breed=pet_data['breed'],
                 age=pet_data.get('age', 0),
-                imageurl=pet_data['image_url']
+                sex= pet_data.get('sex'),
+                color= pet_data.get('color'),
+                weight= pet_data.get('weight'),
+                imageurl=pet_data['imageurl']
             )
             db.session.add(pet)  # Add the new pet to the session
             db.session.flush()  # Flush to get the new pet.id
@@ -130,7 +161,10 @@ def update_adoption_listing(adoption_id):
             pet.species = pet_data.get('species', pet.species)
             pet.breed = pet_data.get('breed', pet.breed)
             pet.age = pet_data.get('age', pet.age)
-            pet.imageurl = pet_data.get('image_url', pet.imageurl)
+            pet.sex= pet_data.get('sex', pet.sex)
+            pet.color= pet_data.get('color', pet.color)
+            pet.weight= pet_data.get('weight', pet.weight)
+            pet.imageurl = pet_data.get('imageurl', pet.imageurl)
 
             db.session.add(pet)  # Update the pet details in the session
             db.session.flush()
