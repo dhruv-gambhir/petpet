@@ -7,6 +7,42 @@ from db import db
 
 users_bp = Blueprint('users_bp', __name__)
 
+# Route to list all users
+@users_bp.route('/all', methods=['GET'])
+def list_all_users():
+    users = Users.query.all()
+    if not users:
+        return jsonify({'message': 'No users found'}), 404
+
+    users_data = [
+        {
+            'userid': user.userid,
+            'name': user.name,
+            'email': user.email,
+            'phonenumber': user.phonenumber,
+            'createdat': user.createdat,
+            'updatedat': user.updatedat,
+            'bio': user.bio,
+            'imageurl': user.imageurl,
+            'isagency': user.isagency,
+            'address': user.address,
+            'licensenumber': user.licensenumber
+        }
+        for user in users
+    ]
+
+    return jsonify(users_data), 200
+
+# Route to get user ID by email
+@users_bp.route('/id/email/<string:email>', methods=['GET'])
+def get_user_id_by_email(email):
+    user = Users.query.filter_by(email=email).first()
+    if not user:
+        abort(404, description="User not found")
+    
+    return jsonify({'user_id': user.userid}), 200
+
+
 #Route to get user info
 @users_bp.route('/<string:user_id>', methods=['GET'])
 def get_user(user_id):
