@@ -74,7 +74,7 @@ export default function EventCreationForm({}) {
         />
         <PreviewForm className="basis-1/3" registerFileHook={register("file")} />
       </div>
-      <button type="submit" className="bg-mypurple text-white rounded-md p-2 self-center w-80 hover:underline">
+      <button type="submit" className="bg-mybutton text-black rounded-md p-2 self-center w-80 hover:underline">
         Create
       </button>
     </form>

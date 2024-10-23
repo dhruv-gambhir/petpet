@@ -20,10 +20,12 @@ export default function WebappLayout({ children }) {
   }
 
   return (
-    <>
-      <NavBar/>
-      {children}
-    </>
+    <div className="flex flex-col h-screen overflow-hidden w-full">
+      <NavBar />
+      <div className="flex-1 overflow-hidden">
+        {children}
+      </div>
+    </div>
   );
 }
 

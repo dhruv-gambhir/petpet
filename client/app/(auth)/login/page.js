@@ -45,7 +45,7 @@ export default function Login() {
     };
 
     return (
-        <div className="flex flex-row m-8 justify-center items-center bg-white w-1/2 h-4/6">
+        <div className="flex flex-row m-8 justify-center border-mybutton border-2 items-center bg-white w-1/2 h-4/6" >
             <form className="m-8 flex flex-col justify-center items-center w-2/6 h-4/6 ">
                 <h1 className="color-black text-2xl font-bold">Login</h1>
                 <div className="flex flex-col relative justify-center w-5/6">
