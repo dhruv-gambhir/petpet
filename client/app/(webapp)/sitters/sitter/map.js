@@ -7,7 +7,7 @@ const containerStyle = {
   height: '500px',
 };
 
-function GoogleMapView({ jobsData, hoveredJobId }) {
+function GoogleMapView({ jobsData, hoveredJobId, setHoveredJobId }) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -57,6 +57,8 @@ function GoogleMapView({ jobsData, hoveredJobId }) {
                 ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // Highlight marker
                 : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // Default marker
             }}
+            onMouseOver={() => setHoveredJobId(job.id)} // Set hovered job ID when marker is hovered
+            onMouseOut={() => setHoveredJobId(null)} // Reset hover state when marker is not hovered
           />
         )
       ))}

@@ -85,7 +85,7 @@ export const unregisterInterestInSitting = async (sittingId, userId) => {
  * @returns {Promise<{lat: number, lng: number} | null>} Returns latitude and longitude.
  */
  export const geocodeAddress = async (postalCode) => {
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY2}`;
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_GEOCODING_API_KEY}`;
     const response = await fetch(geocodeUrl);
     const data = await response.json();
   
