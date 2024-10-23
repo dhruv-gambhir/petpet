@@ -31,7 +31,7 @@ export default function AdoptionCard({ detail, isOrganizer }) {
   isOrganizer = isOrganizer ?? false;
 
   return (
-    <div className="w-2/3 mx-auto p-4">
+    <div className="w-5/6 mx-auto p-4">
       <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-row">
         <div className="flex-none w-64 h-64 relative">
           <img

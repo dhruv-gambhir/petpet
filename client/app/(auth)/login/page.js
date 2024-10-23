@@ -13,15 +13,12 @@ export default function Login() {
     const { zLogin } = useStore();
 
     const fetchUserId = async (email) => {
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/id/email/${email}`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/id/email/${email}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
         if (!response.ok) {
             const errorData = await response.json();
@@ -48,14 +45,7 @@ export default function Login() {
     };
 
     return (
-        <div
-            className="flex flex-row m-8 justify-center border-mybutton border-2 items-center bg-white w-1/2 h-4/6"
-            style={{
-                backgroundImage: "url('/trail.png')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }}
-        >
+        <div className="flex flex-row m-8 justify-center border-mybutton border-2 items-center bg-white w-1/2 h-4/6" >
             <form className="m-8 flex flex-col justify-center items-center w-2/6 h-4/6 ">
                 <h1 className="color-black text-2xl font-bold">Login</h1>
                 <div className="flex flex-col relative justify-center w-5/6">
