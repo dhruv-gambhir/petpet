@@ -2,55 +2,32 @@
 import catBg from "../../../../public/cat_bg.png";
 import { useRouter } from "next/navigation";
 import PopupForm from "./NewSittingRequest";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import icon from "../../../../public/profile_icon.jpg";
 
-
 export default function OwnerPage() {
-
   const router = useRouter();
 
-  const sittingRequests = [
-    {
-      id: "101",
-      type: "Dog Walking",
-      pay: 50,
-      startdate: "2024-10-16",
-      enddate: "2024-10-20",
-      description: "Daily dog walking in the park",
-      location: "Park Avenue",
-      interestedUsers: [
-        { id: "10001", name: "Jane Doe", location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com" },
-        { id: "10002", name: "Alice" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
-      ],
-    },
-    {
-      id: "102",
-      type: "Overnight Stays",
-      pay: 75,
-      startdate: "2024-10-18",
-      enddate: "2024-10-22",
-      description: "Take care of my cat while I'm away",
-      location: "Downtown",
-      interestedUsers: [{ id: "103", name: "Jane Doe", location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com" }],
-    },
-    {
-      id: "103",
-      type: "Drop-In Pet Visits",
-      pay: 60,
-      startdate: "2024-10-25",
-      enddate: "2024-10-28",
-      description: "Groom my two pets",
-      location: "Elm Street",
-      interestedUsers: [
-        { id: "104", name: "Jane Doe" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
-        { id: "105", name: "Alice" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
-        { id: "106", name: "Bob" , location: "Bukit Batok", description: "abc", phone: "84442232", email: "abc@xyc.com"},
-      ],
-    },
-  ];
-
+  const [sittingRequests, setSittingRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const userId = "676e94c4-aabf-4f26-b2b0-a02ab66756f0"; 
+
+  useEffect(() => {
+    const fetchSittingRequests = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sitting_requests?userid=${userId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setSittingRequests(data); 
+      } catch (error) {
+        console.error("Failed to fetch sitting requests:", error);
+      }
+    };
+
+    fetchSittingRequests();
+  }, [userId]); 
 
   const handleRequestChange = (e) => {
     const requestId = e.target.value;
@@ -110,8 +87,8 @@ export default function OwnerPage() {
             </option>
             {sittingRequests.map((request) => (
               <option key={`Sitting Request ${request.id}`} value={request.id}>
-              Sitting Request #{request.id}
-            </option>
+                Sitting Request #{request.id}
+              </option>
             ))}
           </select>
 
@@ -122,7 +99,7 @@ export default function OwnerPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">  
                   <div className="flex flex-col">
                     <label className="text-gray-700 font-bold mb-1">Type</label>
-                    <p className="p-4 border rounded w-full bg-mybg shadow-md">{selectedRequest.type}</p>
+                    <p className="p-4 border rounded w-full bg-mybg shadow-md">{selectedRequest.tasktype}</p>
                   </div>
                   <div className="flex flex-col">
                     <label className="text-gray-700 font-bold mb-1">Pay</label>
@@ -145,7 +122,7 @@ export default function OwnerPage() {
 
               <h3 className="text-md font-bold mt-3">Interested Users</h3>
               <div className="grid grid-cols-1 gap-4">
-                {selectedRequest.interestedUsers.map((user) => (
+                {selectedRequest.interestedUsers && selectedRequest.interestedUsers.map((user) => (
                   <div key={user.id} className="bg-white p-4 rounded-md shadow-md flex items-center">
                     <img
                       src={icon.src} 
@@ -176,20 +153,8 @@ export default function OwnerPage() {
                   </div>
                 ))}
               </div>
-              <button
-        className=" bg-mypurple text-white px-4 py-2 rounded shadow"
-      >
-        Cancel Request
-      </button>
-      <button
-        className=" bg-mypurple text-white px-4 py-2 rounded shadow"
-      >
-        Complete Request
-      </button>
             </div>
-            
           )}
-          
         </div>
 
         <div className="w-1/2 p-5">
