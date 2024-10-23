@@ -5,14 +5,12 @@ import InterestedButton from "../../Components/InterestedButton";
 import { registerInterestInAdoption, unregisterInterestInAdoption } from "./adoptions";
 
 const AdoptionTile = ({ label, content, units }) => {
-    return (
-        <div className="bg-white border w-20 h-20 flex flex-col justify-center items-center rounded text-nowrap">
+    return (content && (<div className="bg-white border w-20 h-20 flex flex-col justify-center items-center rounded text-nowrap">
             <p className="text-mypurple">
                 {content} {units ?? ""}
             </p>
             <span className="text-xs">{label}</span>
-        </div>
-    );
+    </div>));
 };
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -38,7 +36,7 @@ export default function AdoptionCard({ detail, isOrganizer }) {
                 <h2 className="text-lg">{detail.agency}</h2>
                 <div className="flex flex-row gap-4 my-4">
                     <AdoptionTile content={detail.pet?.sex && capitalize(detail.pet?.sex)} label="Sex" />
-                    {detail.pet?.color && <AdoptionTile content={detail.pet?.color} label="Color" />}
+                    <AdoptionTile content={detail.pet?.color} label="Color" />
                     <AdoptionTile content={detail.pet?.species} label="Breed" />
                     <AdoptionTile
                         content={detail.pet?.weight}

@@ -1,11 +1,11 @@
-Id,OwnerId,Name,Age,Sex,Species,Breed,CreatedAt,ImageUrl
-433bd2d5-8022-46f4-860e-360bf944673c,27b72bfb-6c52-45d7-8238-1bd2c7265905,Daisy,17,male,Cat,Siamese,2024-10-23 01:12:55.396072,
-9c7587dc-5bac-45a7-9b3e-e5c9c6c311d4,cf2766a4-e57b-46db-8381-6ad10b25e1fa,Buddy,7,male,Rabbit,Holland Lop,2024-10-23 01:12:55.397072,
-c0564f7c-c67c-45db-90c1-3c43d55bd737,90a6f3f4-e69b-4628-8b4e-49b5c3523976,Max,6,female,Frog,African Bullfrog,2024-10-23 01:12:55.398072,
-e92126e8-4cce-4be5-be4b-1f651bc0f161,0fbb95e1-7758-4a36-9443-19e79ee6cb84,Sadie,20,male,Cat,Siamese,2024-10-23 01:12:55.398072,
-b1a0805c-e2a1-4109-b1cd-d985e48d6a80,27b72bfb-6c52-45d7-8238-1bd2c7265905,Lucy,15,female,Frog,African Bullfrog,2024-10-23 01:12:55.400072,
-fbea3269-cc63-4b09-8eb3-ce57bafa742e,fd6437f7-f8dd-4539-b542-38db31701f4c,Buddy,4,male,Lizard,Bearded Dragon,2024-10-23 01:12:55.400578,
-649249f2-f544-4b45-9d21-0e33dfdfba07,4cbe92b1-3b77-42bb-a8a2-40823fd2a14b,Charlie,7,male,Turtle,Red-Eared Slider,2024-10-23 01:12:55.401585,
-71f8ec6c-474a-48e3-a267-4266064d9b12,b16e7826-ff61-4d43-84b6-59a9dce2cd39,Molly,3,female,Frog,African Bullfrog,2024-10-23 01:12:55.402586,
-13498ee6-b475-4a5e-becd-3f4874d6fadf,e4f3b330-0ab8-441c-be6d-e349d46e4833,Sadie,20,female,Frog,African Bullfrog,2024-10-23 01:12:55.403598,
-9ed26531-e1e0-4db3-9bcd-bfc5e633bbc9,38f1287d-371f-4fc0-a6e5-1b370338dd03,Lucy,3,female,Hamster,Syrian Hamster,2024-10-23 01:12:55.404679,
+Id,OwnerId,Name,Age,Sex,Species,Breed,Color,Weight,CreatedAt,ImageUrl
+fec05649-2a54-4021-906a-64a1f5c46f12,676e94c4-aabf-4f26-b2b0-a02ab66756f0,Charlie,3,female,Dog,German Shepherd,Black and Tan,30,2024-10-19 18:41:19.127770,
+55383911-ecee-488d-b75e-207360263d23,351ff156-897a-47b7-a66a-e5c8f70a0ac4,Molly,9,male,Turtle,Red-Eared Slider,Green,1.5,2024-10-19 18:41:19.128428,
+d9561ca5-aaab-4682-957d-682d694aa52a,d8e6c4b8-4d0c-4c2a-b1e3-0dd11357520f,Lucy,19,male,Snake,Ball Python,Brown and Black,1.2,2024-10-19 18:41:19.129376,
+fb4cf4e3-811e-4193-a633-e15de0ba6476,2b0f112c-d369-4080-920a-076ffefadae9,Daisy,14,female,Rabbit,Holland Lop,White and Brown,1.8,2024-10-19 18:41:19.130295,"https://images.pexels.com/photos/372166/pexels-photo-372166.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+9836ba1f-10bc-4d53-b5e3-5b3fcffc00c5,2b0f112c-d369-4080-920a-076ffefadae9,Max,15,male,Hamster,Syrian Hamster,Golden,0.150,2024-10-19 18:41:19.131181,"https://images.pexels.com/photos/15386522/pexels-photo-15386522/free-photo-of-hamster-with-christmas-lights.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+253445be-3ab3-4e7c-b8cf-b89fa23aacca,676e94c4-aabf-4f26-b2b0-a02ab66756f0,Buddy,9,female,Bird,Cockatiel,Grey and Yellow,0.100,2024-10-19 18:41:19.132062,
+a63dad44-6a81-425a-bb1f-132c03d300a0,b8e3251f-38e0-4d4c-a49d-9d8667a8b7e6,Charlie,9,male,Frog,African sBullfrog,Green,1,2024-10-19 18:41:19.132945,
+fd1e54ad-4e18-49e4-9e0a-be4f5dd94559,676e94c4-aabf-4f26-b2b0-a02ab66756f0,Molly,7,female,Frog,African Bullfrog,Green,0.8,2024-10-19 18:41:19.133815,
+4cf7516a-0742-4b06-8fb4-da6d98d91782,71c12cbd-d14c-437d-af02-72d954425441,Molly,5,female,Hamster,Syrian Hamster,Grey,1.120,2024-10-19 18:41:19.134683,
+da88116c-8267-48c2-8afc-ccc3b12cb097,f8d4e6a4-312e-4e3f-9c62-aaabff93d59d,Bailey,11,female,Rabbit,Holland Lop,White and Brown,2,2024-10-19 18:41:19.135560,"https://images.pexels.com/photos/96442/pexels-photo-96442.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
