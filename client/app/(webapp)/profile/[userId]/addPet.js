@@ -3,10 +3,14 @@ import useStore from "@/app/store";
 
 
 const petOptions = [
-  { value: "dog", label: "Dog" },
-  { value: "cat", label: "Cat" },
-  { value: "bird", label: "Bird" },
-  { value: "fish", label: "Fish" },
+  { value: "Dog", label: "Dog" },
+  { value: "Cat", label: "Cat" },
+  { value: "Bird", label: "Bird" },
+  { value: "Turtle", label: "Turtle" },
+  { value: "Snake", label: "Snake" },
+  { value: "Hamster", label: "Hamster" },
+  { value: "Frog", label: "Frog" },
+  { value: "Rabbit", label: "Rabbit" },
 ];
 
 const AddPetPopup = () => {
@@ -101,7 +105,7 @@ const AddPetPopup = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="p-4 border rounded w-full bg-mybg shadow-md"
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     placeholder="Enter your pet's name"
                     required
                   />
@@ -112,7 +116,7 @@ const AddPetPopup = () => {
                     name="species"
                     value={formData.species}
                     onChange={handleChange}
-                    className="p-4 border rounded w-full bg-mybg shadow-md"
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     required
                   >
                     <option value="" disabled>Select your pet's type</option>
@@ -130,7 +134,7 @@ const AddPetPopup = () => {
                     name="breed"
                     value={formData.breed}
                     onChange={handleChange}
-                    className="p-4 border rounded w-full bg-mybg shadow-md"
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     placeholder="Enter the breed"
                     required
                   />
@@ -142,7 +146,7 @@ const AddPetPopup = () => {
                     name="age"
                     value={formData.age}
                     onChange={handleChange}
-                    className="p-4 border rounded w-full bg-mybg shadow-md"
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     placeholder="Enter the age"
                     required
                   />
@@ -154,7 +158,7 @@ const AddPetPopup = () => {
                     name="sex"
                     value={formData.sex}
                     onChange={handleChange}
-                    className="p-4 border rounded w-full bg-mybg shadow-md"
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     placeholder="Enter the sex"
                     required
                   />
@@ -166,7 +170,7 @@ const AddPetPopup = () => {
                     name="color"
                     value={formData.color}
                     onChange={handleChange}
-                    className="p-4 border rounded w-full bg-mybg shadow-md"
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     placeholder="Enter the color"
                     required
                   />
@@ -178,7 +182,7 @@ const AddPetPopup = () => {
                     name="weight"
                     value={formData.weight}
                     onChange={handleChange}
-                    className="p-4 border rounded w-full bg-mybg shadow-md"
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     placeholder="Enter the weight"
                     required
                   />
@@ -187,7 +191,7 @@ const AddPetPopup = () => {
               <div className="flex justify-center mt-4">
                 <button
                   type="submit"
-                  className="h-14 w-36 bg-mypurple text-white px-4 py-2 rounded shadow"
+                  className="h-14 w-36 bg-mybutton text-black font-bold px-4 mt-5 rounded shadow"
                 >
                   Add Pet
                 </button>

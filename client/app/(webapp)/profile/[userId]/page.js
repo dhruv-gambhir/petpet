@@ -13,44 +13,6 @@ export default function ProfilePage() {
     const [pets, setPets] = useState([]); 
     const router = useRouter();
 
-    // Mock pet data
-    const mockPetsData = [
-        { name: "Buddy", species: "Dog", breed: "Golden Retriever", colour: "Golden", age: 3, sex: "Male", weight: "30 lbs" },
-        { name: "Whiskers", species: "Cat", breed: "Tabby", colour: "Brown", age: 2, sex: "Female", weight: "10 lbs" },
-        { name: "Goldie", species: "Fish", breed: "Goldfish", colour: "Orange", age: 1, sex: "N/A", weight: "0.5 oz" },
-    ];
-
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // const handleAddPetClick = () => {
-    //     setIsModalOpen(true);
-    // };
-
-    // const handleModalClose = () => {
-    //     setIsModalOpen(false);
-    // };
-    
-    // const handlePetSubmit = async (petData) => {
-    //     try {
-    //         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/pets`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify(petData),
-    //         });
-
-    //         if (response.ok) {
-    //             const newPet = await response.json();
-    //             setPets((prevPets) => [...prevPets, newPet]);  // Update pets list
-    //         } else {
-    //             console.error("Failed to add pet");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error adding pet:", error);
-    //     }
-    // };
-
     useEffect(() => {
         if (!zId) {
             router.push("/login");
@@ -130,6 +92,8 @@ export default function ProfilePage() {
                 const updatedUser = await response.json();
                 setUser(updatedUser);
                 setIsEditing(false);
+                window.location.reload(); // This will reload the current page
+ 
             } else {
                 console.error("Failed to update user data");
             }
@@ -174,7 +138,6 @@ export default function ProfilePage() {
                                     className="w-44 h-44 rounded-full shadow-md mb-6 object-cover"
                                 />
                                 <h1 className="text-4xl font-extrabold text-gray-800 mb-2">{user.name}</h1>
-                                <p className="text-lg text-gray-500 italic mb-4">{user.bio || "No bio available."}</p>
                             </div>
                             <div className="w-2/3">
                                 <div className="w-full divide-y divide-gray-200">
@@ -192,7 +155,7 @@ export default function ProfilePage() {
                         </button>
                         {isEditing && (
                             <button 
-                                className="w-full bg-green-500 text-white py-2 rounded shadow hover:bg-green-600 transition duration-300 mt-2"
+                                className="w-full bg-mybutton text-black font-bold py-2 rounded shadow hover:bg-green-600 transition duration-300 mt-2"
                                 onClick={handleSubmit}
                             >
                                 Submit
@@ -202,7 +165,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="w-1/2 bg-white shadow-xl rounded-lg p-10">
                     <h2 className="text-3xl font-bold text-gray-800 mb-4">Pets Owned</h2>
-                    <PetCarousel  pets={mockPetsData} />
+                    <PetCarousel  pets={pets} />
                     <div className="mt-4">
                         <AddPet />
                     </div>
@@ -221,6 +184,7 @@ function ProfileDetails({ user, isEditing, formData, handleChange }) {
         { label: "Address", value: user.address, name: 'address' },
         { label: "Account Created", value: new Date(user.createdat).toLocaleDateString() },
         { label: "Last Updated", value: user.updatedat ? new Date(user.updatedat).toLocaleDateString() : new Date(user.createdat).toLocaleDateString() },
+        { label: "Bio", value: user.bio, name: 'bio' },
     ];
 
     if (user.isagency) {
@@ -267,6 +231,9 @@ function PetCarousel({ pets }) {
     const handlePrev = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + pets.length) % pets.length);
     };
+    if (pets.length === 0) {
+        return <p className="text-center text-gray-500">No pets found.</p>; 
+    }
 
     return (
         <div className="relative w-full flex justify-center items-center">
