@@ -22,13 +22,14 @@ export default function SitterPage() {
         const jobsWithUserDetails = await Promise.all(
           jobsData.map(async (job) => {
             const user = await getUserById(job.userid);
-            const coordinates = await geocodeAddress(job.location); // Geocode location
+            const geocodeResult = await geocodeAddress(job.location);
 
             return {
               ...job,
               name: user?.name || "Unknown",
               imageurl: user?.imageurl || "",
-              coordinates: coordinates || { lat: 0, lng: 0 },
+              address: geocodeResult?.address || job.location,
+              coordinates: geocodeResult?.location  || { lat: 0, lng: 0 },
             };
           })
         );

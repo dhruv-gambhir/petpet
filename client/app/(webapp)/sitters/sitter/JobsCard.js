@@ -21,7 +21,7 @@ export default function JobsCard({ detail, userId, onHover, onLeave, isHovered }
       <div className="flex-1 flex flex-col">
         <h2 className="text-lg">{detail.name}'s Request</h2>
         <p className="text-nowrap">
-          ${detail.pay}/hour | {detail.location}
+          ${detail.pay}/hour | {detail.address}
         </p>
         <p className="line-clamp-[8]">{detail.description}</p>
       </div>

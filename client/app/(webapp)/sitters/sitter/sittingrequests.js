@@ -91,7 +91,8 @@ export const unregisterInterestInSitting = async (sittingId, userId) => {
   
     if (data.status === "OK") {
       const location = data.results[0].geometry.location;
-      return location; // { lat: <latitude>, lng: <longitude> }
+      const formattedAddress = data.results[0].formatted_address;
+      return { location, address: formattedAddress }; // { lat: <latitude>, lng: <longitude> }
     } else {
       console.error("Geocoding failed:", data.status);
       return null;
