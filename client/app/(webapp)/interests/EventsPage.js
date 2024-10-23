@@ -1,13 +1,13 @@
 "use client";
 
 import useSWR from "swr";
-import EventCard from "../../events/EventCard.js";
+import EventCard from "../events/EventCard.js";
 import { fetcher } from "@/app/lib/fetcher.js";
 import useStore from "@/app/store.js";
 
 export default function EventsPage() {
   const userId = useStore((state) => state.zId);
-  const { data: events } = useSWR(() => "event_interests/user/" + userId, fetcher);
+  const { data: events } = useSWR(() => "events/user/" + userId, fetcher);
 
   return (
     <>

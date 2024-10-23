@@ -128,9 +128,8 @@ def delete_event(event_id):
 #Route to get all events based on user id
 @event_bp.route('/user/<string:user_id>', methods=['GET'])
 def get_events_by_user(user_id):
-    events = Event.query.filter_by(createdby=user_id).all()
-    if not events:
-        abort(404, description="No events found for this user")
+    interests = EventInterest.query.filter_by(userid=user_id)
+    events = [Event.query.get(interest.eventid) for interest in interests]
     event_list = [{
         'id': event.id,
         'createdby': event.createdby,
@@ -142,6 +141,7 @@ def get_events_by_user(user_id):
         'cost': event.cost,
         'status': event.status,
         'imageurl': event.imageurl,
-        'createdat': event.createdat
+        'createdat': event.createdat,
+        'interested': True
     } for event in events]
     return jsonify(event_list), 200
