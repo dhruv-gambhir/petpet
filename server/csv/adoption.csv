@@ -1,0 +1,4 @@
+Id,AgentId,PetId,Description,Status,CreatedAt,UpdatedAt
+3e3c9782-8968-4e13-b3e9-006221d87518,c1593758-ae8b-45c5-bdf9-53df1c6cb198,da88116c-8267-48c2-8afc-ccc3b12cb097,Adopt this pet and give it a forever home.,decided,2024-10-19 18:41:19.169722,2024-10-19 18:41:19.169724
+109d6c88-054d-4726-bf6d-49107ce637bc,27af0816-3746-4a47-b4cc-3597efcb2657,9836ba1f-10bc-4d53-b5e3-5b3fcffc00c5,Looking for a loving family for this pet.,decided,2024-10-19 18:41:19.170282,2024-10-19 18:41:19.170283
+62234de0-04f4-4412-97bf-ba23ece3b6f7,27af0816-3746-4a47-b4cc-3597efcb2657,fb4cf4e3-811e-4193-a633-e15de0ba6476,Looking for a loving family for this pet.,pending,2024-10-19 18:41:19.171217,2024-10-19 18:41:19.171218
