@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { getSittingRequests, getUserById } from "./sittingrequests";
+import { getSittingRequests, getUserById, geocodeAddress } from "./sittingrequests";
 import useStore from "@/app/store";
 import catBg from "../../../../public/cat_bg.png";
 import { useRouter } from "next/navigation";
@@ -20,18 +20,21 @@ export default function SitterPage() {
       if (jobsData) {
         const jobsWithUserDetails = await Promise.all(
           jobsData.map(async (job) => {
-            const user = await getUserById(job.userid); // Fetch user by userid
+            const user = await getUserById(job.userid);
+            const coordinates = await geocodeAddress(job.location); // Get lat/lng for the location
+            
             return {
               ...job,
-              name: user?.name || "Unknown",     // Add name from user data
-              imageurl: user?.imageurl || "",    // Add imageurl from user data
+              name: user?.name || "Unknown", // Add name from user data
+              imageurl: user?.imageurl || "", // Add imageurl from user data
+              coordinates: coordinates || { lat: 0, lng: 0 }, // Add coordinates
             };
           })
         );
         setCombinedData(jobsWithUserDetails); // Set the combined data
       }
     };
-
+  
     fetchUserDetails();
   }, [jobsData]);
 
@@ -95,8 +98,8 @@ export default function SitterPage() {
               <JobsCard detail={detail} key={detail.id} userId={userId} />
             ))}
           </div>
-          <div className="flex-1">
-            <GoogleMapView />
+          <div className="flex-1 mb-10">
+            <GoogleMapView jobsData={combinedData} />
           </div>
         </div>
       </div>

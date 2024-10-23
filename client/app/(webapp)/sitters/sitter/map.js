@@ -1,22 +1,22 @@
-'use client'
+'use client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 
 const containerStyle = {
   width: '100%',
-  height: '500px'
+  height: '500px',
 };
 
-function GoogleMapView() {
+function GoogleMapView({ jobsData }) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, 
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, // Add your API key
   });
 
   const [map, setMap] = useState(null);
-  const [center, setCenter] = useState({ lat: 1.3483, lng: 103.6831 }); // Default center at NTU if location services not on
+  const [center, setCenter] = useState({ lat: 1.3876, lng: 103.7454 }); // Default center
+  const [zoom, setZoom] = useState(12); // Set a reasonable default zoom level
 
-  // Get user's current location and update map center
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -26,6 +26,7 @@ function GoogleMapView() {
             lng: position.coords.longitude,
           };
           setCenter(userLocation); // Update center with user location
+          setZoom(12); // Reset zoom to a comfortable level
         },
         () => {
           console.log("Unable to retrieve your location");
@@ -35,10 +36,8 @@ function GoogleMapView() {
   }, []);
 
   const onLoad = useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
     setMap(map);
-  }, [center]);
+  }, []);
 
   const onUnmount = useCallback(function callback(map) {
     setMap(null);
@@ -48,12 +47,20 @@ function GoogleMapView() {
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={10}
+      zoom={zoom} // Use the zoom level state
       onLoad={onLoad}
       onUnmount={onUnmount}
     >
-      {/* Child components, such as markers, info windows, etc. */}
-      <></>
+      {/* Add markers for each job */}
+      {jobsData?.map((job) => (
+        job.coordinates && (
+          <Marker
+            key={job.id}
+            position={job.coordinates} // Marker position using lat/lng
+            title={`${job.name}'s Request`}
+          />
+        )
+      ))}
     </GoogleMap>
   ) : (
     <></>
