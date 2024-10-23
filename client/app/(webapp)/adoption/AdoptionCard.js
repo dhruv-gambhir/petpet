@@ -29,11 +29,11 @@ export default function AdoptionCard({ detail, isOrganizer }) {
                     alt="A dog photo."
                 />
                 <div className="absolute w-4/5 text-center bg-gray-300 px-2 py-1 rounded z-50 text-nowrap shadow-sm shadow-black bottom-[-1rem] left-[50%] translate-x-[-50%]">
-                    <p>{detail.pet?.name}</p>
+                    <p className="text-wrap">{detail.name}</p>
                 </div>
             </div>
             <div className="flex-1 flex flex-col ">
-                <h2 className="text-lg">{detail.agency}</h2>
+                <h2 className="text-lg">{detail.pet?.name}</h2>
                 <div className="flex flex-row gap-4 my-4">
                     <AdoptionTile content={detail.pet?.sex && capitalize(detail.pet?.sex)} label="Sex" />
                     <AdoptionTile content={detail.pet?.color} label="Color" />
