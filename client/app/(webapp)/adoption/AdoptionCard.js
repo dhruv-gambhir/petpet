@@ -6,7 +6,7 @@ import { registerInterestInAdoption, unregisterInterestInAdoption } from "./adop
 
 const AdoptionTile = ({ label, content, units }) => {
     return (content && (<div className="bg-white border w-20 h-20 flex flex-col justify-center items-center rounded text-nowrap">
-            <p className="text-mypurple">
+            <p className="text-mypurple text-wrap text-center truncate">
                 {content} {units ?? ""}
             </p>
             <span className="text-xs">{label}</span>
@@ -25,7 +25,7 @@ export default function AdoptionCard({ detail, isOrganizer }) {
             <div className="flex-none w-60 relative">
                 <img
                     className="object-scale-down mx-auto h-full aspect-auto"
-                    src={detail.pet?.image_url}
+                    src={detail.pet?.imageurl}
                     alt="A dog photo."
                 />
                 <div className="absolute w-4/5 text-center bg-gray-300 px-2 py-1 rounded z-50 text-nowrap shadow-sm shadow-black bottom-[-1rem] left-[50%] translate-x-[-50%]">
