@@ -12,9 +12,14 @@ export default function SitterPage() {
   const router = useRouter();
   const userId = useStore((state) => state.zId);
 
-  const { data: jobsData, isLoading: isLoadingJobs } = useSWR(["sitting_requests",userId], getSittingRequests);
+  const { data: jobsData, isLoading: isLoadingJobs } = useSWR(["sitting_requests", userId], getSittingRequests);
   const [combinedData, setCombinedData] = useState([]);
   const [hoveredJobId, setHoveredJobId] = useState(null); // Track hovered job ID
+
+  // Filter states
+  const [selectedTaskType, setSelectedTaskType] = useState(''); // Task type filter
+  const [selectedStartDate, setSelectedStartDate] = useState(''); // Start date filter
+  const [selectedEndDate, setSelectedEndDate] = useState(''); // End date filter
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -38,6 +43,15 @@ export default function SitterPage() {
 
     fetchUserDetails();
   }, [jobsData]);
+
+  // Filter jobs based on task type, start date, and end date
+  const filteredJobs = combinedData.filter((job) => {
+    const taskTypeMatch = selectedTaskType ? job.tasktype === selectedTaskType : true;
+    const startDateMatch = selectedStartDate ? new Date(job.startdate) >= new Date(selectedStartDate) : true;
+    const endDateMatch = selectedEndDate ? new Date(job.enddate) <= new Date(selectedEndDate) : true;
+
+    return taskTypeMatch && startDateMatch && endDateMatch;
+  });
 
   return (
     <div>
@@ -76,14 +90,47 @@ export default function SitterPage() {
             </button>
           </div>
         </div>
-        
       </section>
 
-      <div className="flex-initial self-stretch w-[83.3%] mx-auto">
+
+      <div className="flex-initial self-stretch w-[95%] mx-auto">
         <div className="flex flex-row gap-4 mt-8">
+
           {/* Job Cards */}
-          <div className="flex flex-col flex-1 gap-4">
-            {combinedData?.map((detail) => (
+          <div className="flex flex-col flex-1 gap-4 h-[430px] overflow-y-auto">
+            {/* Filter UI */}
+            <div className="flex flex-row gap-4">
+              <select
+                value={selectedTaskType}
+                onChange={(e) => setSelectedTaskType(e.target.value)}
+                className="border border-gray-300 px-3 py-2 rounded"
+              >
+                <option value="">All Task Types</option>
+                <option value="dog_walking">Dog Walking</option>
+                <option value="home_visits">Home Visits</option>
+                <option value="day_boarding">Day Boarding</option>
+                <option value="doggy_day_care">Doggy Day Care</option>
+                <option value="house_sitting">House Sitting</option>
+              </select>
+
+              <input
+                type="date"
+                value={selectedStartDate}
+                onChange={(e) => setSelectedStartDate(e.target.value)}
+                className="border border-gray-300 px-3 py-2 rounded"
+                placeholder="Start Date"
+              />
+
+              <input
+                type="date"
+                value={selectedEndDate}
+                onChange={(e) => setSelectedEndDate(e.target.value)}
+                className="border border-gray-300 px-3 py-2 rounded"
+                placeholder="End Date"
+              />
+            </div>
+            <div className="flex flex-col flex-1 gap-4 h-[430px] overflow-y-auto">
+            {filteredJobs?.map((detail) => (
               <JobsCard
                 key={detail.id}
                 detail={detail}
@@ -93,11 +140,13 @@ export default function SitterPage() {
                 onLeave={() => setHoveredJobId(null)} // Handle mouse leave
               />
             ))}
+            
+          </div>
           </div>
 
           {/* Google Map */}
           <div className="flex-1 h-[500px]">
-            <GoogleMapView jobsData={combinedData} hoveredJobId={hoveredJobId} setHoveredJobId={setHoveredJobId} />
+            <GoogleMapView jobsData={filteredJobs} hoveredJobId={hoveredJobId} setHoveredJobId={setHoveredJobId} />
           </div>
         </div>
       </div>
