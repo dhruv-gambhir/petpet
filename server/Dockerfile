@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run the data creation code
-RUN python create_data.py
+RUN python data_to_db.py
 
 # Expose the port the app runs on
 EXPOSE 5000
