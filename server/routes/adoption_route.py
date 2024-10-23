@@ -43,9 +43,34 @@ def get_adoption_listings():
     } for adoption in adoption_listings]
     return jsonify(adoption_list), 200
 
-# Route to fetch a single adoption listing by ID (GET)
 @adoption_bp.route('/user/<string:userid>', methods=['GET'])
 def get_adoption_listing(userid):
+    adoption_data = [{
+        'id': adoption.id,
+        'agentid': adoption.agentid,
+        'name': Users.query.get(adoption.agentid).name,
+        'pet': {  # Include pet details in the response
+            'id': adoption.petid,
+            'name': Pets.query.get(adoption.petid).name,
+            'species': Pets.query.get(adoption.petid).species,
+            'breed': Pets.query.get(adoption.petid).breed,
+            'age': Pets.query.get(adoption.petid).age,
+            'sex': Pets.query.get(adoption.petid).sex,
+            'color': Pets.query.get(adoption.petid).color,
+            'weight': Pets.query.get(adoption.petid).weight,
+            'imageurl': Pets.query.get(adoption.petid).imageurl
+        },
+        'description': adoption.description,
+        'status': adoption.status,
+        'createdat': adoption.createdat,
+        'updatedat': adoption.updatedat,
+        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
+    } for adoption in Adoption.query.filter_by(agentid=userid)]
+    return jsonify(adoption_data), 200
+
+# Route to fetch a single adoption listing by ID (GET)
+@adoption_bp.route('/user_interest/<string:userid>', methods=['GET'])
+def get_adoption_listing_interest(userid):
     adoption_users = AdoptionInterest.query.filter_by(userid=userid).all()
     
     adoptions = [Adoption.query.get(adoption.adoptionlistingid) for adoption in adoption_users]
