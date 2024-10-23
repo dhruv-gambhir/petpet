@@ -53,8 +53,8 @@ export default function AdoptionPage() {
       {isLoading && <div>Loading...</div>}
 
       <div className="flex flex-col items-start gap-4 m-2 mt-8">
-        {filteredAdoptionData?.map((detail, index) => (
-          <AdoptionCard detail={detail} key={index} />
+        {filteredAdoptionData?.map((detail) => (
+          <AdoptionCard detail={detail} key={detail.id} />
         ))}
       </div>
     </div>
