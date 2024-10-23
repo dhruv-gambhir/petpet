@@ -61,8 +61,8 @@ CREATE TABLE Sitting_Requests (
     Id UUID PRIMARY KEY,
     UserId UUID REFERENCES Users(UserId) ON DELETE CASCADE,
     Pay INT,
-    StartDate DATE,
-    EndDate DATE,
+    StartDate TIMESTAMP,
+    EndDate TIMESTAMP,
     Description TEXT,
     Location VARCHAR(255),
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
