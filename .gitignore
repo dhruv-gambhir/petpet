@@ -30,3 +30,6 @@ env/
 
 # Swagger UI cache (if generated)
 swagger-ui/
+
+# Node Modules
+node_modules/

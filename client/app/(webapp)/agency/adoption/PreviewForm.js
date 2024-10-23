@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 
-export default function PreviewForm({ className }) {
+export default function PreviewForm({ className, registerFile }) {
   const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    registerFile?.(e.target.files[0]);
   }
 
   return (

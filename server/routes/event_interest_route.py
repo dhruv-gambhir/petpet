@@ -25,7 +25,8 @@ def get_event_interests():
 # Route to fetch a single event interest by ID (GET)
 @event_interest_bp.route('/<string:event_interest_id>', methods=['GET'])
 def get_event_interest(event_interest_id):
-    event_interest = EventInterest.query.get(event_interest_id)
+    # TODO: Fix this
+    event_interest = next((event_interest for event_interest in EventInterest.query.all() if event_interest.eventid == event_interest_id), None)
     if not event_interest:
         abort(404, description="Event interest not found")
 
@@ -73,7 +74,10 @@ def update_event_interest(event_interest_id):
 # Route to delete an event interest (DELETE)
 @event_interest_bp.route('/<string:event_interest_id>', methods=['DELETE'])
 def delete_event_interest(event_interest_id):
-    event_interest = EventInterest.query.get(event_interest_id)
+    # TODO: Fix this
+    data = request.json
+    user_id = data.get('userid')
+    event_interest = EventInterest.query.filter_by(eventid=event_interest_id, userid=user_id).first()
     if not event_interest:
         abort(404, description="Event interest not found")
 

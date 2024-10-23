@@ -78,3 +78,23 @@ export const unregisterInterestInSitting = async (sittingId, userId) => {
   }
   return response.json()
 }
+
+/**
+ * Geocodes an address or postal code and returns its coordinates (lat, lng).
+ * @param {string} postalCode The postal code to geocode.
+ * @returns {Promise<{lat: number, lng: number} | null>} Returns latitude and longitude.
+ */
+ export const geocodeAddress = async (postalCode) => {
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY2}`;
+    const response = await fetch(geocodeUrl);
+    const data = await response.json();
+  
+    if (data.status === "OK") {
+      const location = data.results[0].geometry.location;
+      return location; // { lat: <latitude>, lng: <longitude> }
+    } else {
+      console.error("Geocoding failed:", data.status);
+      return null;
+    }
+  };
+  

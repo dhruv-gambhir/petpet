@@ -21,10 +21,10 @@ export default function InterestedButton(props) {
       } else {
         await onInterested?.();
       }
+      setPressed(!pressed);
     } catch (e) {
       console.error(e);
     }
-    setPressed(!pressed);
   };
 
   return (
