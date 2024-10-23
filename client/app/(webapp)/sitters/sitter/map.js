@@ -7,15 +7,15 @@ const containerStyle = {
   height: '500px',
 };
 
-function GoogleMapView({ jobsData }) {
+function GoogleMapView({ jobsData, hoveredJobId }) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, // Add your API key
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   });
 
   const [map, setMap] = useState(null);
-  const [center, setCenter] = useState({ lat: 1.3876, lng: 103.7454 }); // Default center
-  const [zoom, setZoom] = useState(12); // Set a reasonable default zoom level
+  const [center, setCenter] = useState({ lat: 1.3483, lng: 103.6831 }); // Default center in NTU
+  const [zoom, setZoom] = useState(15);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -26,7 +26,7 @@ function GoogleMapView({ jobsData }) {
             lng: position.coords.longitude,
           };
           setCenter(userLocation); // Update center with user location
-          setZoom(12); // Reset zoom to a comfortable level
+          setZoom(15);
         },
         () => {
           console.log("Unable to retrieve your location");
@@ -44,20 +44,19 @@ function GoogleMapView({ jobsData }) {
   }, []);
 
   return isLoaded ? (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={zoom} // Use the zoom level state
-      onLoad={onLoad}
-      onUnmount={onUnmount}
-    >
-      {/* Add markers for each job */}
+    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12} onLoad={onLoad} onUnmount={onUnmount}>
       {jobsData?.map((job) => (
         job.coordinates && (
           <Marker
             key={job.id}
-            position={job.coordinates} // Marker position using lat/lng
+            position={job.coordinates}
             title={`${job.name}'s Request`}
+
+            icon={{
+              url: hoveredJobId === job.id
+                ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // Highlight marker
+                : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // Default marker
+            }}
           />
         )
       ))}

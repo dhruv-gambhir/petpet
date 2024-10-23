@@ -1,5 +1,4 @@
-"use client";
-
+'use client';
 import useSWR from "swr";
 import { getSittingRequests, getUserById, geocodeAddress } from "./sittingrequests";
 import useStore from "@/app/store";
@@ -12,29 +11,31 @@ import GoogleMapView from "./map";
 export default function SitterPage() {
   const router = useRouter();
   const userId = useStore((state) => state.zId);
+
   const { data: jobsData, isLoading: isLoadingJobs } = useSWR("sitting_requests", getSittingRequests);
   const [combinedData, setCombinedData] = useState([]);
- 
+  const [hoveredJobId, setHoveredJobId] = useState(null); // Track hovered job ID
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (jobsData) {
         const jobsWithUserDetails = await Promise.all(
           jobsData.map(async (job) => {
             const user = await getUserById(job.userid);
-            const coordinates = await geocodeAddress(job.location); // Get lat/lng for the location
-            
+            const coordinates = await geocodeAddress(job.location); // Geocode location
+
             return {
               ...job,
-              name: user?.name || "Unknown", // Add name from user data
-              imageurl: user?.imageurl || "", // Add imageurl from user data
-              coordinates: coordinates || { lat: 0, lng: 0 }, // Add coordinates
+              name: user?.name || "Unknown",
+              imageurl: user?.imageurl || "",
+              coordinates: coordinates || { lat: 0, lng: 0 },
             };
           })
         );
-        setCombinedData(jobsWithUserDetails); // Set the combined data
+        setCombinedData(jobsWithUserDetails);
       }
     };
-  
+
     fetchUserDetails();
   }, [jobsData]);
 
@@ -75,31 +76,28 @@ export default function SitterPage() {
             </button>
           </div>
         </div>
+        
       </section>
 
       <div className="flex-initial self-stretch w-[83.3%] mx-auto">
-        <form className="flex m-4 h-8">
-          <input
-            className="flex-1 mr-2 w-[40rem] px-2"
-            type="text"
-            placeholder="Location"
-          />
-          <div className="flex gap-2">
-            <input className="px-2" type="text" placeholder="Sitting Type" />
-            <input className="px-2" type="text" placeholder="Animal Type" />
-            <input className="px-2" type="date" />
-          </div>
-        </form>
-
-        <a>Sitting Requests</a>
         <div className="flex flex-row gap-4 mt-8">
+          {/* Job Cards */}
           <div className="flex flex-col flex-1 gap-4">
             {combinedData?.map((detail) => (
-              <JobsCard detail={detail} key={detail.id} userId={userId} />
+              <JobsCard
+                key={detail.id}
+                detail={detail}
+                userId={userId}
+                isHovered={hoveredJobId === detail.id} // Pass whether the job is hovered
+                onHover={() => setHoveredJobId(detail.id)} // Handle hover to highlight
+                onLeave={() => setHoveredJobId(null)} // Handle mouse leave
+              />
             ))}
           </div>
-          <div className="flex-1 mb-10">
-            <GoogleMapView jobsData={combinedData} />
+
+          {/* Google Map */}
+          <div className="flex-1 h-[500px]">
+            <GoogleMapView jobsData={combinedData} hoveredJobId={hoveredJobId} />
           </div>
         </div>
       </div>
