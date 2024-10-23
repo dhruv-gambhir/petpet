@@ -21,7 +21,6 @@ def get_event_interests():
     } for event_interest in event_interests]
     return jsonify(event_interest_list), 200
 
-
 # Route to fetch a single event interest by ID (GET)
 @event_interest_bp.route('/<string:event_interest_id>', methods=['GET'])
 def get_event_interest(event_interest_id):

@@ -46,6 +46,10 @@ def get_adoption_listings():
 # Route to fetch a single adoption listing by ID (GET)
 @adoption_bp.route('/user/<string:userid>', methods=['GET'])
 def get_adoption_listing(userid):
+    adoption_users = AdoptionInterest.query.filter_by(userid=userid).all()
+    
+    adoptions = [Adoption.query.get(adoption.adoptionlistingid) for adoption in adoption_users]
+    
     adoption_data = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
@@ -65,8 +69,8 @@ def get_adoption_listing(userid):
         'status': adoption.status,
         'createdat': adoption.createdat,
         'updatedat': adoption.updatedat,
-        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
-    } for adoption in Adoption.query.filter_by(agentid=userid)]
+        'interested': True
+    } for adoption in adoptions]
     return jsonify(adoption_data), 200
 
 # Route to create a new adoption listing (POST)

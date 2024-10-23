@@ -6,7 +6,7 @@ import { fetcher } from "@/app/lib/fetcher";
 
 export default function AdoptionPage() {
   const userId = useStore((state) => state.zId);
-  const { data: dogs } = useSWR(() => "adoption_interests/user/" + userId, fetcher);
+  const { data: dogs } = useSWR(() => "adoption/user/" + userId, fetcher);
 
   return (
     <div className="flex flex-col self-stretch">

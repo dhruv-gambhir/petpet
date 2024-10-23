@@ -80,7 +80,6 @@ export const updateEvent = async (event) => {
 }
 
 export const registerInterestInEvent = async (eventId, userId) => {
-  console.log('registerInterestInEvent', eventId, userId)
   const response = await fetcher(`event_interests`, {
     method: 'POST',
     headers: {
