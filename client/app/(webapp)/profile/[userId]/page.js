@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import useStore from "@/app/store"; 
 import { useRouter } from "next/navigation";
+import AddPet from "./addPet"; 
+
 
 export default function ProfilePage() {
     const { zId, zLogout } = useStore(); 
@@ -17,7 +19,37 @@ export default function ProfilePage() {
         { name: "Whiskers", species: "Cat", breed: "Tabby", colour: "Brown", age: 2, sex: "Female", weight: "10 lbs" },
         { name: "Goldie", species: "Fish", breed: "Goldfish", colour: "Orange", age: 1, sex: "N/A", weight: "0.5 oz" },
     ];
+
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // const handleAddPetClick = () => {
+    //     setIsModalOpen(true);
+    // };
+
+    // const handleModalClose = () => {
+    //     setIsModalOpen(false);
+    // };
     
+    // const handlePetSubmit = async (petData) => {
+    //     try {
+    //         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/pets`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify(petData),
+    //         });
+
+    //         if (response.ok) {
+    //             const newPet = await response.json();
+    //             setPets((prevPets) => [...prevPets, newPet]);  // Update pets list
+    //         } else {
+    //             console.error("Failed to add pet");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error adding pet:", error);
+    //     }
+    // };
 
     useEffect(() => {
         if (!zId) {
@@ -52,7 +84,7 @@ export default function ProfilePage() {
 
         const fetchPets = async () => { 
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/pets/${zId}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/pets/user/${zId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setPets(data);
@@ -65,7 +97,7 @@ export default function ProfilePage() {
         };
 
         fetchUser();
-        // fetchPets(); 
+        fetchPets(); 
 
     }, [zId]);
 
@@ -172,13 +204,9 @@ export default function ProfilePage() {
                     <h2 className="text-3xl font-bold text-gray-800 mb-4">Pets Owned</h2>
                     <PetCarousel  pets={mockPetsData} />
                     <div className="mt-4">
-                        <button 
-                            className="w-full bg-mybutton text-black font-bold py-2 rounded shadow hover:bg-mypurple-dark transition duration-300"
-                        >
-                            Add Pet
-                        </button>
-                </div>
-                </div>
+                        <AddPet />
+                    </div>
+                    </div>
                 
                 </div>
             </div>
