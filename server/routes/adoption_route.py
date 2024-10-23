@@ -16,12 +16,9 @@ def get_adoption_listings():
 
     #for now without jwt auth just use user id in the url
     userid = request.args.get('userid')  # Fetch userid from query parameters
-    if not userid:
-        abort(400, description="Invalid request. 'userid' is required.")
 
     adoption_listings = Adoption.query.all()
 
-    
     adoption_list = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
@@ -42,22 +39,14 @@ def get_adoption_listings():
             'imageurl': Pets.query.get(adoption.petid).imageurl
         },
         # shown interest
-        'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
+        'interested': userid is not None and bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
     } for adoption in adoption_listings]
     return jsonify(adoption_list), 200
 
 # Route to fetch a single adoption listing by ID (GET)
-@adoption_bp.route('/<string:adoption_id>', methods=['GET'])
-def get_adoption_listing(adoption_id):
-    #for now without jwt auth just use user id in the url
-    userid = request.args.get('userid')  # Fetch userid from query parameters
-    if not userid:
-        abort(400, description="Invalid request. 'userid' is required.")
-    adoption = Adoption.query.get(adoption_id)
-    if not adoption:
-        abort(404, description="Adoption listing not found")
-
-    adoption_data = {
+@adoption_bp.route('/user/<string:userid>', methods=['GET'])
+def get_adoption_listing(userid):
+    adoption_data = [{
         'id': adoption.id,
         'agentid': adoption.agentid,
         'name': Users.query.get(adoption.agentid).name,
@@ -77,15 +66,15 @@ def get_adoption_listing(adoption_id):
         'createdat': adoption.createdat,
         'updatedat': adoption.updatedat,
         'interested': bool(AdoptionInterest.query.filter_by(userid=userid, adoptionlistingid=adoption.id).first())
-    }
+    } for adoption in Adoption.query.filter_by(agentid=userid)]
     return jsonify(adoption_data), 200
 
 # Route to create a new adoption listing (POST)
 @adoption_bp.route('', methods=['POST'])
 def create_adoption_listing():
     data = request.get_json()
-    if not data or not data.get('agentid') or not data.get('petid'):
-        abort(400, description="Invalid adoption listing data. 'agentid', 'petid' are required.")
+    if not data or not data.get('agentid'):
+        abort(400, description="Invalid adoption listing data. 'agentid' is required.")
 
     pet_data= data.get('pet')
     if not pet_data or not pet_data.get('name') or not pet_data.get('species') or not pet_data.get('breed') or not pet_data.get('imageurl'):

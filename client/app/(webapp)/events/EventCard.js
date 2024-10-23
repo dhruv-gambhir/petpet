@@ -21,9 +21,9 @@ export default function EventCard({ event, organizerView, userId }) {
           src={event.imageurl}
           alt="A dog photo."
         />
-        {/* <div className="absolute w-4/5 text-center bg-gray-300 px-2 py-1 rounded z-50 text-nowrap shadow-sm shadow-black bottom-[-1rem] left-[50%] translate-x-[-50%]">
-          <p>{event.createdby}</p>
-        </div> */}
+        <div className="absolute w-4/5 text-center bg-gray-300 px-2 py-1 rounded z-50 text-nowrap shadow-sm shadow-black bottom-[-1rem] left-[50%] translate-x-[-50%]">
+          <p className="text-wrap">{event.name}</p>
+        </div>
       </div>
       <div className="flex-1 flex flex-col justify-between">
         <div className="flex flex-col gap-4">
@@ -51,7 +51,7 @@ export default function EventCard({ event, organizerView, userId }) {
       </div>
       {isOrganizer ? (
         <div className="absolute top-2 right-2 bg-white">
-          <button className="p-2 font-bold hover:underline">Remove</button>
+          {/* <button className="p-2 font-bold hover:underline">Remove</button> */}
         </div>
       ) : (
         <div className="absolute top-2 right-2 bg-white">

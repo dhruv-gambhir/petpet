@@ -8,6 +8,8 @@ const FancyInput = (props) => {
     props.defaultValue !== "" && props.defaultValue !== undefined,
   );
 
+  const { onChange: externalOnChange, ...rest } = props;
+
   const onChange = (e) => {
     const hasValue = e.target.value !== "";
     setShowPlaceholder((shouldShowPlaceholder) => {
@@ -18,6 +20,7 @@ const FancyInput = (props) => {
       }
       return shouldShowPlaceholder;
     });
+    externalOnChange(e);
   };
 
   return (
@@ -32,17 +35,22 @@ const FancyInput = (props) => {
   );
 };
 
-export default function EventForm({ updateSearchParams, searchParams }) {
-  const ref = useRef(null);
+export default function EventForm({ setFilterSettings }) {
+  const onChangeWrapper = (e) => {
+    setFilterSettings((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  }
 
   return (
-    <form className="flex mt-8 m-4 h-8" action={updateSearchParams} ref={ref}>
+    <form className="flex mt-8 m-4 h-8">
       <FancyInput
         name="title"
         className="flex-1 mr-2 w-[40rem] px-2"
         type="text"
         placeholder="Pet Events"
-        defaultValue={searchParams["title"]}
+        onChange={onChangeWrapper}
       />
       <div className="flex gap-2">
         <FancyInput
@@ -50,35 +58,29 @@ export default function EventForm({ updateSearchParams, searchParams }) {
           className="px-2"
           type="text"
           placeholder="Location"
-          defaultValue={searchParams["location"]}
+          onChange={onChangeWrapper}
         />
-        <FancyInput
+        {/* <FancyInput
           name="animalType"
           className="px-2"
           type="text"
           placeholder="Animal Type"
-          defaultValue={searchParams["animalType"]}
-        />
+          onChange={onChangeWrapper}
+        /> */}
         <FancyInput
           name="startDate"
           className="px-2"
           type="date"
           placeholder="Start Date"
-          defaultValue={searchParams["startDate"]}
+          onChange={onChangeWrapper}
         />
         <FancyInput
           name="endDate"
           className="px-2"
           type="date"
           placeholder="End Date"
-          defaultValue={searchParams["endDate"]}
+          onChange={onChangeWrapper}
         />
-        <button
-          type="submit"
-          className="px-2 bg-white border border-black hover:underline"
-        >
-          Submit
-        </button>
       </div>
     </form>
   );

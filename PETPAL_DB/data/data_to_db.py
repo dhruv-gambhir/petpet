@@ -1,11 +1,19 @@
 import os
 import pandas as pd
 from sqlalchemy import create_engine
+import argparse
+
+parser = argparse.ArgumentParser(description='Load CSV data into PostgreSQL database')
+parser.add_argument('--user', type=str, help='Username for PostgreSQL database', default='postgres')
+parser.add_argument('--host', type=str, help='Host for PostgreSQL database', default='localhost')
+parser.add_argument('--password', type=str, help='Password for PostgreSQL user', required=True)
+
+args = parser.parse_args()
 
 # Database connection function updated to create a SQLAlchemy engine
 def connect_db():
     # Create a SQLAlchemy engine for PostgreSQL
-    engine = create_engine('postgresql+psycopg2://postgres:ENTERPASSWORD@localhost:5432/mydb')  # ENTER PASSWORD FOR postgres
+    engine = create_engine(f'postgresql+psycopg2://{args.user}:{args.password}@{args.host}:5432/mydb')  # ENTER PASSWORD FOR postgres
     return engine
 
 # Load CSV function updated to use SQLAlchemy engine

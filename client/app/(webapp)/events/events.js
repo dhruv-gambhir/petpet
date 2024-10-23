@@ -33,8 +33,8 @@ export const unpacker = async (throwable) => {
  * Fetches a list of events from the backend.
  * @returns {Promise<Event[]>} Returns a list of events.
  */
-export const getEvents = async () => {
-  const response = await fetcher('events')
+export const getEvents = async ([_, userId]) => {
+  const response = await fetcher('events?userid=' + userId)
   return await response.json()
 }
 
@@ -81,8 +81,11 @@ export const updateEvent = async (event) => {
 
 export const registerInterestInEvent = async (eventId, userId) => {
   console.log('registerInterestInEvent', eventId, userId)
-  const response = await fetcher(`event_interests/${eventId}`, {
+  const response = await fetcher(`event_interests`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({
       eventid: eventId,
       userid: userId
@@ -98,6 +101,9 @@ export const registerInterestInEvent = async (eventId, userId) => {
 export const unregisterInterestInEvent = async (eventId, userId) => {
   const response = await fetcher(`event_interests/${eventId}`, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({
       eventid: eventId,
       userid: userId

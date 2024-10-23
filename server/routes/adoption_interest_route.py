@@ -36,14 +36,15 @@ def get_adoption_interest(adoption_interest_id):
     return jsonify(adoption_interest_data), 200
 
 # Route to create a new adoption interest (POST)
-@adoption_interest_bp.route('', methods=['POST'])
-def create_adoption_interest():
+@adoption_interest_bp.route('/<string:adoption_id>', methods=['POST'])
+def create_adoption_interest(adoption_id):
     data = request.get_json()
     if not data or not data.get('userid'):
         abort(400, description="Invalid adoption interest data. 'userid' is required.")
 
     new_adoption_interest = AdoptionInterest(
         userid=data['userid'],
+        adoptionlistingid=adoption_id,
         status=data.get('status', 'pending')
     )
     db.session.add(new_adoption_interest)
@@ -67,7 +68,10 @@ def update_adoption_interest(adoption_interest_id):
 # Route to delete an adoption interest (DELETE)
 @adoption_interest_bp.route('/<string:adoption_interest_id>', methods=['DELETE'])
 def delete_adoption_interest(adoption_interest_id):
-    adoption_interest = AdoptionInterest.query.get(adoption_interest_id)
+    data = request.get_json()
+    userid = data.get('userid')
+    
+    adoption_interest = AdoptionInterest.query.filter_by(adoptionlistingid=adoption_interest_id, userid=userid).first()
     if not adoption_interest:
         abort(404, description="Adoption interest not found")
 
