@@ -12,7 +12,7 @@ export default function SitterPage() {
   const router = useRouter();
   const userId = useStore((state) => state.zId);
 
-  const { data: jobsData, isLoading: isLoadingJobs } = useSWR("sitting_requests", getSittingRequests);
+  const { data: jobsData, isLoading: isLoadingJobs } = useSWR(["sitting_requests",userId], getSittingRequests);
   const [combinedData, setCombinedData] = useState([]);
   const [hoveredJobId, setHoveredJobId] = useState(null); // Track hovered job ID
 
@@ -97,7 +97,7 @@ export default function SitterPage() {
 
           {/* Google Map */}
           <div className="flex-1 h-[500px]">
-            <GoogleMapView jobsData={combinedData} hoveredJobId={hoveredJobId} />
+            <GoogleMapView jobsData={combinedData} hoveredJobId={hoveredJobId} setHoveredJobId={setHoveredJobId} />
           </div>
         </div>
       </div>
