@@ -10,13 +10,13 @@ pets_bp = Blueprint('pets_bp', __name__)
 # Route to fetch all pets given a user (GET)
 @pets_bp.route('/user/<string:user_id>', methods=['GET'])
 def get_pets_list(user_id):
-    pets = Pets.query.filter_by(userid=user_id).all()
+    pets = Pets.query.filter_by(ownerid=user_id).all()
 
     pet_list = [{
         'id': pet.id,
         'ownerid': pet.ownerid,
         'name': pet.name,
-        'species': pet.type,
+        'species': pet.species,
         'breed': pet.breed,
         'age': pet.age,
         'sex': pet.sex,
@@ -25,7 +25,7 @@ def get_pets_list(user_id):
         'imageurl': pet.imageurl
     } for pet in pets]
 
-    jsonify(pet_list), 200
+    return jsonify(pet_list), 200
 
 # Route to post a new pet (POST)
 @pets_bp.route('', methods=['POST'])
