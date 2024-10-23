@@ -26,8 +26,8 @@ def get_sitting_requests():
         'userid': sitting_request.userid,
         'name': Users.query.get(sitting_request.userid).name,
         'pay': sitting_request.pay,
-        'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
-        'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
+        'startdate': sitting_request.startdate.strftime('%Y-%m-%d %H:%M:%S') if sitting_request.startdate else None,
+        'enddate': sitting_request.enddate.strftime('%Y-%m-%d %H:%M:%S') if sitting_request.enddate else None,
         'description': sitting_request.description,
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
@@ -49,9 +49,8 @@ def get_sitting_request_with_pet(sitting_request_id):
     if not sitting_request:
         abort(404, description="Sitting request not found")
 
-    # Fetch all associated pets through the one-to-many relationship from pet_sitting_requests
-    # Access pets directly because the relationship is defined in the PetSittingRequests model
-    # Query PetSittingRequests to get all entries related to this sitting request
+   # assumed pets are already created and associated with the user 
+   # Query the PetSittingRequests table for all pets associated with the sitting request
     pet_sitting_requests = PetSittingRequests.query.filter_by(sittingrequestid=sitting_request_id).all()
 
     # Query the Pets table for each petid in pet_sitting_requests
@@ -76,8 +75,8 @@ def get_sitting_request_with_pet(sitting_request_id):
         'userid': sitting_request.userid,
         'name': Users.query.get(sitting_request.userid).name,
         'pay': sitting_request.pay,
-        'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
-        'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
+        'startdate': sitting_request.startdate.strftime('%Y-%m-%d %H:%M:%S') if sitting_request.startdate else None,
+        'enddate': sitting_request.enddate.strftime('%Y-%m-%d %H:%M:%S') if sitting_request.enddate else None,
         'description': sitting_request.description,
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
@@ -97,19 +96,33 @@ def create_sitting_request():
     if not data or not data.get('userid'):
         abort(400, description="Invalid sitting request data. 'userid' is required.")
     
-    # Check if the list of pet data is present in the request
+    # Assumed that pets are alearly created and associated with the user 
+    # Check for the list of pet as "pets" in the request
     pet_data = data.get('pets')
     if not pet_data or not isinstance(pet_data, list):
-        abort(400, description="Invalid pet data. 'pets' (list) is required.")
+        abort(400, description="Invalid pet data. List 'pets' is required.")
 
+    # Use datetime.datetime to parse both date and time
+    try:
+        startdate = datetime.strptime(data.get('startdate'), '%Y-%m-%d %H:%M:%S') if data.get('startdate') else None
+    except ValueError:
+        abort(400, description="Invalid date format for 'startdate'. Expected format: YYYY-MM-DD HH:MM:SS")
+
+    # Use datetime.datetime to parse both date and time
+    try:
+        enddate = datetime.strptime(data.get('enddate'), '%Y-%m-%d %H:%M:%S') if data.get('enddate') else None
+    except ValueError:
+        abort(400, description="Invalid date format for 'enddate'. Expected format: YYYY-MM-DD HH:MM:SS")
+    
     # Create a new sitting request
     new_sitting_request = SittingRequests(
         userid=data['userid'],
         pay=data['pay'],
-        startdate=datetime.strptime(data['startdate'], '%Y-%m-%d').date(),
-        enddate=datetime.strptime(data['enddate'], '%Y-%m-%d').date(),
+        startdate=startdate,
+        enddate=enddate,
         description=data['description'],
         status=data.get('status', 'pending'),
+        tasktype=data.get('tasktype'),
         location=data.get('location'),
    
     )
@@ -120,27 +133,13 @@ def create_sitting_request():
     # Create a new pet for each pet data in the list
     new_pet_sitting_request_ids=[]
     for pet in pet_data:
-            if not pet.get('name') or not pet.get('species'):
-                abort(400, description="Invalid pet data. 'name' and 'species' are required for each pet.")
+            if not pet.get('id'):
+                abort(400, description="Invalid pet data. 'id' is required for each pet.")
     for pet in pet_data:
-        new_pet = Pets(
-            ownerid=data['userid'],
-            name=pet['name'],
-            species=pet['species'],
-            breed=pet['breed'],
-            age=pet.get('age', 0),
-            sex=pet.get('sex'),
-            color=pet.get('color'),
-            weight=pet.get('weight'),
-            imageurl=pet['imageurl']
-        )
-        db.session.add(new_pet)
-        db.session.flush()  # Flush the session to get the pet ID
-
         #also need to add the pet to the pet_sitting_requests table
         new_pet_sitting_request = PetSittingRequests(
             sittingrequestid=new_sitting_request.id,
-            petid=new_pet.id
+            petid= pet.get('id')
         )
         db.session.add(new_pet_sitting_request)
         db.session.flush() # Flush the session to get the pet_sitting_request ID
@@ -154,6 +153,7 @@ def create_sitting_request():
                     }), 201
 
 # Route to update a sitting request (PUT)
+# Not using this -> needs to update for new pet api too 
 @sitting_request_bp.route('/<string:sitting_request_id>', methods=['PUT'])
 def update_sitting_request(sitting_request_id):
     sitting_request = SittingRequests.query.get(sitting_request_id)
@@ -165,8 +165,8 @@ def update_sitting_request(sitting_request_id):
     # Update sitting request fields
     sitting_request.userid = data.get('userid', sitting_request.userid)
     sitting_request.pay = data.get('pay', sitting_request.pay)
-    sitting_request.startdate = datetime.strptime(data['startdate'], '%Y-%m-%d').date()
-    sitting_request.enddate = datetime.strptime(data['enddate'], '%Y-%m-%d').date()
+    sitting_request.startdate = datetime.strptime(data['startdate'], '%Y-%m-%d %H:%M:%S').date()
+    sitting_request.enddate = datetime.strptime(data['enddate'], '%Y-%m-%d %H:%M:%S').date()
     sitting_request.description = data.get('description', sitting_request.description)
     sitting_request.status = data.get('status', sitting_request.status)
     sitting_request.location = data.get('location', sitting_request.location)  # Add location field
@@ -221,9 +221,19 @@ def delete_sitting_request(sitting_request_id):
     if not sitting_request:
         abort(404, description="Sitting request not found")
 
+    # Delete all associated pets from the PetSittingRequests table
+    pet_sitting_requests = PetSittingRequests.query.filter_by(sittingrequestid=sitting_request_id).all()
+    for pet_sitting_request in pet_sitting_requests:
+        db.session.delete(pet_sitting_request)
+
+    #Delete all sitter interests associated with this sitting request
+    sitter_interests = SitterInterests.query.filter_by(sittingrequestid=sitting_request_id).all()
+    for sitter_interest in sitter_interests:
+        db.session.delete(sitter_interest)
+
     db.session.delete(sitting_request)
     db.session.commit()
-    return jsonify({'message': 'Sitting request deleted successfully'}), 200
+    return jsonify({'message': 'Sitting request and related sitter interests and PetSittingRequests have been deleted successfully'}), 200
 
 # Route to fetch all sitting request of a user (GET)
 @sitting_request_bp.route('/user/<string:user_id>', methods=['GET'])
@@ -235,8 +245,8 @@ def get_user_sitting_requests(user_id):
         'userid': sitting_request.userid,
         'name': Users.query.get(sitting_request.userid).name,
         'pay': sitting_request.pay,
-        'startdate': sitting_request.startdate.strftime('%Y-%m-%d') if sitting_request.startdate else None,
-        'enddate': sitting_request.enddate.strftime('%Y-%m-%d') if sitting_request.enddate else None,
+        'startdate': sitting_request.startdate.strftime('%Y-%m-%d %H:%M:%S') if sitting_request.startdate else None,
+        'enddate': sitting_request.enddate.strftime('%Y-%m-%d %H:%M:%S') if sitting_request.enddate else None,
         'description': sitting_request.description,
         'status': sitting_request.status,
         'createdat': sitting_request.createdat,
