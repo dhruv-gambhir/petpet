@@ -11,6 +11,7 @@ const fetcher = async (url, options) => await fetch(`${process.env.NEXT_PUBLIC_B
  * @property {string} location
  * @property {string} status
  * @property {string} createdat
+ * @property {string} tasktype
  */
 
 /**
@@ -32,8 +33,8 @@ export const unpacker = async (throwable) => {
  * Fetches a list of sitting requests from the backend.
  * @returns {Promise<SittingRequest[]>} Returns a list of sitting requests.
  */
-export const getSittingRequests = async () => {
-  const response = await fetcher('sitting_requests')
+export const getSittingRequests = async ([_, userId]) => {
+  const response = await fetcher('sitting_requests?userid=' + userId)
   return await response.json()
 }
 
@@ -50,8 +51,11 @@ export const getSittingRequests = async () => {
 
 export const registerInterestInSitting = async (sittingId, userId) => {
   console.log('registerInterestInSitting', sittingId, userId)
-  const response = await fetcher(`sitter_interests/${sittingId}`, {
+  const response = await fetcher(`sitter_interests`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({
       sittingrequestid: sittingId,
       userid: userId
@@ -65,27 +69,44 @@ export const registerInterestInSitting = async (sittingId, userId) => {
 }
 
 export const unregisterInterestInSitting = async (sittingId, userId) => {
-  const response = await fetcher(`sitter_interests/${sittingId}`, {
-    method: 'DELETE',
-    body: JSON.stringify({
-      sittingrequestid: sittingId,
-      userid: userId
-    })
-  });
+  // Fetch the sitter_interest record using the sittingId and userId
+  const response = await fetcher(`sitter_interests?sittingrequestid=${sittingId}&userid=${userId}`);
 
   if (!response.ok) {
-    throw new Error(response.statusText)
+    throw new Error("Failed to fetch sitter interest record");
   }
-  return response.json()
-}
 
+  const sitterInterests = await response.json();
+
+  // Check if the interest record exists
+  if (sitterInterests.length === 0) {
+    throw new Error("No sitter interest found for the given sitting request and user");
+  }
+
+  // Extract the ID of the sitter_interests record
+  const interestId = sitterInterests[0].id;
+
+  // Perform the DELETE request using the ID from the sitter_interests table
+  const deleteResponse = await fetcher(`sitter_interests/${interestId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!deleteResponse.ok) {
+    throw new Error(deleteResponse.statusText);
+  }
+
+  return deleteResponse.json();
+};
 /**
  * Geocodes an address or postal code and returns its coordinates (lat, lng).
  * @param {string} postalCode The postal code to geocode.
  * @returns {Promise<{lat: number, lng: number} | null>} Returns latitude and longitude.
  */
  export const geocodeAddress = async (postalCode) => {
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY2}`;
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_GEOCODING_API_KEY}`;
     const response = await fetch(geocodeUrl);
     const data = await response.json();
   

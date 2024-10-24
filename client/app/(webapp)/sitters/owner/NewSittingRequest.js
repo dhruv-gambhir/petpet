@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import useStore from "@/app/store"; 
 
+
 const sittingType = [
   { value: "dog_walking", label: "Dog Walking" },
   { value: "day_boarding", label: "Day Boarding" },
   { value: "house_sitting", label: "House Sitting" },
   { value: "home_visits", label: "Home Visits" },
+
 ];
 
 const PopupForm = () => {
@@ -31,11 +33,9 @@ const PopupForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
+
 
   const handlePetSelection = (e) => {
     const { value, checked } = e.target;
@@ -67,6 +67,7 @@ const PopupForm = () => {
       fetchPets();
     }
   }, [showModal]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,21 +127,26 @@ const PopupForm = () => {
   return (
     <div className="relative w-full pt-5">
       <button
+
         className="absolute right-5 mx-10 justify-end bg-mybutton text-black font-bold px-4 py-2 rounded shadow"
+
         onClick={() => setShowModal(true)}
       >
         New Sitting Request
       </button>
 
       {showModal && (
+
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-10 rounded-lg shadow-lg w-2/3 h-[600px] overflow-y-auto relative">
+
             <button
-              className="absolute top-2 right-2 text-gray-500 text-3xl p-2 border-gray-300 rounded-full bg-white hover:bg-gray-100 hover:text-black transition duration-300"
+              className="absolute top-3 right-3 text-gray- text-2xl p-2 rounded-full hover:bg-gray-200 transition duration-300"
               onClick={handleClose}
             >
               &times;
             </button>
+
 
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -183,22 +189,26 @@ const PopupForm = () => {
                 </div>
                 <div className="flex flex-col">
                   <label className="text-gray-700 font-bold mb-1">Start Date</label>
+
                   <input
                     type="datetime-local"
                     name="startDate"
                     value={formData.startDate}
                     onChange={handleChange}
+
                     className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     required
                   />
                 </div>
                 <div className="flex flex-col">
                   <label className="text-gray-700 font-bold mb-1">End Date</label>
+
                   <input
                     type="datetime-local"
                     name="endDate"
                     value={formData.endDate}
                     onChange={handleChange}
+
                     className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     required
                   />
@@ -229,20 +239,25 @@ const PopupForm = () => {
                 </div>
                 <div className="col-span-2">
                   <label className="text-gray-700 font-bold mb-1">Description</label>
+
                   <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
+
                     className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
+
                     placeholder="Description of the job"
                     required
                   ></textarea>
                 </div>
               </div>
+
               <div className="flex justify-center mt-4">
                 <button
                   type="submit"
                   className="h-14 w-36 bg-mybutton text-black font-bold px-4 py-2 rounded shadow"
+
                 >
                   Create
                 </button>
@@ -253,6 +268,7 @@ const PopupForm = () => {
       )}
 
       {showSuccessModal && (
+
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-10 rounded-lg shadow-lg w-1/3 text-center">
             <h2 className="text-2xl font-bold text-black-600 mb-4">
@@ -260,6 +276,7 @@ const PopupForm = () => {
             </h2>
             <button
               className="bg-mybutton text-black font-bold py-2 px-4 rounded-full"
+
               onClick={closeSuccessModal}
             >
               Close
@@ -272,3 +289,4 @@ const PopupForm = () => {
 };
 
 export default PopupForm;
+

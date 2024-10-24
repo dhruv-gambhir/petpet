@@ -10,47 +10,80 @@ import { useMemo, useState } from "react";
 export default function EventsPage() {
   const userId = useStore((state) => state.zId);
   const { data: events, isLoading } = useSWR(["events", userId], getEvents);
-  const [filterSettings, setFilterSettings] = useState({});
+
+  const [filterSettings, setFilterSettings] = useState({
+    title: "",
+    location: "",
+    startDate: "",
+    endDate: "",
+  });
 
   const eventsFiltered = useMemo(() => {
     if (!events) return [];
 
-    const startDateFilter = filterSettings.startDate;
-    const endDateFilter = filterSettings.endDate;
+    const { title, location, startDate, endDate } = filterSettings;
+
+    const lowerCaseTitle = title.trim().toLowerCase();
+    const lowerCaseLocation = location.trim().toLowerCase();
 
     return events.filter((event) => {
-      if (filterSettings.title && !event.event_name.includes(filterSettings.title)) {
+      const eventName = event.event_name ? event.event_name.toLowerCase() : "";
+      const eventLocation = event.location ? event.location.toLowerCase() : "";
+
+      if (lowerCaseTitle && !eventName.includes(lowerCaseTitle)) {
         return false;
       }
-      if (filterSettings.location && !event.location.includes(filterSettings.location)) {
+
+      if (lowerCaseLocation && !eventLocation.includes(lowerCaseLocation)) {
         return false;
       }
-      if (startDateFilter && new Date(Date.parse(event.startdate.replace(" ", "T"))) < new Date(startDateFilter)) {
+
+      if (
+        startDate &&
+        new Date(Date.parse(event.startdate.replace(" ", "T"))) < new Date(startDate)
+      ) {
         return false;
       }
-      if (endDateFilter && new Date(Date.parse(event.startdate.replace(" ", "T"))) > new Date(endDateFilter)) {
-        return false
+
+      if (
+        endDate &&
+        new Date(Date.parse(event.startdate.replace(" ", "T"))) > new Date(endDate)
+      ) {
+        return false;
       }
+
       return true;
     });
   }, [events, filterSettings]);
 
   return (
-    <div className="flex-initial self-stretch w-[83.3%] mx-auto">
-      <EventForm setFilterSettings={setFilterSettings} />
-      <div className="relative flex flex-col items-start gap-4 m-2 mt-8">
-        <div className="absolute top-0 right-0">
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-shrink-0 p-4 w-[83.3%] mx-auto">
+        <div className="flex justify-between items-center">
+          <EventForm setFilterSettings={setFilterSettings} />
           <a
-            className="mx-2 p-2 bg-mypurple hover:underline text-white rounded-md block"
+            className="p-2 w-64 bg-mybutton hover:underline text-center text-black rounded-md"
             href="/events/me"
           >
             My Events
           </a>
         </div>
-        {eventsFiltered?.map((event) => (
-          <EventCard event={event} key={event.id} userId={userId} />
-        ))}
+      </div>
+
+      <div className="flex-1 overflow-y-auto items-center" style={{ maxHeight: "calc(100vh - 310px)" }}>
+        <div className="flex flex-col items-start gap-4 w-[83.3%] mx-auto p-2">
+          {isLoading && <p>Loading events...</p>}
+
+          {eventsFiltered?.length > 0 ? (
+            eventsFiltered.map((event) => (
+              <EventCard event={event} key={event.id} userId={userId} />
+            ))
+          ) : (
+            <p>No events found matching your criteria.</p>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+

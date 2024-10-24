@@ -7,7 +7,7 @@ import useStore from "@/app/store.js";
 
 export default function EventsPage() {
   const userId = useStore((state) => state.zId);
-  const { data: events } = useSWR(() => "events/user/" + userId, fetcher);
+  const { data: events } = useSWR(() => "events/user_interest/" + userId, fetcher);
 
   return (
     <>
