@@ -1,24 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import useStore from "@/app/store"; 
 
-const commonAnimals = [
-  "🐱 Cat",
-  "🐶 Dog",
-  "🐢 Turtle",
-  "🐹 Hamster",
-  "🐰 Rabbit",
+
+const sittingType = [
+  { value: "dog_walking", label: "Dog Walking" },
+  { value: "day_boarding", label: "Day Boarding" },
+  { value: "house_sitting", label: "House Sitting" },
+  { value: "home_visits", label: "Home Visits" },
+
 ];
 
 const PopupForm = () => {
+  const { zId, zLogout } = useStore(); 
+
   const [showModal, setShowModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formData, setFormData] = useState({
     ownerName: "",
-    petName: "",
-    petType: "",
+    petNames: [], // This will hold the selected pet IDs
     startDate: "",
     endDate: "",
+    sittingType: "",
     description: "",
+    payPerHour: "",
+    location: "",
   });
+  const [pets, setPets] = useState([]);
 
   const handleClose = () => {
     setShowModal(false);
@@ -29,22 +36,81 @@ const PopupForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handlePetTypeSelect = (pet) => {
-    setFormData({ ...formData, petType: pet });
+
+  const handlePetSelection = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prevData) => {
+      const petNames = checked
+        ? [...prevData.petNames, value] // Add pet ID if checked
+        : prevData.petNames.filter((id) => id !== value); // Remove pet ID if unchecked
+
+      return { ...prevData, petNames }; // Update formData with new petNames
+    });
   };
 
-  // Mock API call
+  const fetchPets = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/pets/user/${zId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setPets(data);
+      } else {
+        console.error("Failed to fetch pets data");
+      }
+    } catch (error) {
+      console.error("Error fetching pets data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (showModal) {
+      fetchPets();
+    }
+  }, [showModal]);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Prepare the form data to match the API requirements
+    const selectedPetDetails = pets.filter(pet => formData.petNames.includes(pet.id));
+  
+    // Format the start and end dates to 'YYYY-MM-DD HH:MM:SS'
+    const formattedStartDate = new Date(formData.startDate).toISOString().slice(0, 19).replace('T', ' ');
+    const formattedEndDate = new Date(formData.endDate).toISOString().slice(0, 19).replace('T', ' ');
+  
+    const requestData = {
+      userid: zId, // Assuming zId is the user ID
+      pets: selectedPetDetails.map(pet => ({
+        id: pet.id,
+        age: pet.age,
+        breed: pet.breed,
+        color: pet.color,
+        imageurl: pet.imageurl,
+        name: pet.name,
+        ownerid: pet.ownerid,
+        sex: pet.sex,
+        species: pet.species,
+        weight: pet.weight,
+      })), // Use full pet details
+      startdate: formattedStartDate, // Formatted start date
+      enddate: formattedEndDate, // Formatted end date
+      pay: formData.payPerHour, // Add pay per hour
+      description: formData.description,
+      status: "pending", // You can set a default status if needed
+      tasktype: formData.sittingType, // Add the sitting type
+      location: formData.location, // Add location
+    };
+  
     try {
-      const response = await fetch("/api/submit", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sitting_requests`, { // Ensure this URL matches your endpoint
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(requestData), // Send the formatted data
       });
-
+  
       const result = await response.json();
       console.log("Success:", result);
       setShowModal(false);
@@ -53,7 +119,7 @@ const PopupForm = () => {
       console.error("Error:", error);
     }
   };
-
+  
   const closeSuccessModal = () => {
     setShowSuccessModal(false);
   };
@@ -61,15 +127,19 @@ const PopupForm = () => {
   return (
     <div className="relative w-full pt-5">
       <button
-        className="absolute right-5 h-14 w-48 border border-black rounded-full mx-10 hover:bg-gray-100 transition duration-300"
+
+        className="absolute right-5 mx-10 justify-end bg-mybutton text-black font-bold px-4 py-2 rounded shadow"
+
         onClick={() => setShowModal(true)}
       >
         New Sitting Request
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl relative">
+
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-10 rounded-lg shadow-lg w-2/3 h-[600px] overflow-y-auto relative">
+
             <button
               className="absolute top-3 right-3 text-gray- text-2xl p-2 rounded-full hover:bg-gray-200 transition duration-300"
               onClick={handleClose}
@@ -77,107 +147,119 @@ const PopupForm = () => {
               &times;
             </button>
 
-            <h2 className="text-2xl font-semibold text-center mb-6">
-              New Sitting Request
-            </h2>
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Owner Name
-                  </label>
-                  <input
-                    type="text"
-                    name="ownerName"
-                    value={formData.ownerName}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-mynavbutton"
-                    placeholder="Enter your name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Pet Name
-                  </label>
-                  <input
-                    type="text"
-                    name="petName"
-                    value={formData.petName}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-"
-                    placeholder="Enter your pet's name"
-                    required
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Pet Type
-                  </label>
-                  <div className="flex flex-wrap gap-3">
-                    {commonAnimals.map((pet) => (
-                      <button
-                        key={pet}
-                        type="button"
-                        className={`px-4 py-2 border rounded-full focus:outline-none transition duration-300 ${
-                          formData.petType === pet
-                            ? "bg-blue-600 text-white border-blue-600"
-                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                        }`}
-                        onClick={() => handlePetTypeSelect(pet)}
-                      >
-                        {pet}
-                      </button>
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Multi-select for Pets using Checkboxes */}
+                <div className="flex flex-col">
+                  <label className="text-gray-700 font-bold mb-1">Select Pets</label>
+                  <div className="flex flex-col">
+                    {pets.map((pet) => (
+                      <label key={pet.id} className="flex items-center mb-2">
+                        <input
+                          type="checkbox"
+                          value={pet.id}
+                          checked={formData.petNames.includes(pet.id)}
+                          onChange={handlePetSelection}
+                          className="mr-2"
+                        />
+                        <span>
+                          {pet.name} ({pet.species}, {pet.sex}, {pet.age} years)
+                        </span>
+                      </label>
                     ))}
                   </div>
                 </div>
-                <div>
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Start Date
-                  </label>
+                
+                {/* Other fields */}
+                <div className="flex flex-col">
+                  <label className="text-gray-700 font-bold mb-1">Sitting Type</label>
+                  <select
+                    name="sittingType"
+                    value={formData.sittingType}
+                    onChange={handleChange}
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
+                    required
+                  >
+                    <option value="" disabled>Select the sitting type required</option>
+                    {sittingType.map((option) => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col">
+                  <label className="text-gray-700 font-bold mb-1">Start Date</label>
+
                   <input
                     type="datetime-local"
                     name="startDate"
                     value={formData.startDate}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-"
+
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     required
                   />
                 </div>
-                <div>
-                  <label className="block text-gray-700 font-medium mb-1">
-                    End Date
-                  </label>
+                <div className="flex flex-col">
+                  <label className="text-gray-700 font-bold mb-1">End Date</label>
+
                   <input
                     type="datetime-local"
                     name="endDate"
                     value={formData.endDate}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-"
+
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
                     required
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Description
-                  </label>
+                <div className="flex flex-col">
+                  <label className="text-gray-700 font-bold mb-1">Pay/hour</label>
+                  <input
+                    type="text"
+                    name="payPerHour"
+                    value={formData.payPerHour}
+                    onChange={handleChange}
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
+                    placeholder="Enter pay per hour"
+                    required
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label className="text-gray-700 font-bold mb-1">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
+                    placeholder="Enter location"
+                    required
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="text-gray-700 font-bold mb-1">Description</label>
+
                   <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    className="w-full h-28 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-"
+
+                    className="p-4 border rounded w-full bg-mybutton bg-opacity-35 shadow-md"
+
                     placeholder="Description of the job"
                     required
                   ></textarea>
                 </div>
               </div>
-              <div className="flex justify-center mt-8">
+
+              <div className="flex justify-center mt-4">
                 <button
                   type="submit"
-                  className="h-12 w-40 bg-mybutton text-black rounded-full hover:bg-blue-700 transition duration-300"
+                  className="h-14 w-36 bg-mybutton text-black font-bold px-4 py-2 rounded shadow"
+
                 >
-                  Submit
+                  Create
                 </button>
               </div>
             </form>
@@ -186,13 +268,15 @@ const PopupForm = () => {
       )}
 
       {showSuccessModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
-            <h2 className="text-2xl font-bold text-green-600 mb-6">
+
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-10 rounded-lg shadow-lg w-1/3 text-center">
+            <h2 className="text-2xl font-bold text-black-600 mb-4">
               Successfully Submitted!
             </h2>
             <button
-              className="h-12 w-32 bg-green-600 text-white rounded-full hover:bg-green-700 transition duration-300"
+              className="bg-mybutton text-black font-bold py-2 px-4 rounded-full"
+
               onClick={closeSuccessModal}
             >
               Close
