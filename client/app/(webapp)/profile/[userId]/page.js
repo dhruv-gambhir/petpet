@@ -92,7 +92,7 @@ export default function ProfilePage() {
                 const updatedUser = await response.json();
                 setUser(updatedUser);
                 setIsEditing(false);
-                window.location.reload(); // This will reload the current page
+                window.location.reload(); 
  
             } else {
                 console.error("Failed to update user data");
@@ -115,7 +115,7 @@ export default function ProfilePage() {
                     >
                         Logout
                     </button>
-
+                    {!user.isagency && (
                     <button 
                         className="bg-mybutton text-black font-bold px-4 py-2 rounded shadow"
                         onClick={() => {
@@ -124,6 +124,7 @@ export default function ProfilePage() {
                     >
                         View Interests
                     </button>
+                    )}
                 </div>
 
                 <div className="flex space-x-8 mt-4 w-full">
@@ -163,6 +164,7 @@ export default function ProfilePage() {
                         )}
                     </div>
                 </div>
+                {!user.isagency && (
                 <div className="w-1/2 bg-white shadow-xl rounded-lg p-10">
                     <h2 className="text-3xl font-bold text-gray-800 mb-4">Pets Owned</h2>
                     <PetCarousel  pets={pets} />
@@ -170,6 +172,7 @@ export default function ProfilePage() {
                         <AddPet />
                     </div>
                     </div>
+                 )}
                 
                 </div>
             </div>

@@ -25,7 +25,7 @@ function AgencySignUp() {
             email: email,
             phonenumber: phone,
             imageurl: imageUrl,
-            isagencty: true,
+            isagency: true,
         };
 
         try {
