@@ -11,6 +11,7 @@ const fetcher = async (url, options) => await fetch(`${process.env.NEXT_PUBLIC_B
  * @property {string} location
  * @property {string} status
  * @property {string} createdat
+ * @property {string} tasktype
  */
 
 /**
