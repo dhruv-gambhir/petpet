@@ -75,7 +75,7 @@ export default function OwnerPage() {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${zId}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${userId}`);
       if (response.ok) {
         const user = await response.json();
         setUserData((prevData) => ({ ...prevData, [userId]: user })); 
@@ -236,7 +236,7 @@ export default function OwnerPage() {
     <div key={user.id} className="bg-white p-4 rounded-md shadow-md flex flex-col items-center">
       <div className="flex flex-col items-center mb-4">
         <img
-          src={user.imageurl || "/default-avatar.jpg"} 
+          src={userData[user.userid]?.imageurl || "/default-avatar.jpg"} 
           alt="Profile Icon"
           className="w-32 h-32 rounded-full shadow-md object-cover"
         />
