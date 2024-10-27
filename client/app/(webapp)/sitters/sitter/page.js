@@ -97,7 +97,7 @@ export default function SitterPage() {
         <div className="flex flex-row gap-4 mt-8">
 
           {/* Job Cards */}
-          <div className="flex flex-col flex-1 gap-4 h-[430px] overflow-y-auto">
+          <div className="flex flex-col flex-1 gap-4 h-[580px] overflow-y-auto">
             {/* Filter UI */}
             <div className="flex flex-row gap-4">
               <select
@@ -129,7 +129,7 @@ export default function SitterPage() {
                 placeholder="End Date"
               />
             </div>
-            <div className="flex flex-col flex-1 gap-4 h-[430px] overflow-y-auto">
+            <div className="flex flex-col flex-1 gap-4 h-[580px] overflow-y-auto">
             {filteredJobs?.map((detail) => (
               <JobsCard
                 key={detail.id}
@@ -145,7 +145,7 @@ export default function SitterPage() {
           </div>
 
           {/* Google Map */}
-          <div className="flex-1 h-[500px]">
+          <div className="flex-1 h-[580px]">
             <GoogleMapView jobsData={filteredJobs} hoveredJobId={hoveredJobId} setHoveredJobId={setHoveredJobId} />
           </div>
         </div>
