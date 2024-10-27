@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="flex flex-row m-8 justify-center border-mybutton border-2 items-center bg-white w-1/2 h-4/6"
+  >
+    <form
+      class="m-8 flex flex-col justify-center items-center w-2/6 h-4/6 "
+    >
+      <h1
+        class="color-black text-2xl font-bold"
+      >
+        Login
+      </h1>
+      <div
+        class="flex flex-col relative justify-center w-5/6"
+      >
+        <input
+          class="border-2 border-black rounded bg-mynavbutton h-8 m-4"
+          placeholder="Email"
+          type="email"
+          value=""
+        />
+      </div>
+       
+      <div
+        class="flex flex-col relative justify-center w-5/6 "
+      >
+        <input
+          class="border-2 border-black rounded bg-mynavbutton h-8 m-4"
+          placeholder="Password"
+          type="password"
+          value=""
+        />
+      </div>
+       
+      <div
+        class="flex flex-col justify-center items-center"
+      >
+        <button
+          class="bg-mybutton border-black border-1 border w-16 m-4 rounded p-2 text-black"
+          type="submit"
+        >
+          Login
+        </button>
+        <a
+          class="text-lg underline"
+          href="/signup"
+        >
+          New User? Sign Up
+        </a>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;
