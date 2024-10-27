@@ -250,7 +250,7 @@ function PetCarousel({ pets }) {
                 <div className="w-full flex flex-col items-center justify-center">
                     <div className="flex flex-col items-center">
                         <img
-                            src={"/default-avatar.jpg"}
+                            src={pets[currentIndex].imageurl || "/default-avatar.jpg"}
                             alt="Pet Profile"
                             className="w-32 h-32 rounded-full shadow-md mb-4 object-cover"
                         />
@@ -263,7 +263,7 @@ function PetCarousel({ pets }) {
                             <p><strong>Age:</strong> {pets[currentIndex].age} years</p>
                             <p><strong>Sex:</strong> {pets[currentIndex].sex}</p>
                             <p><strong>Breed:</strong> {pets[currentIndex].breed}</p>
-                            <p><strong>Color:</strong> {pets[currentIndex].colour}</p>
+                            <p><strong>Color:</strong> {pets[currentIndex].color}</p>
                             <p><strong>Weight:</strong> {pets[currentIndex].weight}</p>
                         </div>
                     </div>

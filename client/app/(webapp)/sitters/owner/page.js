@@ -128,7 +128,8 @@ export default function OwnerPage() {
         </div>
       </section>
 
-      <div className="flex flex-row mt-2">
+      <div className="flex-1 overflow-y-auto flex flex-row p-5" style={{ maxHeight: "calc(100vh - 310px)" }}>
+
   <div className="w-1/2 p-5">
     <h2 className="text-lg font-bold mb-3">Select Sitting Request</h2>
     <select
