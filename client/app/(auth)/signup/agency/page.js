@@ -25,11 +25,11 @@ function AgencySignUp() {
             email: email,
             phonenumber: phone,
             imageurl: imageUrl,
-            isagencty: true,
+            isagency: true,
         };
 
         try {
-            const response = await fetch('http://localhost:5001/users', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ function AgencySignUp() {
                     className="w-1/2 p-8 flex flex-col justify-center"
                     onSubmit={handleSignUp}
                 >
-                    <h1 className="text-mypurple text-3xl font-bold mb-4">
+                    <h1 className="text-black text-3xl font-bold mb-4">
                         Register
                     </h1>
                     {error && <p className="text-red-500 mb-4">{error}</p>}{" "}
@@ -101,7 +101,7 @@ function AgencySignUp() {
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-mypurple rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                     <div className="mb-4">
@@ -110,7 +110,7 @@ function AgencySignUp() {
                             placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-mypurple rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                     <div className="mb-4">
@@ -119,7 +119,7 @@ function AgencySignUp() {
                             placeholder="Mobile Phone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-mypurple rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                     <div className="mb-4">
@@ -128,7 +128,7 @@ function AgencySignUp() {
                             placeholder="Address"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-mypurple rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                     <div className="mb-4">
@@ -137,7 +137,7 @@ function AgencySignUp() {
                             placeholder="License Number"
                             value={license}
                             onChange={(e) => setLicense(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-mypurple rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                     <div className="mb-4">
@@ -146,7 +146,7 @@ function AgencySignUp() {
                             placeholder="Your Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-mypurple rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                     <div className="mb-4">
@@ -155,14 +155,14 @@ function AgencySignUp() {
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                 </form>
 
                 {/* Right side - Profile Picture Upload */}
                 <div className="w-1/2 p-8 flex flex-col justify-center items-center">
-                    <div className="border-2 border-dashed border-mypurple w-full h-64 flex justify-center items-center rounded-lg mb-4">
+                    <div className="border-2 border-dashed border-black w-full h-64 flex justify-center items-center rounded-lg mb-4">
                         <label className="text-mypurple text-center">
                             <p>
                                 Drag & Drop your image here or{" "}
@@ -179,7 +179,7 @@ function AgencySignUp() {
                         </label>
                     </div>
                     {uploading ? (
-                        <p className="text-mypurple">Uploading...</p>
+                        <p className="text-black">Uploading...</p>
                     ) : (
                         imageUrl && (
                             <p className="text-green-600">Image uploaded successfully</p>
@@ -187,7 +187,7 @@ function AgencySignUp() {
                     )}
                     <button
                         type="submit"
-                        className="bg-mypurple text-white w-full py-3 rounded-lg text-xl"
+                        className="bg-mybutton text-black w-full py-3 rounded-lg text-xl"
                         onClick={handleSignUp}
                     >
                         Next

@@ -21,7 +21,7 @@ services:
     ports:
       - "5001:5000"
     environment:
-      DATABASE_URL: postgresql://myuser:mypassword@db/mydb
+      DATABASE_URL: postgresql://myuser:mypassword@localhost/mydb
       SSL_ENABLED: true
       SSL_DISABLE: False
     depends_on:

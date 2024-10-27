@@ -13,8 +13,12 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        mypurple: "#21005D", // Add your custom hex color here
+        mypurple: "#21005D", 
         mybg: "#f3edf7",
+        mynav: "#eeaa63",
+        mynavbutton: "#fff7d7",
+        mybutton: "#ffcd81"
+
       },
     },
   },

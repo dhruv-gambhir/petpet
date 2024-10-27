@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from swagger.swagger_config import get_swagger_spec
 from db import db
@@ -7,12 +8,12 @@ from db import db
 # Create the app factory
 def create_app():
     app = Flask(__name__)
+    CORS(app)
+    
     app.config.from_object('config.Config')
 
     # Initialize extensions
     db.init_app(app)
-
-
 
     # Register blueprints (API routes)
     from routes.users_route import users_bp
@@ -22,6 +23,7 @@ def create_app():
     from routes.adoption_interest_route import adoption_interest_bp
     from routes.adoption_route import adoption_bp
     from routes.event_interest_route import event_interest_bp
+    from routes.pets_route import pets_bp
 
     app.register_blueprint(users_bp, url_prefix='/users')
     app.register_blueprint(event_bp, url_prefix='/events')
@@ -30,6 +32,7 @@ def create_app():
     app.register_blueprint(sitting_request_bp, url_prefix='/sitting_requests')
     app.register_blueprint(adoption_interest_bp, url_prefix='/adoption_interests')
     app.register_blueprint(adoption_bp, url_prefix='/adoption_listings')
+    app.register_blueprint(pets_bp, url_prefix='/pets')
 
     #API SWagger doc routes
     @app.route("/swagger.json")

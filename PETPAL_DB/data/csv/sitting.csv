@@ -1,6 +1,6 @@
-,sitting_id,map_id,Pay,StartDate,EndDate,Status,CreatedAt,Description
-0,0,14,70,2024-10-13 21:54:47.488515,2024-11-06 21:54:47.488515,decided,,Need a pet sitter for my cat while on vacation.
-1,1,7,44,2024-10-28 21:54:47.490480,2024-11-24 21:54:47.490480,pending,,Looking for someone to take care of my dog during a business trip.
-2,2,4,35,2024-10-30 21:54:47.492548,2024-11-11 21:54:47.492548,decided,,Looking for someone to take care of my dog during a business trip.
-3,3,0,84,2024-10-26 21:54:47.494576,2024-11-04 21:54:47.494576,pending,,Looking for a sitter for a weekend trip.
-4,4,14,46,2024-10-16 21:54:47.496607,2024-10-24 21:54:47.496607,decided,,Need a temporary pet sitter for a week.
+Id,UserId,Pay,StartDate,EndDate,status,CreatedAt,Description,Location,TaskType
+3b53fd72-611f-47e3-92cc-81f7aa40f44f,676e94c4-aabf-4f26-b2b0-a02ab66756f0,17,2024-11-02 18:41:19.137555,2024-11-07 18:41:19.137555,,2024-10-19 18:41:19.137580,Looking for someone to take care of my dog during a business trip.,099253,home_visits
+428fa9e3-bdff-4a0d-8d7c-cdd5b3a98011,676e94c4-aabf-4f26-b2b0-a02ab66756f0,81,2024-11-01 18:41:19.138870,2024-11-02 18:41:19.138870,,2024-10-19 18:41:19.138890,Pet sitter needed while we move houses.,486025,dog_walking
+2cd70911-a548-45db-b745-48191780991d,71c12cbd-d14c-437d-af02-72d954425441,14,2024-10-26 18:41:19.140839,2024-11-17 18:41:19.140839,,2024-10-19 18:41:19.140857,Need a temporary pet sitter for a week.,138522,home_visits
+c07e2918-148e-4c6f-8b73-e4c61baba414,676e94c4-aabf-4f26-b2b0-a02ab66756f0,63,2024-10-26 18:41:19.142747,2024-10-29 18:41:19.142747,,2024-10-19 18:41:19.142765,Pet sitter needed while we move houses.,098585,day_boarding
+3fa5f7e7-6c63-40c8-a613-4fefc201a89c,2b0f112c-d369-4080-920a-076ffefadae9,86,2024-11-13 18:41:19.144630,2024-11-16 18:41:19.144630,,2024-10-19 18:41:19.144647,Pet sitter needed while we move houses.,039595,house_sitting

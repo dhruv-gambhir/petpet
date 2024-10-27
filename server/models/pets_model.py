@@ -11,6 +11,8 @@ class Pets(db.Model):
     breed= db.Column(db.String(100))  # Breed of the pet
     age= db.Column(db.Integer)  # Age of the pet
     imageurl= db.Column(db.Text)  # Image URL of the pet
+    color= db.Column(db.String(50))  # Color of the pet
+    weight= db.Column(db.Float)  # Weight of the pet
     createdat= db.Column(db.TIMESTAMP, default=db.func.current_timestamp())
 
     #add relationship to user table

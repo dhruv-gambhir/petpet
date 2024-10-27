@@ -9,10 +9,6 @@ import os
 '''
 RUN THIS SCRIPT TO GENERATE FAKE DATA FOR THE DATABASE.
 python .\PETPAL_DB\data\create_data.py
-
-TODO: 
-TASK TYPE NEEDS TO MOVE TO SITTING REQUEST CURRENTLY IN ADOPTION
-
 '''
 
 # total number of users - half User and half Agency 
@@ -20,7 +16,7 @@ COUNT = 30
 # number of requests for events, sitting and adoption each
 REQUEST_COUNT = 5 
 # total number of pets randomly assigned 
-PET_COUNT = 5
+PET_COUNT = 10
 # total number of interests for each events, sitting and adoption request 
 INTEREST_COUNT = 2
 
@@ -146,7 +142,8 @@ if __name__=="__main__":
     user_onlydf = userdf[userdf["IsAgency"]==False]
 
     for i in range(PET_COUNT):
-        user_id = random.choice(user_onlydf["userid"].tolist())
+        # user_id = random.choice(user_onlydf["userid"].tolist())
+        user_id = random.choice(userdf["userid"].tolist())
         pet_name = random.choice(PET_NAMES)
         age = random.randint(1, 20)
         species = random.choice(list(SPECIES.keys()))
@@ -194,13 +191,12 @@ if __name__=="__main__":
 
 
     # add sitting 
-    sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location"])
-    # sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location", "TaskType"])
-    pet_sitting_df = pd.DataFrame(columns=["Id", "SittingRequestId", "PetId"])
+    sittingdf = pd.DataFrame(columns=["id", "userid" , "pay" ,  "startdate", "enddate", "status", "createdat" , "description", "tasktype"])
+    pet_sitting_df = pd.DataFrame(columns=["id", "sittingrequestid", "petid"])
     for i in range(REQUEST_COUNT):
-        random_map_id = random.choice(petdf["OwnerId"].tolist())
-        pets_for_sitting_df = petdf[petdf["OwnerId"]==random_map_id]
-        petid = random.choice(pets_for_sitting_df["Id"].tolist())
+        random_map_id = random.choice(petdf["ownerid"].tolist())
+        pets_for_sitting_df = petdf[petdf["ownerid"]==random_map_id]
+        petid = random.choice(pets_for_sitting_df["id"].tolist())
         pay = random.randint(5, 100)
         start_date = datetime.datetime.now() + datetime.timedelta(days=random.randint(1, 30))
         end_date = start_date + datetime.timedelta(days=random.randint(1, 30))
@@ -208,9 +204,7 @@ if __name__=="__main__":
         description = random.choice(DESCRIPTIONS)
         tasktype = random.choice(TASK_TYPES)
         sittingid = str(uuid4())
-        location = random.choice(PINCODES)
-        sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location }
-        # sittingdf.loc[len(sittingdf)] = {"Id":sittingid , "UserId" :random_map_id, "Pay": pay, "StartDate": start_date, "EndDate": end_date, "Status": status,  "Description": description, "CreatedAt": datetime.datetime.now(), "Location":location, "TaskType": tasktype }
+        sittingdf.loc[len(sittingdf)] = {"id":sittingid , "userid" :random_map_id, "pay": pay, "startdate": start_date, "enddate": end_date, "status": status,  "description": description, "tasktype": tasktype}
         pet_sitting_df.loc[len(pet_sitting_df)] = {"id": str(uuid4()), "sittingrequestid": sittingid, "petid": petid}
 
 
@@ -269,15 +263,30 @@ if __name__=="__main__":
     "Looking for a new family for this pet.",
     ]
 
+    # Get initial list of available pet IDs where OwnerId is in agencydf["userid"]
+    available_pets = petdf[petdf["OwnerId"].isin(agencydf["userid"].tolist())]["Id"].tolist()
+    # Initialize a set to store used pet_id values
+    used_pet_ids = set()
+
     for i in range(REQUEST_COUNT):
         random_map_id = random.choice(agencydf["userid"].tolist())
-        pet_id = str(uuid4())
+
+        # Get available pet IDs by excluding the used ones from the initial available_pets
+        available_pet_ids = list(set(available_pets) - used_pet_ids)
+        if not available_pet_ids:
+            print("No more unique pet IDs available, stopping.")
+            break  # Stop the loop if there are no available pet IDs
+        # Select a random pet ID from the available ones
+        pet_id = random.choice(available_pet_ids)
+
+        # Add the selected pet_id to the used_pet_ids set
+        used_pet_ids.add(pet_id)
         description = random.choice(ADOPTION_DESCRIPTIONS)
         status = random.choice(STATUS)
         adoptiondf.loc[len(adoptiondf)] = {"Id": str(uuid4()), "AgentId" :random_map_id, "PetId": pet_id, "Description": description, "Status": status, "CreatedAt": datetime.datetime.now(), "UpdatedAt": datetime.datetime.now()}
 
     # add adoption interest
-    adoption_interestdf = pd.DataFrame(columns=["Id", "UserId", "AdoptionLisitingId", "Createdat" , "Status"])
+    adoption_interestdf = pd.DataFrame(columns=["id", "userid", "adoptionid", "createdat" , "status"])
     
     for i in range(len(adoptiondf)):
         for j in range(INTEREST_COUNT):
@@ -286,7 +295,7 @@ if __name__=="__main__":
             adoption_interestdf.loc[len(adoption_interestdf)] = {"Id": str(uuid4()), "UserId": user_map_id, "AdoptionListingId": adoption_id, "CreatedAt": datetime.datetime.now(), "Status": "pending"}
 
     userdf.to_csv(os.path.join(DIR ,"user.csv"))
-    # agencydf.to_csv(os.path.join(DIR ,"agency.csv"))
+    agencydf.to_csv(os.path.join(DIR ,"agency.csv"))
     petdf.to_csv(os.path.join(DIR ,"pet.csv"))
     sittingdf.to_csv(os.path.join(DIR ,"sitting.csv"))
     sitting_interestdf.to_csv(os.path.join(DIR ,"sitting_interest.csv"))

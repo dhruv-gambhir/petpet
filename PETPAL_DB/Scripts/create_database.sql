@@ -31,6 +31,8 @@ CREATE TABLE Pets (
     Breed VARCHAR(100),
     Age INT,
     ImageUrl TEXT,
+    Color VARCHAR(50),
+    Weight FLOAT,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -41,7 +43,6 @@ CREATE TABLE Adoption_Listings (
     PetId UUID REFERENCES Pets(Id) ON DELETE CASCADE,
     Description TEXT,
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
-    TaskType task_enum,  -- Using the custom ENUM type for TaskType
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -60,11 +61,12 @@ CREATE TABLE Sitting_Requests (
     Id UUID PRIMARY KEY,
     UserId UUID REFERENCES Users(UserId) ON DELETE CASCADE,
     Pay INT,
-    StartDate DATE,
-    EndDate DATE,
+    StartDate TIMESTAMP,
+    EndDate TIMESTAMP,
     Description TEXT,
     Location VARCHAR(255),
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status
+    TaskType task_enum,  -- Using the custom ENUM type for TaskType
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -84,7 +86,7 @@ CREATE TABLE Events (
     Event_name VARCHAR(255),
     Description TEXT,
     Location VARCHAR(255),
-    StartDate DATE,
+    StartDate TIMESTAMP,
     Cost INT,
     ImageUrl TEXT, 
     Status status_enum DEFAULT 'pending',  -- Using the custom ENUM type for status

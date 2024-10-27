@@ -29,7 +29,7 @@ function UserSignUp() {
         };
 
         try {
-            const response = await fetch('http://localhost:5000/users', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ function UserSignUp() {
                     className="w-1/2 p-8 flex flex-col justify-center"
                     onSubmit={handleSignUp}
                 >
-                    <h1 className="text-mypurple text-3xl font-bold mb-4">
+                    <h1 className="text-black text-3xl font-bold mb-4">
                         Register
                     </h1>
                     {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -122,7 +122,7 @@ function UserSignUp() {
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
                             required
                         />
                     </div>
@@ -132,7 +132,7 @@ function UserSignUp() {
                             placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
                             required
                         />
                     </div>
@@ -142,7 +142,7 @@ function UserSignUp() {
                             placeholder="Mobile Phone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
                         />
                     </div>
                     <div className="mb-4">
@@ -151,7 +151,7 @@ function UserSignUp() {
                             placeholder="Your Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
                             required
                         />
                     </div>
@@ -161,13 +161,13 @@ function UserSignUp() {
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="border-2 border-mypurple rounded bg-mybg h-12 px-4 w-full"
+                            className="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
                             required
                         />
                     </div>
                     <button
                         type="submit"
-                        className="bg-mypurple text-white w-full py-3 rounded-lg text-xl"
+                        className="bg-mybutton text-black w-full py-3 rounded-lg text-xl"
                         disabled={uploading}
                     >
                         {uploading ? 'Uploading...' : 'Next'}
@@ -176,7 +176,7 @@ function UserSignUp() {
 
                 <div className="w-1/2 p-8 flex flex-col justify-center items-center">
                     <div
-                        className="border-2 border-dashed border-mypurple w-full h-64 flex justify-center items-center rounded-lg mb-4 cursor-pointer"
+                        className="border-2 border-dashed border-black w-full h-64 flex justify-center items-center rounded-lg mb-4 cursor-pointer"
                         onDrop={handleDrop}
                         onDragOver={handleDragOver}
                         onClick={() => fileInputRef.current.click()}
@@ -188,7 +188,7 @@ function UserSignUp() {
                                 className="object-cover h-full w-full rounded-lg"
                             />
                         ) : (
-                            <label className="text-mypurple text-center">
+                            <label className="text-black text-center">
                                 <p>
                                     Drag & Drop your image here or{" "}
                                     <span className="text-blue-600 underline cursor-pointer">
