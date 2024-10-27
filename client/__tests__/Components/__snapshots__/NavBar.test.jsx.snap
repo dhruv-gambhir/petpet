@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavBar Component matches snapshot 1`] = `
+<DocumentFragment>
+  <nav
+    class="bg-mynav w-full h-40 flex-none flex flex-row items-center justify-center"
+  >
+    <div
+      class="flex flex-row justify-between w-full"
+    >
+      <div
+        class="w-1/2 left-2"
+        data-testid="mock-title"
+      >
+        Mocked Title
+      </div>
+      <div
+        class="w-1/2 h-full right-2 flex flex-row"
+      >
+        <a
+          href="/sitters/owner"
+        >
+          Sitters
+        </a>
+        <a
+          href="/events"
+        >
+          Events
+        </a>
+        <a
+          href="/adoption"
+        >
+          Adoption
+        </a>
+        <a
+          href="/profile/user123"
+        >
+          Profile
+        </a>
+      </div>
+    </div>
+  </nav>
+</DocumentFragment>
+`;
