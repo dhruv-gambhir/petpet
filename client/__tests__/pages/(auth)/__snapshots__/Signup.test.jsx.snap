@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserSignUp Component matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="flex flex-col justify-center items-center h-full w-full"
+  >
+    <div
+      class="w-3/4 h-3/4 bg-white shadow-lg rounded-lg flex flex-row"
+    >
+      <form
+        class="w-1/2 p-8 flex flex-col justify-center"
+      >
+        <h1
+          class="text-black text-3xl font-bold mb-4"
+        >
+          Register
+        </h1>
+        <div
+          class="mb-4"
+        >
+          <input
+            class="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
+            placeholder="Email"
+            required=""
+            type="email"
+            value=""
+          />
+        </div>
+        <div
+          class="mb-4"
+        >
+          <input
+            class="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
+            placeholder="Name"
+            required=""
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          class="mb-4"
+        >
+          <input
+            class="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
+            placeholder="Mobile Phone"
+            type="tel"
+            value=""
+          />
+        </div>
+        <div
+          class="mb-4"
+        >
+          <input
+            class="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
+            placeholder="Your Password"
+            required=""
+            type="password"
+            value=""
+          />
+        </div>
+        <div
+          class="mb-4"
+        >
+          <input
+            class="border-2 border-black rounded bg-mynavbutton h-12 px-4 w-full"
+            placeholder="Confirm Password"
+            required=""
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          class="bg-mybutton text-black w-full py-3 rounded-lg text-xl"
+          type="submit"
+        >
+          Next
+        </button>
+      </form>
+      <div
+        class="w-1/2 p-8 flex flex-col justify-center items-center"
+      >
+        <div
+          class="border-2 border-dashed border-black w-full h-64 flex justify-center items-center rounded-lg mb-4 cursor-pointer"
+        >
+          <label
+            class="text-black text-center"
+          >
+            <p>
+              Drag & Drop your image here or 
+              <span
+                class="text-blue-600 underline cursor-pointer"
+              >
+                choose a file
+              </span>
+            </p>
+          </label>
+          <input
+            accept="image/*"
+            class="hidden"
+            type="file"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="mt-4"
+    >
+      <a
+        class="text-lg text-center underline text-gray-600"
+        href="/login"
+      >
+        Already have an account? Login
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;
