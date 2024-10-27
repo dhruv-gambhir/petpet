@@ -2,5 +2,7 @@
 
 # TEL1 : Team 4
 
-#Database Setup Instructions
-https://github.com/Razor56/PetPal-DB
+PetPal is the one stop solution for all your pet needs.
+
+[![Watch the video](./thumbnail.png)](https://youtu.be/3J6u8c_8cnM)
+
