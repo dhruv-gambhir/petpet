@@ -15,7 +15,7 @@ from db import db
 cd server 
 
 run test cases specificed in this file: 
-    pytest test\test_event_route.py
+    pytest unit-test\test_event_route.py
 
 run all test cases:
     pytest
@@ -54,7 +54,7 @@ def test_get_all_events_with_data(client):
     assert len(response.json) == 1
     assert response.json[0]['event_name'] == "Sample Event"
 
-# Test for retrieving a single event by ID
+
 def test_get_event_by_id(client):
     user = Users(userid="377c0030-0ee4-40f9-af8b-1cb9200f9803", name="Event Creator", email="creator@example.com")
     db.session.add(user)
@@ -114,7 +114,7 @@ def test_update_event_invalid_id(client):
     response = client.put('/events/invalid_id', json={'event_name': 'Updated Event'})
     assert response.status_code == 404
 
-# Test for deleting an event
+
 def test_delete_event(client):
     user = Users(userid="377c0030-0ee4-40f9-af8b-1cb9200f9803", name="Event Creator", email="creator@example.com")
     db.session.add(user)
@@ -132,7 +132,7 @@ def test_delete_event_invalid_id(client):
     response = client.delete('/events/invalid_id')
     assert response.status_code == 404
 
-# Test for fetching events by user
+
 def test_get_events_by_user(client):
     user = Users(userid="377c0030-0ee4-40f9-af8b-1cb9200f9803", name="Event Creator", email="creator@example.com")
     db.session.add(user)
@@ -147,7 +147,6 @@ def test_get_events_by_user(client):
     assert len(response.json) == 1
     assert response.json[0]['event_name'] == "User Event"
 
-# Test for fetching events by user interest
 def test_get_events_by_user_interest(client):
     user = Users(userid="377c0030-0ee4-40f9-af8b-1cb9200f9803", name="Interested User", email="interested@example.com")
     event_creator = Users(userid="47181821-5af6-4cb4-a036-efeb50bd20e6", name="Event Creator", email="creator@example.com")

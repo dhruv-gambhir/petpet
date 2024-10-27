@@ -15,7 +15,7 @@ from db import db
 '''
 cd server 
 run test cases specificed in this file:
-    pytest test\test_event_interest_route.py
+    pytest unit-test\test_event_interest_route.py
 
 run all test cases:
     pytest

@@ -12,7 +12,7 @@ from config import Config
 '''
 cd server 
 run test cases specificed in this file: 
-    pytest test\test_users_api.py
+    pytest unit-test\test_users_api.py
 run all test cases:
     pytest 
 '''
@@ -30,14 +30,13 @@ def client():
         db.session.remove()
         db.drop_all()
 
-# Test for listing all users
 def test_list_all_users_empty(client):
     response = client.get('/users/all')
     assert response.status_code == 404
     assert response.json == {'message': 'No users found'}
 
 def test_list_all_users_with_data(client):
-    # Add a test user to the database
+
     user = Users(userid="e7e9f6d2-d8e0-4f93-a6c0-2343b4b8a43c", name="John Doe", email="john@example.com")
     db.session.add(user)
     db.session.commit()
@@ -47,7 +46,6 @@ def test_list_all_users_with_data(client):
     assert len(response.json) == 1
     assert response.json[0]['name'] == 'John Doe'
 
-# Test for getting user by email
 def test_get_user_id_by_email(client):
     user = Users(userid="c9a47cb1-fb4e-43b3-85a1-2d629d8302be", name="Jane Smith", email="jane@example.com")
     db.session.add(user)
@@ -79,7 +77,6 @@ def test_create_user_with_existing_email(client):
   
     assert response.status_code == 400
 
-# Test for updating a user by user ID
 def test_update_user(client):
     user = Users(userid="377c0030-0ee4-40f9-af8b-1cb9200f9803", name="Old Name", email="old@example.com")
     db.session.add(user)
@@ -89,7 +86,7 @@ def test_update_user(client):
     assert response.status_code == 200
     assert response.json['message'] == 'User updated successfully'
 
-# Test for updating a user by email
+
 def test_update_user_by_email(client):
     user = Users(userid="7ca8527a-9546-4275-8ba2-4bd1b60c9719", name="Another Name", email="another@example.com")
     db.session.add(user)
