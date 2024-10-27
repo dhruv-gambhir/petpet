@@ -191,21 +191,12 @@ if __name__=="__main__":
 
 
     # add sitting 
-    # sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location"])
-    sittingdf = pd.DataFrame(columns=["Id", "UserId" , "Pay" ,  "StartDate", "EndDate", "status", "CreatedAt" , "Description", "Location", "TaskType"])
-    pet_sitting_df = pd.DataFrame(columns=["Id", "SittingRequestId", "PetId"])
-
-    i = 0
-    while i < REQUEST_COUNT:
-        random_map_id = random.choice(petdf["OwnerId"].tolist())
-        pets_for_sitting_df = petdf[petdf["OwnerId"] == random_map_id]
-
-        # Check if there are pets associated with the selected OwnerId
-        if pets_for_sitting_df.empty:
-            print(f"No pets found for OwnerId {random_map_id}, skipping this iteration.")
-            continue  # Skip to the next iteration without adding to DataFrame
-        
-        petid = random.choice(pets_for_sitting_df["Id"].tolist())
+    sittingdf = pd.DataFrame(columns=["id", "userid" , "pay" ,  "startdate", "enddate", "status", "createdat" , "description", "tasktype"])
+    pet_sitting_df = pd.DataFrame(columns=["id", "sittingrequestid", "petid"])
+    for i in range(REQUEST_COUNT):
+        random_map_id = random.choice(petdf["ownerid"].tolist())
+        pets_for_sitting_df = petdf[petdf["ownerid"]==random_map_id]
+        petid = random.choice(pets_for_sitting_df["id"].tolist())
         pay = random.randint(5, 100)
         start_date = datetime.datetime.now() + datetime.timedelta(days=random.randint(1, 30))
         end_date = start_date + datetime.timedelta(days=random.randint(1, 30))
@@ -213,29 +204,9 @@ if __name__=="__main__":
         description = random.choice(DESCRIPTIONS)
         tasktype = random.choice(TASK_TYPES)
         sittingid = str(uuid4())
-        location = random.choice(PINCODES)
+        sittingdf.loc[len(sittingdf)] = {"id":sittingid , "userid" :random_map_id, "pay": pay, "startdate": start_date, "enddate": end_date, "status": status,  "description": description, "tasktype": tasktype}
+        pet_sitting_df.loc[len(pet_sitting_df)] = {"id": str(uuid4()), "sittingrequestid": sittingid, "petid": petid}
 
-        # Adding the sitting request to sittingdf
-        sittingdf.loc[len(sittingdf)] = {
-            "Id": sittingid,
-            "UserId": random_map_id,
-            "Pay": pay,
-            "StartDate": start_date,
-            "EndDate": end_date,
-            "Status": status,
-            "Description": description,
-            "CreatedAt": datetime.datetime.now(),
-            "Location": location,
-            "TaskType": tasktype
-        }
-        
-        # Adding the sitting request and pet relationship to pet_sitting_df
-        pet_sitting_df.loc[len(pet_sitting_df)] = {
-            "Id": str(uuid4()), 
-            "SittingRequestId": sittingid, 
-            "PetId": petid
-        }
-        i += 1  # Increment only when a valid entry is added
 
     # add interest
     sitting_interestdf = pd.DataFrame(columns=["Id", "UserId", "SittingRequestId", "CreatedAt" , "Status"])
@@ -315,7 +286,7 @@ if __name__=="__main__":
         adoptiondf.loc[len(adoptiondf)] = {"Id": str(uuid4()), "AgentId" :random_map_id, "PetId": pet_id, "Description": description, "Status": status, "CreatedAt": datetime.datetime.now(), "UpdatedAt": datetime.datetime.now()}
 
     # add adoption interest
-    adoption_interestdf = pd.DataFrame(columns=["Id", "UserId", "AdoptionListingId", "Createdat" , "Status"])
+    adoption_interestdf = pd.DataFrame(columns=["id", "userid", "adoptionid", "createdat" , "status"])
     
     for i in range(len(adoptiondf)):
         for j in range(INTEREST_COUNT):
@@ -323,16 +294,16 @@ if __name__=="__main__":
             user_map_id = random.choice(user_onlydf["userid"].tolist())
             adoption_interestdf.loc[len(adoption_interestdf)] = {"Id": str(uuid4()), "UserId": user_map_id, "AdoptionListingId": adoption_id, "CreatedAt": datetime.datetime.now(), "Status": "pending"}
 
-    userdf.to_csv(os.path.join(DIR, "user.csv"), index=False)
-    # agencydf.to_csv(os.path.join(DIR, "agency.csv"), index=False)
-    petdf.to_csv(os.path.join(DIR, "pet.csv"), index=False)
-    sittingdf.to_csv(os.path.join(DIR, "sitting.csv"), index=False)
-    sitting_interestdf.to_csv(os.path.join(DIR, "sitting_interest.csv"), index=False)
-    pet_sitting_df.to_csv(os.path.join(DIR, "pet_sitting_request.csv"), index=False)
-    eventdf.to_csv(os.path.join(DIR, "event.csv"), index=False)
-    event_interestdf.to_csv(os.path.join(DIR, "event_interest.csv"), index=False)
-    adoptiondf.to_csv(os.path.join(DIR, "adoption.csv"), index=False)
-    adoption_interestdf.to_csv(os.path.join(DIR, "adoption_interest.csv"), index=False)
+    userdf.to_csv(os.path.join(DIR ,"user.csv"))
+    agencydf.to_csv(os.path.join(DIR ,"agency.csv"))
+    petdf.to_csv(os.path.join(DIR ,"pet.csv"))
+    sittingdf.to_csv(os.path.join(DIR ,"sitting.csv"))
+    sitting_interestdf.to_csv(os.path.join(DIR ,"sitting_interest.csv"))
+    pet_sitting_df.to_csv(os.path.join(DIR ,"pet_sitting_request.csv"))
+    eventdf.to_csv(os.path.join(DIR ,"event.csv"))
+    event_interestdf.to_csv(os.path.join(DIR ,"event_interest.csv"))
+    adoptiondf.to_csv(os.path.join(DIR ,"adoption.csv"))
+    adoption_interestdf.to_csv(os.path.join(DIR ,"adoption_interest.csv"))
 
 
 
