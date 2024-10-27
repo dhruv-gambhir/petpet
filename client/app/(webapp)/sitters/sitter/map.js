@@ -4,7 +4,7 @@ import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 
 const containerStyle = {
   width: '100%',
-  height: '430px',
+  height: '580px',
 };
 
 function GoogleMapView({ jobsData, hoveredJobId, setHoveredJobId }) {
